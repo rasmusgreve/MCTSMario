@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/293/trunk/src/python/competition/tasks
+END
+task.py
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/293/trunk/src/python/competition/tasks/task.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/202/trunk/src/python/competition/tasks/__init__.py
+END
+episodictask.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/200/trunk/src/python/competition/tasks/episodictask.py
+END
+mariotask.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/293/trunk/src/python/competition/tasks/mariotask.py
+END

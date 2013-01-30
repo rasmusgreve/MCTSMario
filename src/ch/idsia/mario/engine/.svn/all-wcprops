@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/321/trunk/src/ch/idsia/mario/engine
+END
+GeneralizerEnemies.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/308/trunk/src/ch/idsia/mario/engine/GeneralizerEnemies.java
+END
+Recorder.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/64/trunk/src/ch/idsia/mario/engine/Recorder.java
+END
+GeneralizerLevelScene.java
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/279/trunk/src/ch/idsia/mario/engine/GeneralizerLevelScene.java
+END
+Scene.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/64/trunk/src/ch/idsia/mario/engine/Scene.java
+END
+GlobalOptions.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/314/trunk/src/ch/idsia/mario/engine/GlobalOptions.java
+END
+AppletLauncher.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/154/trunk/src/ch/idsia/mario/engine/AppletLauncher.java
+END
+MarioComponent.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/321/trunk/src/ch/idsia/mario/engine/MarioComponent.java
+END
+BgRenderer.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/64/trunk/src/ch/idsia/mario/engine/BgRenderer.java
+END
+LevelScene.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/321/trunk/src/ch/idsia/mario/engine/LevelScene.java
+END
+LevelRenderer.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/64/trunk/src/ch/idsia/mario/engine/LevelRenderer.java
+END
+Generalizer.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/279/trunk/src/ch/idsia/mario/engine/Generalizer.java
+END
+Replayer.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/64/trunk/src/ch/idsia/mario/engine/Replayer.java
+END
+Art.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/249/trunk/src/ch/idsia/mario/engine/Art.java
+END

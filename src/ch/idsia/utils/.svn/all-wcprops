@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/321/trunk/src/ch/idsia/utils
+END
+MathX.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/290/trunk/src/ch/idsia/utils/MathX.java
+END
+Stats.java
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/253/trunk/src/ch/idsia/utils/Stats.java
+END
+StatisticalSummary.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/253/trunk/src/ch/idsia/utils/StatisticalSummary.java
+END
+ParameterContainer.java
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/321/trunk/src/ch/idsia/utils/ParameterContainer.java
+END
+StatisticalTests.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/253/trunk/src/ch/idsia/utils/StatisticalTests.java
+END
