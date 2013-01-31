@@ -91,7 +91,7 @@ public class MCTreeNode {
 	 */
 	public double calculateConfidence(double cp){ //TODO: FUCKING DYRT
 		double exploitation = reward/this.visited;
-		double exploration = 2*cp*Math.sqrt((2*Math.log(parent.visited))/this.visited); // Det er SQRT's SKYLD! :(
+		double exploration = cp*Math.sqrt((2*Math.log(parent.visited))/this.visited); // Det er SQRT's SKYLD! :(
 		//System.out.printf("Exploit: %f Explore: %f\n", exploitation, exploration);
 		return exploitation + exploration;
 	}

@@ -77,8 +77,10 @@ public class SimpleMCTS implements Agent {
 		System.out.println("depth: "+maxDepth);
 		
 		MCTreeNode choice = root.bestChild(0);
-		root = choice;
-		choice.parent = null;
+		if(choice != null){
+			root = choice;
+			choice.parent = null;
+		}
 		return choice.action;
 	}
 	
