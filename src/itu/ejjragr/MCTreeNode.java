@@ -18,7 +18,7 @@ import competition.cig.robinbaumgarten.astar.sprites.Mario;
  */
 public class MCTreeNode {
 	
-	private static final int CHILDREN = 16;
+	private static final int CHILDREN = 32;
 	
 	public static Random rand = new Random(1337);
 	
@@ -119,9 +119,18 @@ public class MCTreeNode {
 	}
 	
 	public double advanceXandReward(int ticks){
-		LevelScene copy = advanceStepClone(state,getRandomAction());
-		ticks--;
-		for(int i = 0; i < ticks; i++) advanceStep(copy, getRandomAction());
+		
+		LevelScene copy = null;
+		try {
+			copy = (LevelScene) state.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return 0.0;
+		}
+		for(int i = 0; i < ticks; i++){
+			advanceStep(copy, getRandomAction());
+			if(this.calculateReward(copy) == 0.0) return 0.0;
+		}
 		return this.calculateReward(copy);
 	}
 	
@@ -134,8 +143,8 @@ public class MCTreeNode {
 	 * @return The index in the children array that corresponds to the given action.
 	 */
 	private int getChildIndex(boolean[] action){ //boolean left, boolean right, (boolean down), boolean jump, boolean speed
-		//return (action[0] ? 16 : 0) + (action[1] ? 8 : 0) + (action[2] ? 4 : 0) + (action[3] ? 2 : 0) + (action[4] ? 1 : 0);
-		return (action[Mario.KEY_LEFT] ? 8 : 0) + (action[Mario.KEY_RIGHT] ? 4 : 0) + (action[Mario.KEY_JUMP] ? 2 : 0) + (action[Mario.KEY_SPEED] ? 1 : 0);
+		return (action[0] ? 16 : 0) + (action[1] ? 8 : 0) + (action[2] ? 4 : 0) + (action[3] ? 2 : 0) + (action[4] ? 1 : 0);
+		//return (action[Mario.KEY_LEFT] ? 8 : 0) + (action[Mario.KEY_RIGHT] ? 4 : 0) + (action[Mario.KEY_JUMP] ? 2 : 0) + (action[Mario.KEY_SPEED] ? 1 : 0);
 	}
 	
 	/**
@@ -146,15 +155,15 @@ public class MCTreeNode {
 	 */
 	private boolean[] getActionForIndex(int index){
 		boolean[] result = new boolean[5];
-		/*if(index >= 16) { result[0] = true; index -= 16; }
+		if(index >= 16) { result[0] = true; index -= 16; }
 		if(index >= 8) { result[1] = true; index -= 8; }
 		if(index >= 4) { result[2] = true; index -= 4; }
 		if(index >= 2) { result[3] = true; index -= 2; }
-		if(index >= 1) { result[4] = true; index -= 1; }*/
-		if(index >= 8) { result[Mario.KEY_LEFT] = true; index -= 8; }
+		if(index >= 1) { result[4] = true; index -= 1; }
+		/*if(index >= 8) { result[Mario.KEY_LEFT] = true; index -= 8; }
 		if(index >= 4) { result[Mario.KEY_RIGHT] = true; index -= 4; }
 		if(index >= 2) { result[Mario.KEY_JUMP] = true; index -= 2; }
-		if(index >= 1) { result[Mario.KEY_SPEED] = true; index -= 1; }
+		if(index >= 1) { result[Mario.KEY_SPEED] = true; index -= 1; }*/
 		return result;
 	}
 	
@@ -210,15 +219,11 @@ public class MCTreeNode {
 	 * 0 is worst and 1 is best.
 	 */
 	public double calculateReward(LevelScene state){ // TODO: Just some hackup
-		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0) return 0;
-		double reward = state.mario.x;
-		reward += 10 * (state.enemiesKilled - parent.state.enemiesKilled);
-		reward += 1 * (state.coinsCollected - parent.state.coinsCollected);
-		
-		reward += 10 * (state.mario.x - parent.state.mario.x);
-		//reward /= marioShrunk(state);
+		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0) return 0.0;
+		double reward = 0.5;
+		reward += (state.mario.x - parent.state.mario.x)/10.0;
+		//System.out.println(reward);
 		return reward;
-		//return ((double)state.mario.x) / (state.level.width * marioShrunk(state));
 	}
 	
 	/**

@@ -1,7 +1,5 @@
 package itu.ejjragr;
 
-import java.util.Random;
-
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.level.Level;
 
@@ -17,7 +15,7 @@ import ch.idsia.mario.environments.Environment;
  */
 public class SimpleMCTS implements Agent {
 	
-	private static final int TIME_PER_TICK = 40; // milliseconds
+	private static final int TIME_PER_TICK = 39; // milliseconds
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
@@ -73,15 +71,18 @@ public class SimpleMCTS implements Agent {
 			backup(v1,reward);
 		}
 		
-		//System.out.println("end:   "+root.visited);
+		System.out.println("size:   "+root.visited);
 		System.out.println("depth: "+maxDepth);
 		
-		MCTreeNode choice = root.bestChild(0);
-		if(choice != null){
+		if(root.visited != 0){
+			MCTreeNode choice = root.bestChild(0);
 			root = choice;
 			choice.parent = null;
+			return choice.action;
+		}else{
+			return null;
 		}
-		return choice.action;
+		
 	}
 	
 	/**
@@ -143,7 +144,6 @@ public class SimpleMCTS implements Agent {
 	 * @return The new leaf.
 	 */
 	private MCTreeNode treePolicy(MCTreeNode v) { // may not be right
-		Random rand = new Random(1337);
 		while(true){
 			if(!v.isExpanded()){
 				return v.createRandomChild();
