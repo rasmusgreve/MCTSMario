@@ -1,5 +1,9 @@
 package itu.ejjragr;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -254,4 +258,32 @@ public class MCTreeNode {
 		if(mario.large) return 1;
 		return 0;
 	}
+
+	public void outputTree()
+	{
+		StringBuilder b = new StringBuilder();
+		getXMLRepresentation(b);
+		String xml = b.toString();
+		try {
+			File f = new File("C:\\Users\\Rasmus\\Desktop\\Test.tree");
+			FileWriter fw = new FileWriter(f);
+			fw.write(xml);
+			fw.flush();
+			fw.close();
+		} catch (IOException e) {
+			System.out.println("Tree to file write failed");
+			e.printStackTrace();
+		}
+	}
+	
+	private void getXMLRepresentation(StringBuilder b)
+	{
+		b.append("<Node>");
+		if (children != null)
+			for (MCTreeNode c : children)
+				if (c != null)
+					c.getXMLRepresentation(b);		
+		b.append("</Node>");
+	}
+	
 }
