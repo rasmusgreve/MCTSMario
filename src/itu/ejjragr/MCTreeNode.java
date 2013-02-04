@@ -1,7 +1,13 @@
 package itu.ejjragr;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Random;
+
+import ch.idsia.mario.engine.GlobalOptions;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.sprites.Mario;
@@ -18,17 +24,21 @@ import competition.cig.robinbaumgarten.astar.sprites.Mario;
  */
 public class MCTreeNode {
 	
-	private static final int CHILDREN = 16;
+	private static final int CHILDREN = 32;
+	private static final int REPETITIONS = 2;
 	
 	public static Random rand = new Random(1337);
 	
 	public LevelScene state;
 	public boolean[] action;
 	public MCTreeNode parent;
-	public MCTreeNode[] children = new MCTreeNode[CHILDREN];
-	public int numChildren = 0;
-	public double reward = 0;
-	public int visited = 0;
+	public MCTreeNode[] children;
+	public double reward;
+	public int visited;
+	
+	// for stats
+	public int numChildren;
+	public int timeElapsed = 0; // in ticks
 
 	/**
 	 * Constructor for the MCTreeNode.
@@ -38,9 +48,21 @@ public class MCTreeNode {
 	 * @param parent The parent of the new node or null if it is root.
 	 */
 	public MCTreeNode(LevelScene state, boolean[] action, MCTreeNode parent){
+		reset();
 		this.state = state;
 		this.action = action;
 		this.parent = parent;
+		this.timeElapsed = parent != null ? parent.timeElapsed + REPETITIONS : 0;
+	}
+	
+	public void reset(){
+		action = null;
+		parent = null;
+		children = new MCTreeNode[CHILDREN];
+		reward = 0;
+		visited = 0;
+		numChildren = 0;
+		timeElapsed = 0;
 	}
 	
 	/**
@@ -91,7 +113,7 @@ public class MCTreeNode {
 	 */
 	public double calculateConfidence(double cp){ //TODO: FUCKING DYRT
 		double exploitation = reward/this.visited;
-		double exploration = 2*cp*Math.sqrt((2*Math.log(parent.visited))/this.visited); // Det er SQRT's SKYLD! :(
+		double exploration = cp*Math.sqrt((2*Math.log(parent.visited))/this.visited); // Det er SQRT's SKYLD! :(
 		//System.out.printf("Exploit: %f Explore: %f\n", exploitation, exploration);
 		return exploitation + exploration;
 	}
@@ -119,9 +141,18 @@ public class MCTreeNode {
 	}
 	
 	public double advanceXandReward(int ticks){
-		LevelScene copy = advanceStepClone(state,getRandomAction());
-		ticks--;
-		for(int i = 0; i < ticks; i++) advanceStep(copy, getRandomAction());
+		
+		LevelScene copy = null;
+		try {
+			copy = (LevelScene) state.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return 0.0;
+		}
+		for(int i = 0; i < ticks; i++){
+			advanceStep(copy, getRandomAction());
+			if(this.calculateReward(copy) == 0.0) return 0.0;
+		}
 		return this.calculateReward(copy);
 	}
 	
@@ -134,8 +165,8 @@ public class MCTreeNode {
 	 * @return The index in the children array that corresponds to the given action.
 	 */
 	private int getChildIndex(boolean[] action){ //boolean left, boolean right, (boolean down), boolean jump, boolean speed
-		//return (action[0] ? 16 : 0) + (action[1] ? 8 : 0) + (action[2] ? 4 : 0) + (action[3] ? 2 : 0) + (action[4] ? 1 : 0);
-		return (action[Mario.KEY_LEFT] ? 8 : 0) + (action[Mario.KEY_RIGHT] ? 4 : 0) + (action[Mario.KEY_JUMP] ? 2 : 0) + (action[Mario.KEY_SPEED] ? 1 : 0);
+		return (action[0] ? 16 : 0) + (action[1] ? 8 : 0) + (action[2] ? 4 : 0) + (action[3] ? 2 : 0) + (action[4] ? 1 : 0);
+		//return (action[Mario.KEY_LEFT] ? 8 : 0) + (action[Mario.KEY_RIGHT] ? 4 : 0) + (action[Mario.KEY_JUMP] ? 2 : 0) + (action[Mario.KEY_SPEED] ? 1 : 0);
 	}
 	
 	/**
@@ -145,16 +176,19 @@ public class MCTreeNode {
 	 * @return The action that a children and the index should have.
 	 */
 	private boolean[] getActionForIndex(int index){
+		
 		boolean[] result = new boolean[5];
-		/*if(index >= 16) { result[0] = true; index -= 16; }
+		//for (int i = 0; i < 5; i++)
+		//	result[i] = ((index &) != 0)
+		if(index >= 16) { result[0] = true; index -= 16; }
 		if(index >= 8) { result[1] = true; index -= 8; }
 		if(index >= 4) { result[2] = true; index -= 4; }
 		if(index >= 2) { result[3] = true; index -= 2; }
-		if(index >= 1) { result[4] = true; index -= 1; }*/
-		if(index >= 8) { result[Mario.KEY_LEFT] = true; index -= 8; }
+		if(index >= 1) { result[4] = true; index -= 1; }
+		/*if(index >= 8) { result[Mario.KEY_LEFT] = true; index -= 8; }
 		if(index >= 4) { result[Mario.KEY_RIGHT] = true; index -= 4; }
 		if(index >= 2) { result[Mario.KEY_JUMP] = true; index -= 2; }
-		if(index >= 1) { result[Mario.KEY_SPEED] = true; index -= 1; }
+		if(index >= 1) { result[Mario.KEY_SPEED] = true; index -= 1; }*/
 		return result;
 	}
 	
@@ -191,8 +225,10 @@ public class MCTreeNode {
 	}
 	
 	private void advanceStep(LevelScene state, boolean[] action){
-		state.mario.setKeys(action);
-		state.tick();
+		for(int i = 0; i < REPETITIONS; i++){
+			state.mario.setKeys(action);
+			state.tick();
+		}
 	}
 	
 	private boolean[] getRandomAction(){
@@ -210,16 +246,50 @@ public class MCTreeNode {
 	 * 0 is worst and 1 is best.
 	 */
 	public double calculateReward(LevelScene state){ // TODO: Just some hackup
-		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0) return 0;
-		double reward = state.mario.x;
-		reward += 10 * (state.enemiesKilled - parent.state.enemiesKilled);
-		reward += 1 * (state.coinsCollected - parent.state.coinsCollected);
-		
-		reward += 10 * (state.mario.x - parent.state.mario.x);
-		//reward /= marioShrunk(state);
+		/*double reward = 1.0 - (calcRemainingTime(state.mario.x, state.mario.xa)
+	 	+ (getMarioDamage() - parent.getMarioDamage())) / 10000.0;*/
+		double reward;
+		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0){
+			reward = 0.0;
+		}else{
+			 reward = (state.mario.x - parent.state.mario.x)/11.0;
+		}
+		//System.out.println("reward: " + reward);
 		return reward;
-		//return ((double)state.mario.x) / (state.level.width * marioShrunk(state));
 	}
+	
+	// from Robin
+    private int getMarioDamage()
+    {
+    	// early damage at gaps: Don't even fall 1 px into them.
+    	if (state.level.isGap[(int) (state.mario.x/16)] &&
+    			state.mario.y > state.level.gapHeight[(int) (state.mario.x/16)]*16)
+    	{
+     		state.mario.damage+=5;
+    	}
+    	//System.out.println(state.mario.damage);
+    	return state.mario.damage;
+    }
+	
+	// returns the estimated remaining time to some arbitrary distant target
+	private float calcRemainingTime(float marioX, float marioXA)
+	{
+	    float maxMarioSpeed = 10.9090909f;
+
+		return (100000 - (maxForwardMovement(marioXA, 1000) + marioX)) 
+			/ maxMarioSpeed - 1000;
+	}
+	
+    // distance covered at maximum acceleration with initialSpeed for ticks timesteps 
+    // this is the closed form of the above function, found using Matlab 
+    private float maxForwardMovement(float initialSpeed, int ticks)
+    {
+    	float y = ticks;
+    	float s0 = initialSpeed;
+    	return (float) (99.17355373 * Math.pow(0.89,y+1)
+    	  -9.090909091*s0*Math.pow(0.89,y+1)
+    	  +10.90909091*y-88.26446282+9.090909091*s0);
+    }
 	
 	/**
 	 * Tells if Mario's Mode has been decreased since last state. Used for dividing
@@ -249,4 +319,54 @@ public class MCTreeNode {
 		if(mario.large) return 1;
 		return 0;
 	}
+
+	/**
+	 * Output the tree under this node as XML
+	 * @param filename Where to store the generated XML
+	 */
+	public void outputTree(String filename)
+	{
+		StringBuilder b = new StringBuilder();
+		getXMLRepresentation(b);
+		String xml = b.toString();
+		try {
+			File f = new File(filename);
+			FileWriter fw = new FileWriter(f);
+			fw.write(xml);
+			fw.flush();
+			fw.close();
+		} catch (IOException e) {
+			System.out.println("Tree to file write failed: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	private void getXMLRepresentation(StringBuilder b)
+	{
+		b.append("<Node " + actionToXML() + " " + String.format("Reward=\"%s\"",reward/this.visited) + ">");
+		if (children != null)
+			for (MCTreeNode c : children)
+				if (c != null)
+					c.getXMLRepresentation(b);		
+		b.append("</Node>");
+	}
+	
+	private String actionToXML()
+	{
+		StringBuilder b = new StringBuilder("Action=\"");
+		if (action == null || action.length < 5)
+			b.append("Nothing");
+		else
+		{
+			if (action[0]) b.append("Left ");
+			if (action[1]) b.append("Right ");
+			if (action[2]) b.append("Down ");
+			if (action[3]) b.append("Jump ");
+			if (action[4]) b.append("Speed ");
+			if (!action[0] && !action[1] && !action[2] && !action[3] && !action[4]) b.append("Nothing");
+		}
+		b.append("\"");
+		return b.toString();
+	}
+	
 }

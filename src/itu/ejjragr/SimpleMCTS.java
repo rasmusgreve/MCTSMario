@@ -1,7 +1,5 @@
 package itu.ejjragr;
 
-import java.util.Random;
-
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.level.Level;
 
@@ -17,10 +15,11 @@ import ch.idsia.mario.environments.Environment;
  */
 public class SimpleMCTS implements Agent {
 	
-	private static final int TIME_PER_TICK = 40; // milliseconds
+	private static final int TIME_PER_TICK = 39; // milliseconds
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
+	private int delayOutput = 0;
 	
 	private String name = "SimpleMCTS";
 	private MCTreeNode root;
@@ -66,20 +65,27 @@ public class SimpleMCTS implements Agent {
 		clearRoot(obs);
 		
 		//System.out.println("start: "+root.visited);
-		
 		while(System.currentTimeMillis() < endTime){
 			MCTreeNode v1 = treePolicy(root);
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
 		}
 		
-		//System.out.println("end:   "+root.visited);
+		System.out.println("size:   "+root.visited);
 		System.out.println("depth: "+maxDepth);
 		
-		MCTreeNode choice = root.bestChild(0);
-		root = choice;
-		choice.parent = null;
-		return choice.action;
+		if (delayOutput++ > 50)
+			root.outputTree("Tree.xml");
+		
+		if(root.visited != 0){
+			MCTreeNode choice = root.bestChild(0);
+			root = choice;
+			choice.parent = null;
+			return choice.action;
+		}else{
+			return null;
+		}
+		
 	}
 	
 	/**
@@ -89,9 +95,10 @@ public class SimpleMCTS implements Agent {
 	 * @param obs The current state of the game to simulate from.
 	 */
 	private void clearRoot(Environment obs){
-		LevelScene l = new LevelScene();
+		LevelScene	l = new LevelScene();
 		l.init();
 		l.level = new Level(1500,15);
+
 		l.setLevelScene(obs.getEnemiesObservationZ(0));
 		l.setEnemies(obs.getEnemiesFloatPos());
 		l.mario.x = obs.getMarioFloatPos()[0];
@@ -127,8 +134,9 @@ public class SimpleMCTS implements Agent {
 	 * @param node The node to simulate random actions on.
 	 * @return The final reward for the node after the simulations.
 	 */
-	private double defaultPolicy(MCTreeNode node) { // TODO: According to the algorithm it should be until terminal and not X times.
-		return node.calculateReward(node.state);
+	private double defaultPolicy(MCTreeNode node) {
+		double result = node.calculateReward(node.state);
+		return result;
 		//return node.advanceXandReward(8);
 	}
 
@@ -141,7 +149,6 @@ public class SimpleMCTS implements Agent {
 	 * @return The new leaf.
 	 */
 	private MCTreeNode treePolicy(MCTreeNode v) { // may not be right
-		Random rand = new Random(1337);
 		while(true){
 			if(!v.isExpanded()){
 				return v.createRandomChild();
