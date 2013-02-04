@@ -24,7 +24,7 @@ public class EmilSimple extends BasicAIAgent {
     {
     	action[Mario.KEY_JUMP] = lastOnGround || !observation.isMarioOnGround();
     	lastOnGround = observation.isMarioOnGround();
-    	
+
     	//System.out.println(observation.getMarioMode());
     	//print2DByte(observation.getCompleteObservation());
     	return action;

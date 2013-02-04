@@ -19,6 +19,7 @@ public class SimpleMCTS implements Agent {
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
+	private int delayOutput = 0;
 	
 	private String name = "SimpleMCTS";
 	private MCTreeNode root;
@@ -73,6 +74,9 @@ public class SimpleMCTS implements Agent {
 		
 		System.out.println("size:   "+root.visited);
 		System.out.println("depth: "+maxDepth);
+		
+		if (delayOutput++ > 50)
+			root.outputTree("Tree.xml");
 		
 		if(root.visited != 0){
 			MCTreeNode choice = root.bestChild(0);

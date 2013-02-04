@@ -1,5 +1,9 @@
 package itu.ejjragr;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -172,7 +176,10 @@ public class MCTreeNode {
 	 * @return The action that a children and the index should have.
 	 */
 	private boolean[] getActionForIndex(int index){
+		
 		boolean[] result = new boolean[5];
+		//for (int i = 0; i < 5; i++)
+		//	result[i] = ((index &) != 0)
 		if(index >= 16) { result[0] = true; index -= 16; }
 		if(index >= 8) { result[1] = true; index -= 8; }
 		if(index >= 4) { result[2] = true; index -= 4; }
@@ -309,4 +316,32 @@ public class MCTreeNode {
 		if(mario.large) return 1;
 		return 0;
 	}
+
+	public void outputTree(String filename)
+	{
+		StringBuilder b = new StringBuilder();
+		getXMLRepresentation(b);
+		String xml = b.toString();
+		try {
+			File f = new File(filename);
+			FileWriter fw = new FileWriter(f);
+			fw.write(xml);
+			fw.flush();
+			fw.close();
+		} catch (IOException e) {
+			System.out.println("Tree to file write failed");
+			e.printStackTrace();
+		}
+	}
+	
+	private void getXMLRepresentation(StringBuilder b)
+	{
+		b.append("<Node>");
+		if (children != null)
+			for (MCTreeNode c : children)
+				if (c != null)
+					c.getXMLRepresentation(b);		
+		b.append("</Node>");
+	}
+	
 }
