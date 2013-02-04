@@ -262,6 +262,10 @@ public class MCTreeNode {
 		return 0;
 	}
 
+	/**
+	 * Output the tree under this node as XML
+	 * @param filename Where to store the generated XML
+	 */
 	public void outputTree(String filename)
 	{
 		StringBuilder b = new StringBuilder();
@@ -281,12 +285,30 @@ public class MCTreeNode {
 	
 	private void getXMLRepresentation(StringBuilder b)
 	{
-		b.append("<Node>");
+		b.append("<Node " + actionToXML() + ">");
 		if (children != null)
 			for (MCTreeNode c : children)
 				if (c != null)
 					c.getXMLRepresentation(b);		
 		b.append("</Node>");
+	}
+	
+	private String actionToXML()
+	{
+		StringBuilder b = new StringBuilder("Action=\"");
+		if (action == null || action.length < 5)
+			b.append("Nothing");
+		else
+		{
+			if (action[0]) b.append("Left ");
+			if (action[1]) b.append("Right ");
+			if (action[2]) b.append("Down ");
+			if (action[3]) b.append("Jump ");
+			if (action[4]) b.append("Speed ");
+			if (!action[0] && !action[1] && !action[2] && !action[3] && !action[4]) b.append("Nothing");
+		}
+		b.append("\"");
+		return b.toString();
 	}
 	
 }
