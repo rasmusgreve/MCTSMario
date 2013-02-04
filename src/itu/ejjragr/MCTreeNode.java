@@ -158,7 +158,10 @@ public class MCTreeNode {
 	 * @return The action that a children and the index should have.
 	 */
 	private boolean[] getActionForIndex(int index){
+		
 		boolean[] result = new boolean[5];
+		//for (int i = 0; i < 5; i++)
+		//	result[i] = ((index &) != 0)
 		if(index >= 16) { result[0] = true; index -= 16; }
 		if(index >= 8) { result[1] = true; index -= 8; }
 		if(index >= 4) { result[2] = true; index -= 4; }
@@ -259,13 +262,13 @@ public class MCTreeNode {
 		return 0;
 	}
 
-	public void outputTree()
+	public void outputTree(String filename)
 	{
 		StringBuilder b = new StringBuilder();
 		getXMLRepresentation(b);
 		String xml = b.toString();
 		try {
-			File f = new File("C:\\Users\\Rasmus\\Desktop\\Test.tree");
+			File f = new File(filename);
 			FileWriter fw = new FileWriter(f);
 			fw.write(xml);
 			fw.flush();
