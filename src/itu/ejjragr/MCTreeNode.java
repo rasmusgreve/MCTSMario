@@ -336,14 +336,14 @@ public class MCTreeNode {
 			fw.flush();
 			fw.close();
 		} catch (IOException e) {
-			System.out.println("Tree to file write failed");
+			System.out.println("Tree to file write failed: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
 	private void getXMLRepresentation(StringBuilder b)
 	{
-		b.append("<Node " + actionToXML() + ">");
+		b.append("<Node " + actionToXML() + " " + String.format("Reward=\"%s\"",reward/this.visited) + ">");
 		if (children != null)
 			for (MCTreeNode c : children)
 				if (c != null)

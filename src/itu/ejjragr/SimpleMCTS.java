@@ -65,7 +65,6 @@ public class SimpleMCTS implements Agent {
 		clearRoot(obs);
 		
 		//System.out.println("start: "+root.visited);
-		
 		while(System.currentTimeMillis() < endTime){
 			MCTreeNode v1 = treePolicy(root);
 			double reward = defaultPolicy(v1);
