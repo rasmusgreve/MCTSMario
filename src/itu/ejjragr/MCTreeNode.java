@@ -254,7 +254,7 @@ public class MCTreeNode {
 		}else{
 			 reward = (state.mario.x - parent.state.mario.x)/11.0;
 		}
-		System.out.println("reward: " + reward);
+		//System.out.println("reward: " + reward);
 		return reward;
 	}
 	
