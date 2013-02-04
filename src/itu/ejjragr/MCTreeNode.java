@@ -3,6 +3,8 @@ package itu.ejjragr;
 import java.util.ArrayList;
 import java.util.Random;
 
+import ch.idsia.mario.engine.GlobalOptions;
+
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.sprites.Mario;
 
@@ -19,16 +21,20 @@ import competition.cig.robinbaumgarten.astar.sprites.Mario;
 public class MCTreeNode {
 	
 	private static final int CHILDREN = 32;
+	private static final int REPETITIONS = 2;
 	
 	public static Random rand = new Random(1337);
 	
 	public LevelScene state;
 	public boolean[] action;
 	public MCTreeNode parent;
-	public MCTreeNode[] children = new MCTreeNode[CHILDREN];
-	public int numChildren = 0;
-	public double reward = 0;
-	public int visited = 0;
+	public MCTreeNode[] children;
+	public double reward;
+	public int visited;
+	
+	// for stats
+	public int numChildren;
+	public int timeElapsed = 0; // in ticks
 
 	/**
 	 * Constructor for the MCTreeNode.
@@ -38,9 +44,21 @@ public class MCTreeNode {
 	 * @param parent The parent of the new node or null if it is root.
 	 */
 	public MCTreeNode(LevelScene state, boolean[] action, MCTreeNode parent){
+		reset();
 		this.state = state;
 		this.action = action;
 		this.parent = parent;
+		this.timeElapsed = parent != null ? parent.timeElapsed + REPETITIONS : 0;
+	}
+	
+	public void reset(){
+		action = null;
+		parent = null;
+		children = new MCTreeNode[CHILDREN];
+		reward = 0;
+		visited = 0;
+		numChildren = 0;
+		timeElapsed = 0;
 	}
 	
 	/**
@@ -200,8 +218,10 @@ public class MCTreeNode {
 	}
 	
 	private void advanceStep(LevelScene state, boolean[] action){
-		state.mario.setKeys(action);
-		state.tick();
+		for(int i = 0; i < REPETITIONS; i++){
+			state.mario.setKeys(action);
+			state.tick();
+		}
 	}
 	
 	private boolean[] getRandomAction(){
@@ -219,12 +239,47 @@ public class MCTreeNode {
 	 * 0 is worst and 1 is best.
 	 */
 	public double calculateReward(LevelScene state){ // TODO: Just some hackup
+		/*double reward = 1.0 - (calcRemainingTime(state.mario.x, state.mario.xa)
+	 	+ (getMarioDamage() - parent.getMarioDamage())) / 10000.0;*/
 		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0) return 0.0;
 		double reward = 0.5;
 		reward += (state.mario.x - parent.state.mario.x)/10.0;
 		//System.out.println(reward);
 		return reward;
 	}
+	
+	// from Robin
+    private int getMarioDamage()
+    {
+    	// early damage at gaps: Don't even fall 1 px into them.
+    	if (state.level.isGap[(int) (state.mario.x/16)] &&
+    			state.mario.y > state.level.gapHeight[(int) (state.mario.x/16)]*16)
+    	{
+     		state.mario.damage+=5;
+    	}
+    	//System.out.println(state.mario.damage);
+    	return state.mario.damage;
+    }
+	
+	// returns the estimated remaining time to some arbitrary distant target
+	private float calcRemainingTime(float marioX, float marioXA)
+	{
+	    float maxMarioSpeed = 10.9090909f;
+
+		return (100000 - (maxForwardMovement(marioXA, 1000) + marioX)) 
+			/ maxMarioSpeed - 1000;
+	}
+	
+    // distance covered at maximum acceleration with initialSpeed for ticks timesteps 
+    // this is the closed form of the above function, found using Matlab 
+    private float maxForwardMovement(float initialSpeed, int ticks)
+    {
+    	float y = ticks;
+    	float s0 = initialSpeed;
+    	return (float) (99.17355373 * Math.pow(0.89,y+1)
+    	  -9.090909091*s0*Math.pow(0.89,y+1)
+    	  +10.90909091*y-88.26446282+9.090909091*s0);
+    }
 	
 	/**
 	 * Tells if Mario's Mode has been decreased since last state. Used for dividing

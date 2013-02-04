@@ -92,9 +92,15 @@ public class SimpleMCTS implements Agent {
 	 * @param obs The current state of the game to simulate from.
 	 */
 	private void clearRoot(Environment obs){
-		LevelScene l = new LevelScene();
-		l.init();
-		l.level = new Level(1500,15);
+		LevelScene l;
+		if(root == null){
+			l = new LevelScene();
+			l.init();
+			l.level = new Level(1500,15);
+		}else{
+			l = root.state;
+		}
+
 		l.setLevelScene(obs.getEnemiesObservationZ(0));
 		l.setEnemies(obs.getEnemiesFloatPos());
 		l.mario.x = obs.getMarioFloatPos()[0];
@@ -130,7 +136,7 @@ public class SimpleMCTS implements Agent {
 	 * @param node The node to simulate random actions on.
 	 * @return The final reward for the node after the simulations.
 	 */
-	private double defaultPolicy(MCTreeNode node) { // TODO: According to the algorithm it should be until terminal and not X times.
+	private double defaultPolicy(MCTreeNode node) {
 		return node.calculateReward(node.state);
 		//return node.advanceXandReward(8);
 	}
