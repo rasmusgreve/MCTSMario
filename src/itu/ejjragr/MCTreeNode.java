@@ -3,11 +3,8 @@ package itu.ejjragr;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Random;
-
-import ch.idsia.mario.engine.GlobalOptions;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.sprites.Mario;
@@ -225,8 +222,8 @@ public class MCTreeNode {
 	}
 	
 	private void advanceStep(LevelScene state, boolean[] action){
+		state.mario.setKeys(action);
 		for(int i = 0; i < REPETITIONS; i++){
-			state.mario.setKeys(action);
 			state.tick();
 		}
 	}
@@ -257,6 +254,18 @@ public class MCTreeNode {
 		//System.out.println("reward: " + reward);
 		return reward;
 	}
+/*	public double calculateReward(LevelScene state){ // TODO: Just some hackup
+		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0) return 0;
+		double reward = state.mario.x;
+		reward += 10 * (state.enemiesKilled - parent.state.enemiesKilled);
+		reward += 1 * (state.coinsCollected - parent.state.coinsCollected);
+		
+		reward += 10 * (state.mario.x - parent.state.mario.x);
+		reward /= (state.mario.x + 11.0);
+		//System.out.println("reward: " + reward);
+		return reward;
+		//return ((double)state.mario.x) / (state.level.width * marioShrunk(state));
+	}*/
 	
 	// from Robin
     private int getMarioDamage()
@@ -353,7 +362,7 @@ public class MCTreeNode {
 	
 	private String actionToXML()
 	{
-		StringBuilder b = new StringBuilder("Action=\"");
+		StringBuilder b = new StringBuilder("Move=\"");
 		if (action == null || action.length < 5)
 			b.append("Nothing");
 		else
@@ -363,7 +372,7 @@ public class MCTreeNode {
 			if (action[2]) b.append("Down ");
 			if (action[3]) b.append("Jump ");
 			if (action[4]) b.append("Speed ");
-			if (!action[0] && !action[1] && !action[2] && !action[3] && !action[4]) b.append("Nothing");
+			//if (!action[0] && !action[1] && !action[2] && !action[3] && !action[4]) b.append("Nothing");
 		}
 		b.append("\"");
 		return b.toString();

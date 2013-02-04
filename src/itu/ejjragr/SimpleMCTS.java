@@ -74,7 +74,7 @@ public class SimpleMCTS implements Agent {
 		System.out.println("size:   "+root.visited);
 		System.out.println("depth: "+maxDepth);
 		
-		if (delayOutput++ > 50)
+		if (delayOutput++ == 50)
 			root.outputTree("Tree.xml");
 		
 		if(root.visited != 0){
