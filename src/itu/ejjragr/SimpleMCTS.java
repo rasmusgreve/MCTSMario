@@ -96,14 +96,9 @@ public class SimpleMCTS implements Agent {
 	 * @param obs The current state of the game to simulate from.
 	 */
 	private void clearRoot(Environment obs){
-		LevelScene l;
-		if(root == null){
-			l = new LevelScene();
-			l.init();
-			l.level = new Level(1500,15);
-		}else{
-			l = root.state;
-		}
+		LevelScene	l = new LevelScene();
+		l.init();
+		l.level = new Level(1500,15);
 
 		l.setLevelScene(obs.getEnemiesObservationZ(0));
 		l.setEnemies(obs.getEnemiesFloatPos());
@@ -141,7 +136,8 @@ public class SimpleMCTS implements Agent {
 	 * @return The final reward for the node after the simulations.
 	 */
 	private double defaultPolicy(MCTreeNode node) {
-		return node.calculateReward(node.state);
+		double result = node.calculateReward(node.state);
+		return result;
 		//return node.advanceXandReward(8);
 	}
 

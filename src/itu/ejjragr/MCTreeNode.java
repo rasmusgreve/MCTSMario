@@ -248,10 +248,13 @@ public class MCTreeNode {
 	public double calculateReward(LevelScene state){ // TODO: Just some hackup
 		/*double reward = 1.0 - (calcRemainingTime(state.mario.x, state.mario.xa)
 	 	+ (getMarioDamage() - parent.getMarioDamage())) / 10000.0;*/
-		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0) return 0.0;
-		double reward = 0.5;
-		reward += (state.mario.x - parent.state.mario.x)/10.0;
-		//System.out.println(reward);
+		double reward;
+		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0){
+			reward = 0.0;
+		}else{
+			 reward = (state.mario.x - parent.state.mario.x)/11.0;
+		}
+		System.out.println("reward: " + reward);
 		return reward;
 	}
 	
