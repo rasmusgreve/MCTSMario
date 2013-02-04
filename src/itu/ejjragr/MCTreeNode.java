@@ -251,7 +251,7 @@ public class MCTreeNode {
 		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0) return 0.0;
 		double reward = 0.5;
 		reward += (state.mario.x - parent.state.mario.x)/10.0;
-		//System.out.println(reward);
+		System.out.println(reward);
 		return reward;
 	}
 	
@@ -333,14 +333,14 @@ public class MCTreeNode {
 			fw.flush();
 			fw.close();
 		} catch (IOException e) {
-			System.out.println("Tree to file write failed");
+			System.out.println("Tree to file write failed: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
 	private void getXMLRepresentation(StringBuilder b)
 	{
-		b.append("<Node " + actionToXML() + ">");
+		b.append("<Node " + actionToXML() + " " + String.format("Reward=\"%s\"",reward/this.visited) + ">");
 		if (children != null)
 			for (MCTreeNode c : children)
 				if (c != null)
