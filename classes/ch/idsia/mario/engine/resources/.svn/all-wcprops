@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources
+END
+logo.gif
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/logo.gif
+END
+font.gif
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/font.gif
+END
+gameovergost.gif
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/gameovergost.gif
+END
+worldmap.png
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/worldmap.png
+END
+test.lvl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/test.lvl
+END
+endscene.gif
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/endscene.gif
+END
+itemsheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/itemsheet.png
+END
+firemariosheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/firemariosheet.png
+END
+tiles.dat
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/tiles.dat
+END
+title.gif
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/title.gif
+END
+racoonmariosheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/racoonmariosheet.png
+END
+enemysheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/enemysheet.png
+END
+particlesheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/particlesheet.png
+END
+bgsheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/bgsheet.png
+END
+mariosheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/mariosheet.png
+END
+smallmariosheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/smallmariosheet.png
+END
+mapsheet.png
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/246/trunk/src/ch/idsia/mario/engine/resources/mapsheet.png
+END

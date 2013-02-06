@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/293/trunk/src/python/competition/agents
+END
+marioagent.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/200/trunk/src/python/competition/agents/marioagent.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/202/trunk/src/python/competition/agents/__init__.py
+END
+forwardagent.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/293/trunk/src/python/competition/agents/forwardagent.py
+END
+forwardrandomagent.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/202/trunk/src/python/competition/agents/forwardrandomagent.py
+END

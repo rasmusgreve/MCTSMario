@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/291/trunk/src/python/research/agents
+END
+networkagent.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/272/trunk/src/python/research/agents/networkagent.py
+END
+marioagent.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/200/trunk/src/python/research/agents/marioagent.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/203/trunk/src/python/research/agents/__init__.py
+END
+forwardagent.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/291/trunk/src/python/research/agents/forwardagent.py
+END
+forwardrandomagent.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/230/trunk/src/python/research/agents/forwardrandomagent.py
+END
+mdrnnagent.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/272/trunk/src/python/research/agents/mdrnnagent.py
+END

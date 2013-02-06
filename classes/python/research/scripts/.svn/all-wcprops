@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/278/trunk/src/python/research/scripts
+END
+ipymario.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/240/trunk/src/python/research/scripts/ipymario.py
+END
+reproducejulian.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/278/trunk/src/python/research/scripts/reproducejulian.py
+END
+evolvemrnnmario.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/278/trunk/src/python/research/scripts/evolvemrnnmario.py
+END
+testnetagent.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/278/trunk/src/python/research/scripts/testnetagent.py
+END
+agentmeasure.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/233/trunk/src/python/research/scripts/agentmeasure.py
+END

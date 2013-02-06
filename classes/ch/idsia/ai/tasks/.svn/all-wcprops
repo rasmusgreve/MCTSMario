@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/257/trunk/src/ch/idsia/ai/tasks
+END
+ProgressPlusTimeLeftTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/255/trunk/src/ch/idsia/ai/tasks/ProgressPlusTimeLeftTask.java
+END
+MultiSeedProgressTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/253/trunk/src/ch/idsia/ai/tasks/MultiSeedProgressTask.java
+END
+StochasticProgressTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/253/trunk/src/ch/idsia/ai/tasks/StochasticProgressTask.java
+END
+CoinTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/237/trunk/src/ch/idsia/ai/tasks/CoinTask.java
+END
+MultiDifficultyProgressTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/257/trunk/src/ch/idsia/ai/tasks/MultiDifficultyProgressTask.java
+END
+Task.java
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/237/trunk/src/ch/idsia/ai/tasks/Task.java
+END
+ProgressTask.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/237/trunk/src/ch/idsia/ai/tasks/ProgressTask.java
+END

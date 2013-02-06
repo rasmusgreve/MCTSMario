@@ -353,7 +353,7 @@ public class MCTreeNode {
 	
 	private String actionToXML()
 	{
-		StringBuilder b = new StringBuilder("Action=\"");
+		StringBuilder b = new StringBuilder("Move=\"");
 		if (action == null || action.length < 5)
 			b.append("Nothing");
 		else
@@ -363,7 +363,7 @@ public class MCTreeNode {
 			if (action[2]) b.append("Down ");
 			if (action[3]) b.append("Jump ");
 			if (action[4]) b.append("Speed ");
-			if (!action[0] && !action[1] && !action[2] && !action[3] && !action[4]) b.append("Nothing");
+			if (!action[0] && !action[1] && !action[2] && !action[3] && !action[4]) b.append("Nothing ");
 		}
 		b.append("\"");
 		return b.toString();

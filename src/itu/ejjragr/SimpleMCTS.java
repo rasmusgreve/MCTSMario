@@ -105,7 +105,6 @@ public class SimpleMCTS implements Agent {
 		l.mario.y = obs.getMarioFloatPos()[1]; // we dont set mario.xa or xy anywhere, may be necessary
 		l.mario.large = true;
 		l.mario.fire = true;
-		
 		root = new MCTreeNode(l,null, null);
 	}
 
