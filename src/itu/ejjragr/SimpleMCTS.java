@@ -1,9 +1,13 @@
 package itu.ejjragr;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.level.Level;
 
 import ch.idsia.ai.agents.Agent;
+import ch.idsia.mario.engine.MarioComponent;
 import ch.idsia.mario.environments.Environment;
 
 /**
@@ -13,9 +17,9 @@ import ch.idsia.mario.environments.Environment;
  * @author Emil
  *
  */
-public class SimpleMCTS implements Agent {
+public class SimpleMCTS extends KeyAdapter implements Agent {
 	
-	private static final int TIME_PER_TICK = 39; // milliseconds
+	private static int TIME_PER_TICK = 239; // milliseconds
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
@@ -71,12 +75,8 @@ public class SimpleMCTS implements Agent {
 			backup(v1,reward);
 		}
 		
-		System.out.println("size:   "+root.visited);
-		System.out.println("depth: "+maxDepth);
-		
-		if (delayOutput++ == 50)
-			root.outputTree("Tree.xml");
-		
+		System.out.println(String.format("Depth: %s, at %s nodes",maxDepth,root.visited));
+			
 		if(root.visited != 0){
 			MCTreeNode choice = root.bestChild(0);
 			root = choice;
@@ -87,6 +87,27 @@ public class SimpleMCTS implements Agent {
 		}
 		
 	}
+	
+	public void keyPressed (KeyEvent e)
+    {
+		if (e.getKeyCode() == KeyEvent.VK_SPACE)
+        {
+			System.out.println("Saving state");
+			MarioComponent.SAVE_NEXT_FRAME = true;
+			root.outputTree("Tree.xml");
+        }
+		else if (e.getKeyCode() == KeyEvent.VK_UP)
+		{
+			TIME_PER_TICK += 10;
+			System.out.println("Time pr tick: " + TIME_PER_TICK);
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_DOWN)
+		{
+			TIME_PER_TICK -= 10;
+			while (TIME_PER_TICK < 0) TIME_PER_TICK += 10;
+			System.out.println("Time pr tick: " + TIME_PER_TICK);
+		}
+    }
 	
 	/**
 	 * Creates a new root node (MCTreeNode) with the data in
