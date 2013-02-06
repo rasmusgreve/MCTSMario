@@ -19,7 +19,7 @@ import ch.idsia.mario.environments.Environment;
  */
 public class SimpleMCTS extends KeyAdapter implements Agent {
 	
-	private static int TIME_PER_TICK = 239; // milliseconds
+	private static int TIME_PER_TICK = 39; // milliseconds
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
@@ -101,7 +101,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			TIME_PER_TICK += 10;
 			System.out.println("Time pr tick: " + TIME_PER_TICK);
 		}
-		else if (e.getKeyCode() == KeyEvent.VK_DOWN)
+		else if (e.getKeyCode() == KeyEvent.VK_DOWN) 
 		{
 			TIME_PER_TICK -= 10;
 			while (TIME_PER_TICK < 0) TIME_PER_TICK += 10;
