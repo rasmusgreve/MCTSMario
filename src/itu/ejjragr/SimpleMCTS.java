@@ -19,7 +19,7 @@ import ch.idsia.mario.environments.Environment;
  */
 public class SimpleMCTS extends KeyAdapter implements Agent {
 	
-	private static int TIME_PER_TICK = 239; // milliseconds
+	private static int TIME_PER_TICK = 39; // milliseconds
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
@@ -69,13 +69,16 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		clearRoot(obs);
 		
 		//System.out.println("start: "+root.visited);
+		//int c = 0;
 		while(System.currentTimeMillis() < endTime){
+		//while (c < 400) {
 			MCTreeNode v1 = treePolicy(root);
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
+			//c++;
 		}
 		
-		System.out.println(String.format("Depth: %s, at %s nodes",maxDepth,root.visited));
+		System.out.println(String.format("Depth: %s, at %s nodes %sms used",maxDepth,root.visited,TIME_PER_TICK));
 			
 		if(root.visited != 0){
 			MCTreeNode choice = root.bestChild(0);

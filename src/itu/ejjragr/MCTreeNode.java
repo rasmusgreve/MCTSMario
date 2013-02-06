@@ -249,7 +249,7 @@ public class MCTreeNode {
 		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0){
 			reward = 0.0;
 		}else{
-			 reward = (state.mario.x - parent.state.mario.x)/11.0;
+			 reward = 0.5 + ((state.mario.x - parent.state.mario.x)/11.0)/2;
 		}
 		//System.out.println("reward: " + reward);
 		return reward;
