@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/293/trunk/src/python/competition/utils
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/202/trunk/src/python/competition/utils/__init__.py
+END
+cmdlineoptions.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/202/trunk/src/python/competition/utils/cmdlineoptions.py
+END
+dataadaptor.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/293/trunk/src/python/competition/utils/dataadaptor.py
+END
+bitsTest.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/293/trunk/src/python/competition/utils/bitsTest.py
+END

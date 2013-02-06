@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/321/trunk/src/ch/idsia/tools
+END
+CmdLineOptions.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/321/trunk/src/ch/idsia/tools/CmdLineOptions.java
+END
+LOGGER.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/142/trunk/src/ch/idsia/tools/LOGGER.java
+END
+ToolsConfigurator.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/321/trunk/src/ch/idsia/tools/ToolsConfigurator.java
+END
+Evaluator.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/321/trunk/src/ch/idsia/tools/Evaluator.java
+END
+EvaluationInfo.java
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/315/trunk/src/ch/idsia/tools/EvaluationInfo.java
+END
+StateEncoderDecoder.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/279/trunk/src/ch/idsia/tools/StateEncoderDecoder.java
+END
+GameViewer.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/307/trunk/src/ch/idsia/tools/GameViewer.java
+END
+EvaluationOptions.java
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/321/trunk/src/ch/idsia/tools/EvaluationOptions.java
+END

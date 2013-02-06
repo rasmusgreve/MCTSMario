@@ -1,0 +1,80 @@
+10
+
+dir
+329
+https://marioai.googlecode.com/svn/trunk/src/python/competition
+https://marioai.googlecode.com/svn
+
+
+
+2009-08-11T12:54:28.699322Z
+293
+Sergey.Karakovskiy
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+91117294-33d9-11de-9c63-4752e237b823
+
+agents
+dir
+
+client
+dir
+
+experiments
+dir
+
+ipymario.py
+file
+
+
+
+
+2009-08-11T14:21:03.000000Z
+f011ba4e5457a13bf06467c4f459ed7d
+2009-08-11T12:54:28.699322Z
+293
+Sergey.Karakovskiy
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1687
+
+scripts
+dir
+
+tasks
+dir
+
+utils
+dir
+

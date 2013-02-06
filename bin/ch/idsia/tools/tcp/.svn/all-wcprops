@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/321/trunk/src/ch/idsia/tools/tcp
+END
+Server.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/290/trunk/src/ch/idsia/tools/tcp/Server.java
+END
+ServerAgent.java
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/321/trunk/src/ch/idsia/tools/tcp/ServerAgent.java
+END
+TCP_MODE.java
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/282/trunk/src/ch/idsia/tools/tcp/TCP_MODE.java
+END

@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/139/trunk/src/wox/serial
+END
+ArrayListTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/107/trunk/src/wox/serial/ArrayListTest.java
+END
+ReadTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/107/trunk/src/wox/serial/ReadTest.java
+END
+EncodeBase64.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/107/trunk/src/wox/serial/EncodeBase64.java
+END
+SimpleWriter.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/107/trunk/src/wox/serial/SimpleWriter.java
+END
+WriterTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/107/trunk/src/wox/serial/WriterTest.java
+END
+Easy.java
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/107/trunk/src/wox/serial/Easy.java
+END
+ObjectReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/107/trunk/src/wox/serial/ObjectReader.java
+END
+Util.java
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/107/trunk/src/wox/serial/Util.java
+END
+AccessTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/107/trunk/src/wox/serial/AccessTest.java
+END
+SimpleReader.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/107/trunk/src/wox/serial/SimpleReader.java
+END
+EasyTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/107/trunk/src/wox/serial/EasyTest.java
+END
+Serial.java
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/!svn/ver/107/trunk/src/wox/serial/Serial.java
+END
+ObjectWriter.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/107/trunk/src/wox/serial/ObjectWriter.java
+END
+ShadowTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/107/trunk/src/wox/serial/ShadowTest.java
+END
+TestObject.java
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/139/trunk/src/wox/serial/TestObject.java
+END

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/293/trunk/src/python/competition/client
+END
+environment.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/200/trunk/src/python/competition/client/environment.py
+END
+tcpenvironment.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/293/trunk/src/python/competition/client/tcpenvironment.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/202/trunk/src/python/competition/client/__init__.py
+END
+marioenvironment.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/293/trunk/src/python/competition/client/marioenvironment.py
+END
+client.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/293/trunk/src/python/competition/client/client.py
+END
