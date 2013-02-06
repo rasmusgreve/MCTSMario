@@ -26,15 +26,15 @@ public class MCTreeNode {
 	
 	public static Random rand = new Random(1337);
 	
-	public LevelScene state;
-	public boolean[] action;
-	public MCTreeNode parent;
-	public MCTreeNode[] children;
-	public double reward;
-	public int visited;
+	public LevelScene state = null;
+	public boolean[] action = null;
+	public MCTreeNode parent = null;
+	public MCTreeNode[] children = new MCTreeNode[CHILDREN];
+	public double reward = 0;
+	public int visited = 0;
 	
 	// for stats
-	public int numChildren;
+	public int numChildren = 0;
 	public int timeElapsed = 0; // in ticks
 
 	/**
@@ -45,21 +45,10 @@ public class MCTreeNode {
 	 * @param parent The parent of the new node or null if it is root.
 	 */
 	public MCTreeNode(LevelScene state, boolean[] action, MCTreeNode parent){
-		reset();
 		this.state = state;
 		this.action = action;
 		this.parent = parent;
 		this.timeElapsed = parent != null ? parent.timeElapsed + REPETITIONS : 0;
-	}
-	
-	public void reset(){
-		action = null;
-		parent = null;
-		children = new MCTreeNode[CHILDREN];
-		reward = 0;
-		visited = 0;
-		numChildren = 0;
-		timeElapsed = 0;
 	}
 	
 	/**
