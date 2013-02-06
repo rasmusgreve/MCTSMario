@@ -363,6 +363,7 @@ public class MCTreeNode {
 			if (action[2]) b.append("Down ");
 			if (action[3]) b.append("Jump ");
 			if (action[4]) b.append("Speed ");
+
 			//if (!action[0] && !action[1] && !action[2] && !action[3] && !action[4]) b.append("Nothing");
 
 		}

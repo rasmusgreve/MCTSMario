@@ -8,18 +8,24 @@ import ch.idsia.tools.EvaluationInfo;
 import ch.idsia.tools.GameViewer;
 import ch.idsia.tools.tcp.ServerAgent;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.awt.image.VolatileImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MarioComponent extends JComponent implements Runnable, /*KeyListener,*/ FocusListener, Environment {
     private static final long serialVersionUID = 790878775993203817L;
+    public static boolean SAVE_NEXT_FRAME = false; //Modification for debugging (itu.ejjragr)
     public static final int TICKS_PER_SECOND = 24;
 
     private boolean running = false;
@@ -216,10 +222,21 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
                 LevelScene.drawStringDropShadow(og, "Trial:", 33, 4, 7);
                 LevelScene.drawStringDropShadow(og, msg, 33, 5, 7);
 
-
                 if (width != 320 || height != 240) {
-                        g.drawImage(image, 0, 0, 640 * 2, 480 * 2, null);
+                        g.drawImage(image, 0, 0, 640 * 2, 480 * 2, null);  
                 } else {
+                	if (SAVE_NEXT_FRAME) //Modification for debugging (itu.ejjragr)
+                	{
+	                	BufferedImage im = new BufferedImage(320,240,BufferedImage.TYPE_INT_RGB);
+	                    Graphics gg = im.createGraphics();
+	                    gg.drawImage(image, 0, 0, null);
+	                    try {
+							ImageIO.write(im, "png", new File("Scene.png"));
+						} catch (IOException e) {
+							System.out.println("Save frame failed");
+						}
+	                    SAVE_NEXT_FRAME = false;
+                	}
                     g.drawImage(image, 0, 0, null);
                 }
             } else {
