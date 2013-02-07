@@ -23,12 +23,9 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
-<<<<<<< HEAD
-	private int delayOutput = 0;
     private float lastX = 0;
     private float lastY = 0;
-=======
->>>>>>> 8751ed39f24ed61a79b5451126a286fbfb2aba43
+
 	
 	private String name = "SimpleMCTS";
 	private MCTreeNode root;
