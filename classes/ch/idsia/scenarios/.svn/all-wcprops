@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/329/trunk/src/ch/idsia/scenarios
+END
+Stats.java
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/321/trunk/src/ch/idsia/scenarios/Stats.java
+END
+Evolve.java
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/321/trunk/src/ch/idsia/scenarios/Evolve.java
+END
+EvolveMultiSeed.java
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/321/trunk/src/ch/idsia/scenarios/EvolveMultiSeed.java
+END
+RandomSearch.java
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/255/trunk/src/ch/idsia/scenarios/RandomSearch.java
+END
+CustomRun.java
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/229/trunk/src/ch/idsia/scenarios/CustomRun.java
+END
+EvolveIncrementally.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/321/trunk/src/ch/idsia/scenarios/EvolveIncrementally.java
+END
+Play.java
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/321/trunk/src/ch/idsia/scenarios/Play.java
+END
+CompetitionScore.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/328/trunk/src/ch/idsia/scenarios/CompetitionScore.java
+END
+MainRun.java
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/329/trunk/src/ch/idsia/scenarios/MainRun.java
+END

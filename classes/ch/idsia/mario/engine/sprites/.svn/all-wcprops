@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/317/trunk/src/ch/idsia/mario/engine/sprites
+END
+Shell.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/195/trunk/src/ch/idsia/mario/engine/sprites/Shell.java
+END
+FlowerEnemy.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/308/trunk/src/ch/idsia/mario/engine/sprites/FlowerEnemy.java
+END
+SpriteContext.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/64/trunk/src/ch/idsia/mario/engine/sprites/SpriteContext.java
+END
+BulletBill.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/195/trunk/src/ch/idsia/mario/engine/sprites/BulletBill.java
+END
+Enemy.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/314/trunk/src/ch/idsia/mario/engine/sprites/Enemy.java
+END
+Mushroom.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/195/trunk/src/ch/idsia/mario/engine/sprites/Mushroom.java
+END
+Particle.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/195/trunk/src/ch/idsia/mario/engine/sprites/Particle.java
+END
+Sparkle.java
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/195/trunk/src/ch/idsia/mario/engine/sprites/Sparkle.java
+END
+Fireball.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/195/trunk/src/ch/idsia/mario/engine/sprites/Fireball.java
+END
+Sprite.java
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/309/trunk/src/ch/idsia/mario/engine/sprites/Sprite.java
+END
+Mario.java
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/317/trunk/src/ch/idsia/mario/engine/sprites/Mario.java
+END
+CoinAnim.java
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/195/trunk/src/ch/idsia/mario/engine/sprites/CoinAnim.java
+END
+FireFlower.java
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/195/trunk/src/ch/idsia/mario/engine/sprites/FireFlower.java
+END
