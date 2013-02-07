@@ -23,9 +23,12 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
+<<<<<<< HEAD
 	private int delayOutput = 0;
     private float lastX = 0;
     private float lastY = 0;
+=======
+>>>>>>> 8751ed39f24ed61a79b5451126a286fbfb2aba43
 	
 	private String name = "SimpleMCTS";
 	private MCTreeNode root;
@@ -69,6 +72,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		long endTime = startTime + TIME_PER_TICK;
 		
 		clearRoot(obs);
+		maxDepth = 0;
 		
 		//System.out.println("start: "+root.visited);
 		//int c = 0;
@@ -129,8 +133,8 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		l.setEnemies(obs.getEnemiesFloatPos());
 		l.mario.x = obs.getMarioFloatPos()[0];
 		l.mario.y = obs.getMarioFloatPos()[1]; // we dont set mario.xa or xy anywhere, may be necessary
-		l.mario.large = true;
-		l.mario.fire = true;
+		if(obs.getMarioMode() == 2) l.mario.fire = true;
+		if(obs.getMarioMode() >= 1) l.mario.large = true;
 		root = new MCTreeNode(l,null, null);
 	}
 
@@ -162,7 +166,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private double defaultPolicy(MCTreeNode node) {
 		double result = node.calculateReward(node.state);
 		return result;
-		//return node.advanceXandReward(8);
+		//return node.advanceXandReward(4);
 	}
 
 	/**
