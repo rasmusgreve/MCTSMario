@@ -71,6 +71,9 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		clearRoot(obs);
 		maxDepth = 0;
 		
+		//lastX = obs.getMarioFloatPos()[0];
+		//lastY = obs.getMarioFloatPos()[1];
+		
 		//System.out.println("start: "+root.visited);
 		//int c = 0;
 		while(System.currentTimeMillis() < endTime){
@@ -132,6 +135,12 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		l.mario.y = obs.getMarioFloatPos()[1]; // we dont set mario.xa or xy anywhere, may be necessary
 		if(obs.getMarioMode() == 2) l.mario.fire = true;
 		if(obs.getMarioMode() >= 1) l.mario.large = true;
+		/*if (lastX != 0)
+		{
+			l.mario.xa = (l.mario.x - lastX) *0.89f;
+			if (Math.abs(l.mario.y - l.mario.y) > 0.1f)
+				l.mario.ya = (l.mario.y - lastY) * 0.85f;// + 3f;
+		}*/
 		root = new MCTreeNode(l,null, null);
 	}
 
