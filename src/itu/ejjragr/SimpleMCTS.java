@@ -23,6 +23,8 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
+	private boolean picture = false;
+	
 	
 	private String name = "SimpleMCTS";
 	private MCTreeNode root;
@@ -71,6 +73,8 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + TIME_PER_TICK;
 		
+		printDifference(obs);
+		
 		initRoot(obs);
 		maxDepth = 0;
 		
@@ -98,6 +102,23 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			return null;
 		}
 		
+	}
+	
+	private void printDifference(Environment obs) {
+		if(root == null) return;
+		
+		float dx = root.state.mario.x - obs.getMarioFloatPos()[0];
+		float dy = root.state.mario.y - obs.getMarioFloatPos()[1];
+
+		System.out.println("xDiff: "+dx);
+		System.out.println("yDiff: "+dy);
+		
+		System.out.println("--------------------------------------------------------");
+		
+		if(!picture && dx > 1.0){
+			MarioComponent.SAVE_NEXT_FRAME = true;
+			picture = true;
+		}
 	}
 	
 	public void keyPressed (KeyEvent e)

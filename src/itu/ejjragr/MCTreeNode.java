@@ -21,8 +21,8 @@ import competition.cig.robinbaumgarten.astar.sprites.Mario;
  */
 public class MCTreeNode {
 	
-	private static final int CHILDREN = 32;
-	private static final int REPETITIONS = 2;
+	private static final int CHILDREN = 16;
+	private static final int REPETITIONS = 1;
 	
 	public static Random rand = new Random(1337);
 	
@@ -165,8 +165,8 @@ public class MCTreeNode {
 	 * @return The index in the children array that corresponds to the given action.
 	 */
 	private int getChildIndex(boolean[] action){ //boolean left, boolean right, (boolean down), boolean jump, boolean speed
-		return (action[0] ? 16 : 0) + (action[1] ? 8 : 0) + (action[2] ? 4 : 0) + (action[3] ? 2 : 0) + (action[4] ? 1 : 0);
-		//return (action[Mario.KEY_LEFT] ? 8 : 0) + (action[Mario.KEY_RIGHT] ? 4 : 0) + (action[Mario.KEY_JUMP] ? 2 : 0) + (action[Mario.KEY_SPEED] ? 1 : 0);
+		//return (action[0] ? 16 : 0) + (action[1] ? 8 : 0) + (action[2] ? 4 : 0) + (action[3] ? 2 : 0) + (action[4] ? 1 : 0);
+		return (action[Mario.KEY_LEFT] ? 8 : 0) + (action[Mario.KEY_RIGHT] ? 4 : 0) + (action[Mario.KEY_JUMP] ? 2 : 0) + (action[Mario.KEY_SPEED] ? 1 : 0);
 	}
 	
 	/**
@@ -180,15 +180,15 @@ public class MCTreeNode {
 		boolean[] result = new boolean[5];
 		//for (int i = 0; i < 5; i++)
 		//	result[i] = ((index &) != 0)
-		if(index >= 16) { result[0] = true; index -= 16; }
+		/*if(index >= 16) { result[0] = true; index -= 16; }
 		if(index >= 8) { result[1] = true; index -= 8; }
 		if(index >= 4) { result[2] = true; index -= 4; }
 		if(index >= 2) { result[3] = true; index -= 2; }
-		if(index >= 1) { result[4] = true; index -= 1; }
-		/*if(index >= 8) { result[Mario.KEY_LEFT] = true; index -= 8; }
+		if(index >= 1) { result[4] = true; index -= 1; }*/
+		if(index >= 8) { result[Mario.KEY_LEFT] = true; index -= 8; }
 		if(index >= 4) { result[Mario.KEY_RIGHT] = true; index -= 4; }
 		if(index >= 2) { result[Mario.KEY_JUMP] = true; index -= 2; }
-		if(index >= 1) { result[Mario.KEY_SPEED] = true; index -= 1; }*/
+		if(index >= 1) { result[Mario.KEY_SPEED] = true; index -= 1; }
 		return result;
 	}
 	
