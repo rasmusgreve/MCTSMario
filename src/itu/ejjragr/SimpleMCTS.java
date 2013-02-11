@@ -23,10 +23,8 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
-    private float lastX = 0;
-    private float lastY = 0;
-    private boolean picture = false;
-
+	private boolean picture = false;
+	
 	
 	private String name = "SimpleMCTS";
 	private MCTreeNode root;
@@ -38,7 +36,13 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 
 	@Override
 	public boolean[] getAction(Environment obs) {
-		return MCTSSearch(obs);
+		if (root == null)
+			initRoot(obs);
+		else
+			clearRoot(obs);
+
+		boolean[] action = MCTSSearch(obs);
+		return action;
 	}
 
 	@Override
@@ -69,14 +73,15 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + TIME_PER_TICK;
 		
-		//printDifference(obs);
+		printDifference(obs);
 		
-		clearRoot(obs);
+		initRoot(obs);
 		maxDepth = 0;
 		
-		lastX = obs.getMarioFloatPos()[0];
-		lastY = obs.getMarioFloatPos()[1];
+		//lastX = obs.getMarioFloatPos()[0];
+		//lastY = obs.getMarioFloatPos()[1];
 		
+		//System.out.println("start: "+root.visited);
 		//int c = 0;
 		while(System.currentTimeMillis() < endTime){
 		//while (c < 400) {
@@ -120,7 +125,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		MarioComponent.SAVE_NEXT_FRAME = true;
 		root.outputTree("Tree.xml");
 	}
-
+	
 	public void keyPressed (KeyEvent e)
     {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE)
@@ -147,7 +152,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	 * 
 	 * @param obs The current state of the game to simulate from.
 	 */
-	private void clearRoot(Environment obs){
+	private void initRoot(Environment obs){
 		LevelScene	l = new LevelScene();
 		l.init();
 		l.level = new Level(1500,15);
@@ -155,16 +160,20 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		l.setLevelScene(obs.getEnemiesObservationZ(0));
 		l.setEnemies(obs.getEnemiesFloatPos());
 		l.mario.x = obs.getMarioFloatPos()[0];
-		l.mario.y = obs.getMarioFloatPos()[1]; // we dont set mario.xa or xy anywhere, may be necessary
-		if(obs.getMarioMode() == 2) l.mario.fire = true;
-		if(obs.getMarioMode() >= 1) l.mario.large = true;
-		if (lastX != 0)
-		{
-			l.mario.xa = (l.mario.x - lastX) *0.89f;
-			if (Math.abs(l.mario.y - l.mario.y) > 0.1f)
-				l.mario.ya = (l.mario.y - lastY) * 0.85f;// + 3f;
-		}
-		root = new MCTreeNode(l,null, null);
+		l.mario.y = obs.getMarioFloatPos()[1];
+		l.mario.fire = true;
+		l.mario.large = true;
+
+		root = new MCTreeNode(l, null, null);
+	}
+	
+	private void clearRoot(Environment obs)
+	{
+		root.state.mario.setKeys(root.action);
+		root.state.tick();
+		root.reset();
+		root.state.setEnemies(obs.getEnemiesFloatPos());
+		root.state.setLevelScene(obs.getLevelSceneObservationZ(0));
 	}
 
 	/**

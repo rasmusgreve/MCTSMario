@@ -90,6 +90,20 @@ public class MCTreeNode {
 	}
 	
 	/**
+	 * Reset this node
+	 */
+	public void reset()
+	{
+		children = new MCTreeNode[CHILDREN];
+		action = null;
+		parent = null;
+		reward = 0;
+		visited = 0;
+		numChildren = 0;
+		timeElapsed = 0;
+	}
+	
+	/**
 	 * Calculates the confidence in a given node depending on the average reward of
 	 * this node (exploitation) (and children) and how neglected the node has been
 	 * (exploration).
