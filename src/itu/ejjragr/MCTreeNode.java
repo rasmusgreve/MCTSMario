@@ -179,7 +179,7 @@ public class MCTreeNode {
 		
 		boolean[] result = new boolean[5];
 		//for (int i = 0; i < 5; i++)
-		//	result[i] = ((index &) != 0)
+		//	result[i] = ((index & 1<<i) != 0);
 		/*if(index >= 16) { result[0] = true; index -= 16; }
 		if(index >= 8) { result[1] = true; index -= 8; }
 		if(index >= 4) { result[2] = true; index -= 4; }
