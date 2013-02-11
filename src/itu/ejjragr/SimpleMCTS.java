@@ -69,7 +69,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + TIME_PER_TICK;
 		
-		printDifference(obs);
+		//printDifference(obs);
 		
 		clearRoot(obs);
 		maxDepth = 0;
@@ -77,7 +77,6 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		lastX = obs.getMarioFloatPos()[0];
 		lastY = obs.getMarioFloatPos()[1];
 		
-		//System.out.println("start: "+root.visited);
 		//int c = 0;
 		while(System.currentTimeMillis() < endTime){
 		//while (c < 400) {
@@ -87,7 +86,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			//c++;
 		}
 		
-		//System.out.println(String.format("Depth: %s, at %s nodes %sms used",maxDepth,root.visited,TIME_PER_TICK));
+		System.out.println(String.format("Depth: %s, at %s nodes %sms used",maxDepth,root.visited,TIME_PER_TICK));
 			
 		if(root.visited != 0){
 			MCTreeNode choice = root.bestChild(0);
@@ -112,9 +111,14 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		System.out.println("--------------------------------------------------------");
 		
 		if(!picture && dx > 1.0){
-			MarioComponent.SAVE_NEXT_FRAME = true;
+			logState();
 			picture = true;
 		}
+	}
+	
+	private void logState(){
+		MarioComponent.SAVE_NEXT_FRAME = true;
+		root.outputTree("Tree.xml");
 	}
 
 	public void keyPressed (KeyEvent e)
@@ -122,8 +126,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE)
         {
 			System.out.println("Saving state");
-			MarioComponent.SAVE_NEXT_FRAME = true;
-			root.outputTree("Tree.xml");
+			logState();
         }
 		else if (e.getKeyCode() == KeyEvent.VK_UP)
 		{
