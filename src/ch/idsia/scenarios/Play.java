@@ -29,8 +29,8 @@ public class Play {
         options.setVisualization(true);
         options.setNumberOfTrials(1);
         options.setMatlabFileName("");
-        options.setLevelRandSeed((int) (Math.random () * Integer.MAX_VALUE));
-        //options.setLevelRandSeed(1);
+        //options.setLevelRandSeed((int) (Math.random () * Integer.MAX_VALUE));
+        options.setLevelRandSeed(1411649273);
         options.setLevelDifficulty(3);
         //options.setLevelType(2);
         task.setOptions(options);

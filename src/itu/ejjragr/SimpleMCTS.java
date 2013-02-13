@@ -244,7 +244,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private double defaultPolicy(MCTreeNode node) {
 		//double result = node.calculateReward(node.state);
 		//return result;
-		return node.advanceXandReward(20);
+		return node.advanceXandReward(15);
 	}
 
 	/**
