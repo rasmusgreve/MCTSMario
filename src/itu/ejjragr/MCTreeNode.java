@@ -21,13 +21,13 @@ import competition.cig.robinbaumgarten.astar.sprites.Mario;
  */
 public class MCTreeNode {
 	
-	private static final int CHILDREN = 16;
+	private static int CHILDREN = 16;
 	private static final int REPETITIONS = 1;
 	
 	public static Random rand = new Random(1337);
 	
 	public LevelScene state = null;
-	public boolean[] action = null;
+	public boolean[] action = new boolean[CHILDREN];
 	public MCTreeNode parent = null;
 	public MCTreeNode[] children = new MCTreeNode[CHILDREN];
 	public double reward = 0;
@@ -165,8 +165,9 @@ public class MCTreeNode {
 	 * @return The index in the children array that corresponds to the given action.
 	 */
 	private int getChildIndex(boolean[] action){ //boolean left, boolean right, (boolean down), boolean jump, boolean speed
-		//return (action[0] ? 16 : 0) + (action[1] ? 8 : 0) + (action[2] ? 4 : 0) + (action[3] ? 2 : 0) + (action[4] ? 1 : 0);
-		return (action[Mario.KEY_LEFT] ? 8 : 0) + (action[Mario.KEY_RIGHT] ? 4 : 0) + (action[Mario.KEY_JUMP] ? 2 : 0) + (action[Mario.KEY_SPEED] ? 1 : 0);
+		if(CHILDREN == 32) return (action[0] ? 16 : 0) + (action[1] ? 8 : 0) + (action[2] ? 4 : 0) + (action[3] ? 2 : 0) + (action[4] ? 1 : 0);
+		if(CHILDREN == 16) return (action[Mario.KEY_LEFT] ? 8 : 0) + (action[Mario.KEY_RIGHT] ? 4 : 0) + (action[Mario.KEY_JUMP] ? 2 : 0) + (action[Mario.KEY_SPEED] ? 1 : 0);
+		return 0;
 	}
 	
 	/**
@@ -180,15 +181,18 @@ public class MCTreeNode {
 		boolean[] result = new boolean[5];
 		//for (int i = 0; i < 5; i++)
 		//	result[i] = ((index & 1<<i) != 0);
-		/*if(index >= 16) { result[0] = true; index -= 16; }
-		if(index >= 8) { result[1] = true; index -= 8; }
-		if(index >= 4) { result[2] = true; index -= 4; }
-		if(index >= 2) { result[3] = true; index -= 2; }
-		if(index >= 1) { result[4] = true; index -= 1; }*/
-		if(index >= 8) { result[Mario.KEY_LEFT] = true; index -= 8; }
-		if(index >= 4) { result[Mario.KEY_RIGHT] = true; index -= 4; }
-		if(index >= 2) { result[Mario.KEY_JUMP] = true; index -= 2; }
-		if(index >= 1) { result[Mario.KEY_SPEED] = true; index -= 1; }
+		if(CHILDREN == 32){
+			if(index >= 16) { result[0] = true; index -= 16; }
+			if(index >= 8) { result[1] = true; index -= 8; }
+			if(index >= 4) { result[2] = true; index -= 4; }
+			if(index >= 2) { result[3] = true; index -= 2; }
+			if(index >= 1) { result[4] = true; index -= 1; }
+		}else if(CHILDREN == 16){
+			if(index >= 8) { result[Mario.KEY_LEFT] = true; index -= 8; }
+			if(index >= 4) { result[Mario.KEY_RIGHT] = true; index -= 4; }
+			if(index >= 2) { result[Mario.KEY_JUMP] = true; index -= 2; }
+			if(index >= 1) { result[Mario.KEY_SPEED] = true; index -= 1; }
+		}
 		return result;
 	}
 	
@@ -252,7 +256,8 @@ public class MCTreeNode {
 		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0){
 			reward = 0.0;
 		}else{
-			 reward = 0.5 + ((state.mario.x - parent.state.mario.x)/11.0)/2;
+			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/11.0)/2;
+			//reward = state.mario.x/4224f;
 		}
 		//System.out.println("reward: " + reward);
 		return reward;

@@ -43,6 +43,12 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		root = null;
 	}
 
+	public void printDifs(LevelScene ls, Environment obs)
+	{
+		//System.out.println(String.format("%s / %s -- %s / %s",ls.mario.x,obs.getMarioFloatPos()[0],ls.mario.y,obs.getMarioFloatPos()[1]));
+		System.out.println(String.format("Difs: %s %s",obs.getMarioFloatPos()[0]-ls.mario.x,obs.getMarioFloatPos()[1]-ls.mario.y));
+	}
+	
 	@Override
 	public boolean[] getAction(Environment obs) {
 		
@@ -50,8 +56,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		ls.mario.setKeys(oldAction);
 		ls.tick();
 		
-		System.out.println(String.format("%s / %s -- %s / %s",ls.mario.x,obs.getMarioFloatPos()[0],ls.mario.y,obs.getMarioFloatPos()[1]));
-		System.out.println(String.format("Difs: %s %s",obs.getMarioFloatPos()[0]-ls.mario.x,obs.getMarioFloatPos()[1]-ls.mario.y));
+		//printDifs(ls,obs);
 		
 		/*if (ls.mario.x != obs.getMarioFloatPos()[0] || ls.mario.y != obs.getMarioFloatPos()[1])
 		{
@@ -65,8 +70,8 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			ls.mario.y = obs.getMarioFloatPos()[1];
 		}*/
 		
-		lastX = obs.getMarioFloatPos()[0];
-		lastY = obs.getMarioFloatPos()[1];
+		//lastX = obs.getMarioFloatPos()[0];
+		//lastY = obs.getMarioFloatPos()[1];
 		
 		ls.setLevelScene(obs.getLevelSceneObservationZ(0));
 		ls.setEnemies(obs.getEnemiesFloatPos());
@@ -104,60 +109,55 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + TIME_PER_TICK;
 		
-		
+		if (root != null && root.state != null)
+		printDifs(root.state,obs); //Print
+		if (root != null && root.state != null)
+		{
+			if (root.state.mario.x != obs.getMarioFloatPos()[0] || root.state.mario.y != obs.getMarioFloatPos()[1])
+			{
+				System.out.println("CORRECTED POSITIONS!");
+				// Set the simulator mario to the real coordinates (x and y) and estimated speeds (xa and ya)
+				root.state.mario.x = obs.getMarioFloatPos()[0];
+				root.state.mario.xa = (obs.getMarioFloatPos()[0] - lastX) *0.89f;
+				if (Math.abs(root.state.mario.y - obs.getMarioFloatPos()[1]) > 0.1f)
+					root.state.mario.ya = (obs.getMarioFloatPos()[1] - lastY) * 0.85f;// + 3f;
+	
+				root.state.mario.y = obs.getMarioFloatPos()[1];
+			}
+		}
+		lastX = obs.getMarioFloatPos()[0];
+		lastY = obs.getMarioFloatPos()[1];
+		System.out.println(lastX);
 		
 		if (root == null)
-			initRoot(obs);
+			initRoot(obs); //new LevelScene
 		else
-			clearRoot(obs);
+			clearRoot(obs); //setEnemies, setLevelScene
 		
-		printDifference(obs);
+		
 		
 		maxDepth = 0;
 	
-		//System.out.println("start: "+root.visited);
-		//int c = 0;
 		while(System.currentTimeMillis() < endTime){
-		//while (c < 400) {
-			MCTreeNode v1 = treePolicy(root);
+			//setKeys(action);
+			//tick();
+			MCTreeNode v1 = treePolicy(root); //CreateRandChild, CreateChild, advanceStepClone, advanceStep
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
-			//c++;
 		}
+		
 		
 		System.out.println(String.format("Depth: %s, at %s nodes %sms used",maxDepth,root.visited,TIME_PER_TICK));
 			
 		if(root.visited != 0){
 			MCTreeNode choice = root.bestChild(0);
 			root = choice;
+			
 			return choice.action;
 		}else{
 			return new boolean[5];
 		}
 		
-	}
-	
-	private void printDifference(Environment obs) {
-		if(root == null) return;
-		
-		float[] realMarioPos = obs.getMarioFloatPos();
-		
-		float dx = root.state.mario.x - realMarioPos[0];
-		float dy = root.state.mario.y - realMarioPos[1];
-
-		System.out.println("Real: "+realMarioPos[0]+" "+realMarioPos[1]
-			      + " Est: "+ root.state.mario.x + " " + root.state.mario.y +
-			      " Diff: " + (realMarioPos[0]- root.state.mario.x) + " " + (realMarioPos[1]-root.state.mario.y));
-		
-		System.out.println("xDiff: "+dx);
-		System.out.println("yDiff: "+dy);
-		
-		System.out.println("--------------------------------------------------------");
-		
-		if(!picture && dx > 1.0){
-			logState();
-			picture = true;
-		}
 	}
 	
 	private void logState(){
@@ -196,13 +196,13 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		l.init();
 		l.level = new Level(1500,15);
 
-		l.setLevelScene(obs.getEnemiesObservationZ(0));
+		/*l.setLevelScene(obs.getLevelSceneObservationZ(0));
 		l.setEnemies(obs.getEnemiesFloatPos());
 		l.mario.x = obs.getMarioFloatPos()[0];
 		l.mario.y = obs.getMarioFloatPos()[1];
 		l.mario.fire = true;
 		l.mario.large = true;
-
+		 */
 		root = new MCTreeNode(l, null, null);
 	}
 	
@@ -242,9 +242,9 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	 * @return The final reward for the node after the simulations.
 	 */
 	private double defaultPolicy(MCTreeNode node) {
-		double result = node.calculateReward(node.state);
-		return result;
-		//return node.advanceXandReward(4);
+		//double result = node.calculateReward(node.state);
+		//return result;
+		return node.advanceXandReward(4);
 	}
 
 	/**
