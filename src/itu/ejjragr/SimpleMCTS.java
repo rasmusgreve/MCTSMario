@@ -23,8 +23,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
-	private boolean picture = false;
-	
+	private boolean picture = false;	
 	
 	private String name = "SimpleMCTS";
 	private MCTreeNode root;
@@ -36,11 +35,6 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 
 	@Override
 	public boolean[] getAction(Environment obs) {
-		if (root == null)
-			initRoot(obs);
-		else
-			clearRoot(obs);
-
 		boolean[] action = MCTSSearch(obs);
 		return action;
 	}
@@ -75,13 +69,13 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		
 		printDifference(obs);
 		
-		initRoot(obs);
+		if (root == null)
+			initRoot(obs);
+		else
+			clearRoot(obs);
+		
 		maxDepth = 0;
 		
-		//lastX = obs.getMarioFloatPos()[0];
-		//lastY = obs.getMarioFloatPos()[1];
-		
-		//System.out.println("start: "+root.visited);
 		//int c = 0;
 		while(System.currentTimeMillis() < endTime){
 		//while (c < 400) {
@@ -91,7 +85,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			//c++;
 		}
 		
-		System.out.println(String.format("Depth: %s, at %s nodes %sms used",maxDepth,root.visited,TIME_PER_TICK));
+		//System.out.println(String.format("Depth: %s, at %s nodes %sms used",maxDepth,root.visited,TIME_PER_TICK));
 			
 		if(root.visited != 0){
 			MCTreeNode choice = root.bestChild(0);
@@ -169,8 +163,8 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	
 	private void clearRoot(Environment obs)
 	{
-		root.state.mario.setKeys(root.action);
-		root.state.tick();
+		//root.state.mario.setKeys(root.action);
+		//root.state.tick();
 		root.reset();
 		root.state.setEnemies(obs.getEnemiesFloatPos());
 		root.state.setLevelScene(obs.getLevelSceneObservationZ(0));
