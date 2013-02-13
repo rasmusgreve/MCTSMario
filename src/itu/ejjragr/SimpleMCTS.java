@@ -50,8 +50,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	}
 	
 	@Override
-	public boolean[] getAction(Environment obs) {
-		
+	public boolean[] getAction(Environment obs) {		
 		
 		ls.mario.setKeys(oldAction);
 		ls.tick();
@@ -108,7 +107,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private boolean[] MCTSSearch(Environment obs){
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + TIME_PER_TICK;
-		
+
 		if (root != null && root.state != null)
 		printDifs(root.state,obs); //Print
 		if (root != null && root.state != null)
@@ -129,6 +128,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		lastY = obs.getMarioFloatPos()[1];
 		System.out.println(lastX);
 		
+
 		if (root == null)
 			initRoot(obs); //new LevelScene
 		else
@@ -137,7 +137,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		
 		
 		maxDepth = 0;
-	
+
 		while(System.currentTimeMillis() < endTime){
 			//setKeys(action);
 			//tick();
@@ -145,9 +145,9 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
 		}
-		
-		
+				
 		System.out.println(String.format("Depth: %s, at %s nodes %sms used",maxDepth,root.visited,TIME_PER_TICK));
+
 			
 		if(root.visited != 0){
 			MCTreeNode choice = root.bestChild(0);
@@ -244,7 +244,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private double defaultPolicy(MCTreeNode node) {
 		//double result = node.calculateReward(node.state);
 		//return result;
-		return node.advanceXandReward(30);
+		return node.advanceXandReward(20);
 	}
 
 	/**
