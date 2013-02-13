@@ -23,7 +23,6 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
-	private boolean picture = false;
 	
 	private LevelScene ls;
 	private boolean[] oldAction = new boolean[5];
@@ -107,11 +106,10 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private boolean[] MCTSSearch(Environment obs){
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + TIME_PER_TICK;
-
-		if (root != null && root.state != null)
-		printDifs(root.state,obs); //Print
+		
 		if (root != null && root.state != null)
 		{
+			printDifs(root.state,obs); //Print
 			if (root.state.mario.x != obs.getMarioFloatPos()[0] || root.state.mario.y != obs.getMarioFloatPos()[1])
 			{
 				System.out.println("CORRECTED POSITIONS!");
@@ -244,7 +242,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private double defaultPolicy(MCTreeNode node) {
 		//double result = node.calculateReward(node.state);
 		//return result;
-		return node.advanceXandReward(15);
+		return node.advanceXandReward(8);
 	}
 
 	/**

@@ -35,7 +35,6 @@ public class MCTreeNode {
 	
 	// for stats
 	public int numChildren = 0;
-	public int timeElapsed = 0; // in ticks
 
 	/**
 	 * Constructor for the MCTreeNode.
@@ -48,7 +47,6 @@ public class MCTreeNode {
 		this.state = state;
 		this.action = action;
 		this.parent = parent;
-		this.timeElapsed = parent != null ? parent.timeElapsed + REPETITIONS : 0;
 	}
 	
 	/**
@@ -100,7 +98,6 @@ public class MCTreeNode {
 		reward = 0;
 		visited = 0;
 		numChildren = 0;
-		timeElapsed = 0;
 	}
 	
 	/**
@@ -249,9 +246,7 @@ public class MCTreeNode {
 	 * @return A number between 0 and 1 telling how good the current state is, where
 	 * 0 is worst and 1 is best.
 	 */
-	public double calculateReward(LevelScene state){ // TODO: Just some hackup
-		/*double reward = 1.0 - (calcRemainingTime(state.mario.x, state.mario.xa)
-	 	+ (getMarioDamage() - parent.getMarioDamage())) / 10000.0;*/
+	public double calculateReward(LevelScene state){
 		double reward;
 		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0){
 			reward = 0.0;
@@ -262,52 +257,6 @@ public class MCTreeNode {
 		//System.out.println("reward: " + reward);
 		return reward;
 	}
-/*	public double calculateReward(LevelScene state){ // TODO: Just some hackup
-		if(state.mario.deathTime > 0 || marioShrunk(state) > 1.0) return 0;
-		double reward = state.mario.x;
-		reward += 10 * (state.enemiesKilled - parent.state.enemiesKilled);
-		reward += 1 * (state.coinsCollected - parent.state.coinsCollected);
-		
-		reward += 10 * (state.mario.x - parent.state.mario.x);
-		reward /= (state.mario.x + 11.0);
-		//System.out.println("reward: " + reward);
-		return reward;
-		//return ((double)state.mario.x) / (state.level.width * marioShrunk(state));
-	}*/
-	
-	// from Robin
-    private int getMarioDamage()
-    {
-    	// early damage at gaps: Don't even fall 1 px into them.
-    	if (state.level.isGap[(int) (state.mario.x/16)] &&
-    			state.mario.y > state.level.gapHeight[(int) (state.mario.x/16)]*16)
-    	{
-     		state.mario.damage+=5;
-    	}
-    	//System.out.println(state.mario.damage);
-    	return state.mario.damage;
-    }
-	
-	// returns the estimated remaining time to some arbitrary distant target
-	private float calcRemainingTime(float marioX, float marioXA)
-	{
-	    float maxMarioSpeed = 10.9090909f;
-
-		return (100000 - (maxForwardMovement(marioXA, 1000) + marioX)) 
-			/ maxMarioSpeed - 1000;
-	}
-	
-
-    // distance covered at maximum acceleration with initialSpeed for ticks timesteps 
-    // this is the closed form of the above function, found using Matlab 
-    private float maxForwardMovement(float initialSpeed, int ticks)
-    {
-    	float y = ticks;
-    	float s0 = initialSpeed;
-    	return (float) (99.17355373 * Math.pow(0.89,y+1)
-    	  -9.090909091*s0*Math.pow(0.89,y+1)
-    	  +10.90909091*y-88.26446282+9.090909091*s0);
-    }
 	
 	/**
 	 * Tells if Mario's Mode has been decreased since last state. Used for dividing
