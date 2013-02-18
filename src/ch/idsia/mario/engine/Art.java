@@ -71,7 +71,7 @@ public class Art
             // System.out.println("source: " + source);
         }
         catch (Exception e) {
-            e.printStackTrace ();
+            //e.printStackTrace ();
         }
 
         if (source == null) {

@@ -162,6 +162,14 @@ public class MCTreeNode {
 	 * @return The index in the children array that corresponds to the given action.
 	 */
 	private int getChildIndex(boolean[] action){ //boolean left, boolean right, (boolean down), boolean jump, boolean speed
+		/*int res = 0;
+		for (int i = 0; i < action.length; i++)
+		{
+			if (action[i])
+				res += 1<<i;
+		}
+		return res;*/
+		
 		if(CHILDREN == 32) return (action[0] ? 16 : 0) + (action[1] ? 8 : 0) + (action[2] ? 4 : 0) + (action[3] ? 2 : 0) + (action[4] ? 1 : 0);
 		if(CHILDREN == 16) return (action[Mario.KEY_LEFT] ? 8 : 0) + (action[Mario.KEY_RIGHT] ? 4 : 0) + (action[Mario.KEY_JUMP] ? 2 : 0) + (action[Mario.KEY_SPEED] ? 1 : 0);
 		return 0;
@@ -176,8 +184,9 @@ public class MCTreeNode {
 	private boolean[] getActionForIndex(int index){
 		
 		boolean[] result = new boolean[5];
-		//for (int i = 0; i < 5; i++)
-		//	result[i] = ((index & 1<<i) != 0);
+		/*for (int i = 0; i < 5; i++)
+			result[i] = ((index & 1<<i) != 0);
+		*/
 		if(CHILDREN == 32){
 			if(index >= 16) { result[0] = true; index -= 16; }
 			if(index >= 8) { result[1] = true; index -= 8; }
@@ -252,7 +261,15 @@ public class MCTreeNode {
 			reward = 0.0;
 		}else{
 			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/11.0)/2;
-			//reward = state.mario.x/4224f;
+			/*if (reward < 0 || reward > 1) 
+				{
+				System.out.println("Reward: " + reward);
+				System.out.println("X dif: " + (state.mario.x - parent.state.mario.x));
+				}*/
+			//reward = 0.5;
+			//if (state.mario.x > parent.state.mario.x) reward += 0.005;
+			//if (state.mario.isOnGround())
+				//reward += 0.1;
 		}
 		//System.out.println("reward: " + reward);
 		return reward;

@@ -14,7 +14,7 @@ import ch.idsia.mario.environments.Environment;
  * This Agent for the Mario AI Benchmark is based on the UTC MCTS algorithm
  * (Upper Confidence Bound for Trees Monte Carlo Tree Search).
  * 
- * @author Emil
+ * @author Emil & Rasmus
  *
  */
 public class SimpleMCTS extends KeyAdapter implements Agent {
@@ -24,59 +24,27 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	
 	private int maxDepth = 0;
 	
-	private LevelScene ls;
-	private boolean[] oldAction = new boolean[5];
-	private float lastX, lastY;
+	private float lastX, lastY; //For simulation error correction
+	private int lastMode = 2;
 	
-	private String name = "SimpleMCTS";
+	private String name = "BasicMCTS";
 	private MCTreeNode root;
 
 	@Override
 	public void reset() {
 		System.out.println("Agent Reset");
 		
-		ls = new LevelScene();
-		ls.init();
-		ls.level = new Level(1500, 15);
-		
 		root = null;
-	}
-
-	public void printDifs(LevelScene ls, Environment obs)
-	{
-		//System.out.println(String.format("%s / %s -- %s / %s",ls.mario.x,obs.getMarioFloatPos()[0],ls.mario.y,obs.getMarioFloatPos()[1]));
-		System.out.println(String.format("Difs: %s %s",obs.getMarioFloatPos()[0]-ls.mario.x,obs.getMarioFloatPos()[1]-ls.mario.y));
 	}
 	
 	@Override
 	public boolean[] getAction(Environment obs) {		
+		int m = obs.getMarioMode();
+		if (m != lastMode)
+			System.out.println("Mode changed: " + m);
+		lastMode = m;
 		
-		ls.mario.setKeys(oldAction);
-		ls.tick();
-		
-		//printDifs(ls,obs);
-		
-		/*if (ls.mario.x != obs.getMarioFloatPos()[0] || ls.mario.y != obs.getMarioFloatPos()[1])
-		{
-			System.out.println("CORRECTED POSITIONS!\nCORRECTED POSITIONS!\nCORRECTED POSITIONS!\n");
-			// Set the simulator mario to the real coordinates (x and y) and estimated speeds (xa and ya)
-			ls.mario.x = obs.getMarioFloatPos()[0];
-			ls.mario.xa = (obs.getMarioFloatPos()[0] - lastX) *0.89f;
-			if (Math.abs(ls.mario.y - obs.getMarioFloatPos()[1]) > 0.1f)
-				ls.mario.ya = (obs.getMarioFloatPos()[1] - lastY) * 0.85f;// + 3f;
-
-			ls.mario.y = obs.getMarioFloatPos()[1];
-		}*/
-		
-		//lastX = obs.getMarioFloatPos()[0];
-		//lastY = obs.getMarioFloatPos()[1];
-		
-		ls.setLevelScene(obs.getLevelSceneObservationZ(0));
-		ls.setEnemies(obs.getEnemiesFloatPos());
-		
-		boolean[] action = MCTSSearch(obs);
-		oldAction = action;
-		return action;
+		return MCTSSearch(obs);
 	}
 
 	@Override
@@ -109,48 +77,52 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		
 		if (root != null && root.state != null)
 		{
-			printDifs(root.state,obs); //Print
-			if (root.state.mario.x != obs.getMarioFloatPos()[0] || root.state.mario.y != obs.getMarioFloatPos()[1])
+			float[] marioPos = obs.getMarioFloatPos();
+			if (root.state.mario.x != marioPos[0] || root.state.mario.y != marioPos[1])
 			{
-				System.out.println("CORRECTED POSITIONS!");
+				//if (marioPos[0] == lastX && marioPos[1] == lastY)
+				//	System.out.println("Game won!?");
+				if (root.state.mario.x == marioPos[0])
+					System.out.println(String.format("CORRECTED POSITIONS! y: %s -> %s", root.state.mario.y, marioPos[1]));
+				else if	(root.state.mario.y == marioPos[1])
+					System.out.println(String.format("CORRECTED POSITIONS! x: %s -> %s", root.state.mario.x, marioPos[0]));
+				else
+					System.out.println(String.format("CORRECTED POSITIONS! x: %s -> %s, y: %s -> %s", root.state.mario.x, marioPos[0], root.state.mario.y, marioPos[1]));
+			
 				// Set the simulator mario to the real coordinates (x and y) and estimated speeds (xa and ya)
-				root.state.mario.x = obs.getMarioFloatPos()[0];
-				root.state.mario.xa = (obs.getMarioFloatPos()[0] - lastX) *0.89f;
-				if (Math.abs(root.state.mario.y - obs.getMarioFloatPos()[1]) > 0.1f)
-					root.state.mario.ya = (obs.getMarioFloatPos()[1] - lastY) * 0.85f;// + 3f;
-	
-				root.state.mario.y = obs.getMarioFloatPos()[1];
+				root.state.mario.x = marioPos[0];
+				root.state.mario.xa = (marioPos[0] - lastX) *0.89f;
+				if (Math.abs(root.state.mario.y - marioPos[1]) > 0.1f)
+					root.state.mario.ya = (marioPos[1] - lastY) * 0.85f; //+ 3f;
+				root.state.mario.y = marioPos[1];
 			}
 		}
 		lastX = obs.getMarioFloatPos()[0];
 		lastY = obs.getMarioFloatPos()[1];
-		System.out.println(lastX);
 		
 
 		if (root == null)
-			initRoot(obs); //new LevelScene
+			initRoot(obs);
 		else
-			clearRoot(obs); //setEnemies, setLevelScene
-		
-		
+			clearRoot(obs); 
 		
 		maxDepth = 0;
-
+		int c = 250;
+		//while (c-- > 0) {
 		while(System.currentTimeMillis() < endTime){
-			//setKeys(action);
-			//tick();
-			MCTreeNode v1 = treePolicy(root); //CreateRandChild, CreateChild, advanceStepClone, advanceStep
+			MCTreeNode v1 = treePolicy(root);
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
 		}
 				
-		System.out.println(String.format("Depth: %s, at %s nodes %sms used",maxDepth,root.visited,TIME_PER_TICK));
+		//System.out.println(String.format("Depth: %s, at %s nodes %sms used",maxDepth,root.visited,TIME_PER_TICK));
 
 			
 		if(root.visited != 0){
 			MCTreeNode choice = root.bestChild(0);
+			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
+				System.out.println("I'm gonna die and i know it! ("+choice.state.mario.fire+" , " + choice.state.mario.large + " , " + choice.state.mario.deathTime + ") Reward:" + choice.reward);
 			root = choice;
-			
 			return choice.action;
 		}else{
 			return new boolean[5];
@@ -193,23 +165,19 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		LevelScene	l = new LevelScene();
 		l.init();
 		l.level = new Level(1500,15);
+		l.tick(); //TODO: NOTE! First move is always empty
 
-		/*l.setLevelScene(obs.getLevelSceneObservationZ(0));
-		l.setEnemies(obs.getEnemiesFloatPos());
-		l.mario.x = obs.getMarioFloatPos()[0];
-		l.mario.y = obs.getMarioFloatPos()[1];
-		l.mario.fire = true;
-		l.mario.large = true;
-		 */
 		root = new MCTreeNode(l, null, null);
 	}
 	
+	/**
+	 * Clear the (newly selected) root node of all children 
+	 * and get it ready for searching 
+	 * @param obs
+	 */
 	private void clearRoot(Environment obs)
 	{
-		//root.state.mario.setKeys(root.action);
-		//root.state.tick();
 		root.reset();
-		
 		root.state.setEnemies(obs.getEnemiesFloatPos());
 		root.state.setLevelScene(obs.getLevelSceneObservationZ(0));
 	}
