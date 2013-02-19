@@ -30,14 +30,13 @@ public class Play {
         options.setNumberOfTrials(1);
         options.setMatlabFileName("");
         options.setLevelRandSeed((int) (Math.random () * Integer.MAX_VALUE));
-        //options.setLevelRandSeed(1411649273);
-        //options.setLevelRandSeed(317872382); //Difficulty 3 - problematic
-        //options.setLevelRandSeed(2116621545);
+        //options.setLevelRandSeed(1244706423);
         
-        options.setLevelDifficulty(13);
+        options.setLevelDifficulty(3);
         //options.setLevelType(2);
         task.setOptions(options);
-
+        System.out.println("Seed: " + options.getLevelRandSeed());
+        System.out.println("Difficulty: " + options.getLevelDifficulty());
         System.out.println ("Score: " + task.evaluate (controller)[0]);
     }
 }

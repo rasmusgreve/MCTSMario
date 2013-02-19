@@ -44,6 +44,10 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			System.out.println("Mode changed: " + m);
 		lastMode = m;
 		
+		MarioComponent.MARIOPOS = obs.getMarioFloatPos();
+		MarioComponent.MONSTERS = obs.getEnemiesFloatPos();
+		System.out.println("Monsters: " + MarioComponent.MONSTERS.length);
+		
 		return MCTSSearch(obs);
 	}
 
@@ -96,6 +100,26 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 					root.state.mario.ya = (marioPos[1] - lastY) * 0.85f; //+ 3f;
 				root.state.mario.y = marioPos[1];
 			}
+			if (root.state.mario.fire && obs.getMarioMode() < 2 || root.state.mario.large && obs.getMarioMode() < 1)
+			{
+				if (obs.getMarioMode() == 2)
+				{
+					root.state.mario.fire = true;
+					root.state.mario.large = true;
+				}
+				else if (obs.getMarioMode() == 1)
+				{
+					root.state.mario.fire = false;
+					root.state.mario.large = true;
+				}
+				else
+				{
+					root.state.mario.fire = false;
+					root.state.mario.large = false;
+				}
+				root.state.mario.deathTime = 0;
+				System.out.println(String.format("CORRECTED MARIO STATE! Fire: %s Large: %s", root.state.mario.fire, root.state.mario.large));
+			}
 		}
 		lastX = obs.getMarioFloatPos()[0];
 		lastY = obs.getMarioFloatPos()[1];
@@ -107,17 +131,16 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			clearRoot(obs); 
 		
 		maxDepth = 0;
-		int c = 250;
+		int c = 1000;
 		//while (c-- > 0) {
 		while(System.currentTimeMillis() < endTime){
 			MCTreeNode v1 = treePolicy(root);
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
 		}
-				
-		//System.out.println(String.format("Depth: %s, at %s nodes %sms used",maxDepth,root.visited,TIME_PER_TICK));
-
-			
+		
+		//System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
+		
 		if(root.visited != 0){
 			MCTreeNode choice = root.bestChild(0);
 			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
@@ -210,7 +233,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private double defaultPolicy(MCTreeNode node) {
 		//double result = node.calculateReward(node.state);
 		//return result;
-		return node.advanceXandReward(8);
+		return node.advanceXandReward(4);
 	}
 
 	/**
