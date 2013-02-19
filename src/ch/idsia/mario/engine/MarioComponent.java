@@ -26,8 +26,8 @@ import java.util.List;
 public class MarioComponent extends JComponent implements Runnable, /*KeyListener,*/ FocusListener, Environment {
     private static final long serialVersionUID = 790878775993203817L;
     public static boolean SAVE_NEXT_FRAME = false; //Modification for debugging (itu.ejjragr)
-    public static float[] MONSTERS;
-    public static float[] MARIOPOS;
+    public static int[] BESTLINE_XS;
+    public static int[] BESTLINE_YS;
     public static final int TICKS_PER_SECOND = 24;
 
     private boolean running = false;
@@ -240,19 +240,15 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
 	                    SAVE_NEXT_FRAME = false;
                 	}
                     g.drawImage(image, 0, 0, null);
-                    int xCam = (int) (mario.xOld + (mario.x - mario.xOld) * alpha) - 160;
-                    //int yCam = (int) (mario.yOld + (mario.y - mario.yOld) * alpha) - 120;
-                    xCam = Math.max(0, xCam);
-                    //yCam = Math.max(0, yCam);
-                    //System.out.println("xCam: " + xCam + ", yCam: " + yCam);
+                    
+                    int xCam = Math.max(0, (int) (mario.xOld + (mario.x - mario.xOld) * alpha) - 160);
                     g.setColor(Color.RED);
-                    if (MONSTERS != null)
-                    for (int i = 0; i < MONSTERS.length-1; i++)
+                    if (BESTLINE_XS != null)
                     {
-                    	i++; //Enemy type info?
-                    	g.drawLine((int)MARIOPOS[0] - xCam, (int)MARIOPOS[1], (int)MONSTERS[i] - xCam, (int)MONSTERS[++i]);
-                    	
-                    } 
+                    	for (int i = 0; i < BESTLINE_XS.length; i++)
+                        	BESTLINE_XS[i] -= xCam;
+                    	g.drawPolyline(BESTLINE_XS, BESTLINE_YS, BESTLINE_XS.length);
+                    }
                 }
             } else {
                 // Win or Die without renderer!! independently.

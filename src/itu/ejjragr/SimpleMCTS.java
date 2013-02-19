@@ -2,6 +2,7 @@ package itu.ejjragr;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.level.Level;
@@ -20,6 +21,7 @@ import ch.idsia.mario.environments.Environment;
 public class SimpleMCTS extends KeyAdapter implements Agent {
 	
 	private static int TIME_PER_TICK = 39; // milliseconds
+	public static int RANDOM_SAMPLES_LIMIT = 4;
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
@@ -43,10 +45,6 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		if (m != lastMode)
 			System.out.println("Mode changed: " + m);
 		lastMode = m;
-		
-		MarioComponent.MARIOPOS = obs.getMarioFloatPos();
-		MarioComponent.MONSTERS = obs.getEnemiesFloatPos();
-		System.out.println("Monsters: " + MarioComponent.MONSTERS.length);
 		
 		return MCTSSearch(obs);
 	}
@@ -145,12 +143,38 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			MCTreeNode choice = root.bestChild(0);
 			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
 				System.out.println("I'm gonna die and i know it! ("+choice.state.mario.fire+" , " + choice.state.mario.large + " , " + choice.state.mario.deathTime + ") Reward:" + choice.reward);
+			
+			drawFuture(root);
+			
+			
 			root = choice;
 			return choice.action;
 		}else{
 			return new boolean[5];
 		}
+	}
+	
+	private void drawFuture(MCTreeNode v)
+	{
+		ArrayList<Integer> xs = new ArrayList<Integer>();
+		ArrayList<Integer> ys = new ArrayList<Integer>();
 		
+		while (v != null)
+		{
+			xs.add((int)v.state.mario.x);
+			ys.add((int)v.state.mario.y);
+			v = v.bestChild(0);
+			
+		}
+		int[] rx = new int[xs.size()];
+		int[] ry = new int[xs.size()];
+		for (int i = 0; i < xs.size(); i++)
+		{
+			rx[i] = xs.get(i);
+			ry[i] = ys.get(i);
+		}
+		MarioComponent.BESTLINE_XS = rx;
+		MarioComponent.BESTLINE_YS = ry;
 	}
 	
 	private void logState(){
@@ -233,7 +257,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private double defaultPolicy(MCTreeNode node) {
 		//double result = node.calculateReward(node.state);
 		//return result;
-		return node.advanceXandReward(4);
+		return node.advanceXandReward(RANDOM_SAMPLES_LIMIT);
 	}
 
 	/**
