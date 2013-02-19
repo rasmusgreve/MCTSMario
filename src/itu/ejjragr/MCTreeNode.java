@@ -109,7 +109,7 @@ public class MCTreeNode {
 	 * @return A value of how attractive the node is to look into.
 	 */
 	public double calculateConfidence(double cp){ //TODO: FUCKING DYRT
-		if(reward <= 0.0) return 0.0;
+		if(reward <= 0.0001) return 0.0;
 		
 		double exploitation = reward/this.visited;
 		double exploration = cp*Math.sqrt((2*Math.log(parent.visited))/this.visited); // Det er SQRT's SKYLD! :(
@@ -268,10 +268,6 @@ public class MCTreeNode {
 				System.out.println("Reward: " + reward);
 				System.out.println("X dif: " + (state.mario.x - parent.state.mario.x));
 				}
-			//reward = 0.5;
-			//if (state.mario.x > parent.state.mario.x) reward += 0.005;
-			//if (state.mario.isOnGround())
-				//reward += 0.1;
 		}
 		//System.out.println("reward: " + reward);
 		return reward;

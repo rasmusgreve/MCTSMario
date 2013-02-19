@@ -129,7 +129,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			clearRoot(obs); 
 		
 		maxDepth = 0;
-		int c = 1000;
+		//int c = 1000;
 		//while (c-- > 0) {
 		while(System.currentTimeMillis() < endTime){
 			MCTreeNode v1 = treePolicy(root);
@@ -137,7 +137,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			backup(v1,reward);
 		}
 		
-		//System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
+		System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
 		
 		if(root.visited != 0){
 			MCTreeNode choice = root.bestChild(0);
@@ -255,8 +255,8 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	 * @return The final reward for the node after the simulations.
 	 */
 	private double defaultPolicy(MCTreeNode node) {
-		//double result = node.calculateReward(node.state);
-		//return result;
+		//return node.calculateReward(node.state);
+
 		return node.advanceXandReward(RANDOM_SAMPLES_LIMIT);
 	}
 
