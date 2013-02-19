@@ -20,6 +20,7 @@ import ch.idsia.mario.environments.Environment;
 public class SimpleMCTS extends KeyAdapter implements Agent {
 	
 	private static int TIME_PER_TICK = 39; // milliseconds
+	public static int RANDOM_SAMPLES_LIMIT = 4;
 	private static final double cp = 1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
@@ -210,7 +211,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private double defaultPolicy(MCTreeNode node) {
 		//double result = node.calculateReward(node.state);
 		//return result;
-		return node.advanceXandReward(8);
+		return node.advanceXandReward(RANDOM_SAMPLES_LIMIT);
 	}
 
 	/**
