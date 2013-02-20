@@ -1,4 +1,6 @@
-package itu.ejjragr;
+package itu.ejuuragr.UTC;
+
+import itu.ejuuragr.MCTSAgent;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -18,7 +20,7 @@ import ch.idsia.mario.environments.Environment;
  * @author Emil & Rasmus
  *
  */
-public class SimpleMCTS extends KeyAdapter implements Agent {
+public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	
 	private static int TIME_PER_TICK = 39; // milliseconds
 	public static int RANDOM_SAMPLES_LIMIT = 4;
@@ -30,11 +32,12 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	private int lastMode = 2;
 	
 	private String name = "BasicMCTS";
-	private MCTreeNode root;
+	private UTCNode root;
 
 	@Override
 	public void reset() {
 		System.out.println("Agent Reset");
+		
 		root = null;
 	}
 	
@@ -45,7 +48,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 			System.out.println("Mode changed: " + m);
 		lastMode = m;
 		
-		return MCTSSearch(obs);
+		return search(obs);
 	}
 
 	@Override
@@ -72,7 +75,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	 * @param obs The Environment just recieved from the game.
 	 * @return The action that seems to be best.
 	 */
-	private boolean[] MCTSSearch(Environment obs){
+	public boolean[] search(Environment obs){
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + TIME_PER_TICK;
 		
@@ -131,7 +134,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		//int c = 1000;
 		//while (c-- > 0) {
 		while(System.currentTimeMillis() < endTime){
-			MCTreeNode v1 = treePolicy(root);
+			UTCNode v1 = treePolicy(root);
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
 		}
@@ -139,7 +142,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
 		
 		if(root.visited != 0){
-			MCTreeNode choice = root.bestChild(0);
+			UTCNode choice = root.getBestChild(0);
 			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
 				System.out.println("I'm gonna die and i know it! ("+choice.state.mario.fire+" , " + choice.state.mario.large + " , " + choice.state.mario.deathTime + ") Reward:" + choice.reward);
 			
@@ -153,7 +156,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		}
 	}
 	
-	private void drawFuture(MCTreeNode v)
+	private void drawFuture(UTCNode v)
 	{
 		ArrayList<Integer> xs = new ArrayList<Integer>();
 		ArrayList<Integer> ys = new ArrayList<Integer>();
@@ -162,7 +165,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		{
 			xs.add((int)v.state.mario.x);
 			ys.add((int)v.state.mario.y);
-			v = v.bestChild(0);
+			v = v.getBestChild(0);
 			
 		}
 		int[] rx = new int[xs.size()];
@@ -201,6 +204,10 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		}
     }
 	
+	public UTCNode createRoot(LevelScene state){
+		return new UTCNode(state, null, null);
+	}
+	
 	/**
 	 * Creates a new root node (MCTreeNode) with the data in
 	 * the given state (Environment).
@@ -211,8 +218,11 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		LevelScene	l = new LevelScene();
 		l.init();
 		l.level = new Level(1500,15);
-		l.tick(); //TODO: NOTE! First move is always empty
-		root = new MCTreeNode(l, null, null);
+		
+
+		root = createRoot(l);
+		clearRoot(obs);
+		root.state.tick();
 	}
 	
 	/**
@@ -234,7 +244,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	 * @param v The MCTreeNode that has recieved the reward.
 	 * @param reward The reward for the given node (how good it is).
 	 */
-	private void backup(MCTreeNode v, double reward) {
+	public void backup(UTCNode v, double reward) {
 		int depth = 0;
 		while(v != null){
 			v.visited++;
@@ -252,7 +262,7 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	 * @param node The node to simulate random actions on.
 	 * @return The final reward for the node after the simulations.
 	 */
-	private double defaultPolicy(MCTreeNode node) {
+	public double defaultPolicy(UTCNode node) {
 		//return node.calculateReward(node.state);
 
 		return node.advanceXandReward(RANDOM_SAMPLES_LIMIT);
@@ -266,12 +276,12 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	 * @param v The root of the tree.
 	 * @return The new leaf.
 	 */
-	private MCTreeNode treePolicy(MCTreeNode v) { // may not be right
+	public UTCNode treePolicy(UTCNode v) { // may not be right
 		while(true){
 			if(!v.isExpanded()){
-				return v.createRandomChild();
+				return v.expand();
 			}else{
-				v = v.bestChild(cp);
+				v = v.getBestChild(cp);
 			}
 		}
 	}

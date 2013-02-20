@@ -1,4 +1,6 @@
-package itu.ejjragr;
+package itu.ejuuragr.UTC;
+
+import itu.ejuuragr.MCTSNode;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,7 +21,7 @@ import competition.cig.robinbaumgarten.astar.sprites.Mario;
  * @author Emil
  *
  */
-public class MCTreeNode {
+public class UTCNode implements MCTSNode{
 	
 	private static int CHILDREN = 16;
 	private static final int REPETITIONS = 1;
@@ -28,8 +30,8 @@ public class MCTreeNode {
 	
 	public LevelScene state = null;
 	public boolean[] action = new boolean[CHILDREN];
-	public MCTreeNode parent = null;
-	public MCTreeNode[] children = new MCTreeNode[CHILDREN];
+	public UTCNode parent = null;
+	public UTCNode[] children = new UTCNode[CHILDREN];
 	public double reward = 0;
 	public int visited = 0;
 	
@@ -43,34 +45,14 @@ public class MCTreeNode {
 	 * @param action The action leading to the node's state.
 	 * @param parent The parent of the new node or null if it is root.
 	 */
-	public MCTreeNode(LevelScene state, boolean[] action, MCTreeNode parent){
+	public UTCNode(LevelScene state, boolean[] action, UTCNode parent){
 		this.state = state;
 		this.action = action;
 		this.parent = parent;
 	}
 	
-	/**
-	 * Creates a new child beneath this node in the tree from the given action.
-	 * 
-	 * @param action The action to be performed on the current state leading to
-	 * the new child.
-	 * @return The child node containing the state resulting from performing the
-	 * action on the current node.
-	 */
-	public MCTreeNode createChild(boolean[] action){
-		MCTreeNode child = new MCTreeNode(advanceStepClone(state, action),action,this);
-		children[getChildIndex(action)] = child;
-		numChildren++;
-		
-		return child;
-	}
-	
-	/**
-	 * Creates a child beneath this node by applying a random action on this state.
-	 * 
-	 * @return The new child node.
-	 */
-	public MCTreeNode createRandomChild(){
+	@Override
+	public UTCNode expand() {
 		ArrayList<Integer> spaces = getUnexpanded();
 		return createChild(this.getActionForIndex(spaces.get(rand.nextInt(spaces.size()))));
 	}
@@ -88,11 +70,27 @@ public class MCTreeNode {
 	}
 	
 	/**
+	 * Creates a new child beneath this node in the tree from the given action.
+	 * 
+	 * @param action The action to be performed on the current state leading to
+	 * the new child.
+	 * @return The child node containing the state resulting from performing the
+	 * action on the current node.
+	 */
+	public UTCNode createChild(boolean[] action){
+		UTCNode child = new UTCNode(advanceStepClone(state, action),action,this);
+		children[getChildIndex(action)] = child;
+		numChildren++;
+		
+		return child;
+	}
+	
+	/**
 	 * Reset this node
 	 */
 	public void reset()
 	{
-		children = new MCTreeNode[CHILDREN];
+		children = new UTCNode[CHILDREN];
 		action = null;
 		parent = null;
 		reward = 0;
@@ -124,7 +122,7 @@ public class MCTreeNode {
 	 * @param cp The constant to use in the exploration part of the confidence equation.
 	 * @return The direct child with the highest confidence value.
 	 */
-	public MCTreeNode bestChild(double cp){
+	public UTCNode getBestChild(double cp){
 		int best = -1;
 		double score = -1;
 		for(int i = 0; i < CHILDREN; i++){
@@ -243,7 +241,7 @@ public class MCTreeNode {
 		}
 	}
 	
-	private boolean[] getRandomAction(){
+	protected boolean[] getRandomAction(){
 		return getActionForIndex(rand.nextInt(CHILDREN));
 	}
 	
@@ -268,15 +266,6 @@ public class MCTreeNode {
 				System.out.println("Reward: " + reward);
 				System.out.println("X dif: " + (state.mario.x - parent.state.mario.x));
 				}
-			/*if (state.enemiesKilled > parent.state.enemiesKilled)
-				reward = 1;
-			if (state.coinsCollected > parent.state.coinsCollected)
-				reward = 1;*/
-			//reward = 0.5;
-			//if (state.mario.x > parent.state.mario.x) reward += 0.005;
-			//if (state.mario.isOnGround())
-				//reward += 0.1;
-
 		}
 		//System.out.println("reward: " + reward);
 		return reward;
@@ -336,7 +325,7 @@ public class MCTreeNode {
 	{
 		b.append("<Node " + actionToXML() + " " + String.format("Reward=\"%s\"",reward/this.visited) + ">");
 		if (children != null)
-			for (MCTreeNode c : children)
+			for (UTCNode c : children)
 				if (c != null)
 					c.getXMLRepresentation(b);		
 		b.append("</Node>");
