@@ -268,6 +268,10 @@ public class MCTreeNode {
 				System.out.println("Reward: " + reward);
 				System.out.println("X dif: " + (state.mario.x - parent.state.mario.x));
 				}
+			/*if (state.enemiesKilled > parent.state.enemiesKilled)
+				reward = 1;
+			if (state.coinsCollected > parent.state.coinsCollected)
+				reward = 1;*/
 			//reward = 0.5;
 			//if (state.mario.x > parent.state.mario.x) reward += 0.005;
 			//if (state.mario.isOnGround())

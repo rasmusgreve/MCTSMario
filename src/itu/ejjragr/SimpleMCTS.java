@@ -35,7 +35,6 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 	@Override
 	public void reset() {
 		System.out.println("Agent Reset");
-		
 		root = null;
 	}
 	
@@ -213,7 +212,6 @@ public class SimpleMCTS extends KeyAdapter implements Agent {
 		l.init();
 		l.level = new Level(1500,15);
 		l.tick(); //TODO: NOTE! First move is always empty
-
 		root = new MCTreeNode(l, null, null);
 	}
 	
