@@ -77,6 +77,7 @@ public class LevelScene implements SpriteContext, Cloneable
         	}
         }
         c.sprites = clone;
+        fireballsToCheck.clear(); //Modification by ejuuragr ("fixing" memory leak)
     	return c;
     }
 

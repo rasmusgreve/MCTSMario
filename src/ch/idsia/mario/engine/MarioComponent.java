@@ -25,9 +25,21 @@ import java.util.List;
 
 public class MarioComponent extends JComponent implements Runnable, /*KeyListener,*/ FocusListener, Environment {
     private static final long serialVersionUID = 790878775993203817L;
-    public static boolean SAVE_NEXT_FRAME = false; //Modification for debugging (itu.ejjragr)
+    /*
+	 * Modification for debugging (itu.ejuuragr)
+	 */
+    public static boolean SAVE_NEXT_FRAME = false;
     public static int[] BESTLINE_XS;
     public static int[] BESTLINE_YS;
+    
+    public static int[] PLAN_XS;
+    public static int[] PLAN_YS;
+    
+    
+    /*
+	 * Modification for debugging end (itu.ejuuragr)
+	 */
+	
     public static final int TICKS_PER_SECOND = 24;
 
     private boolean running = false;
@@ -227,7 +239,31 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
                 if (width != 320 || height != 240) {
                         g.drawImage(image, 0, 0, 640 * 2, 480 * 2, null);  
                 } else {
-                	if (SAVE_NEXT_FRAME) //Modification for debugging (itu.ejjragr)
+                	g.drawImage(image, 0, 0, null);
+                    
+                	/*
+                	 * Modification for debugging (itu.ejuuragr)
+                	 */
+                	
+                    int xCam = Math.max(0, (int)mario.xOld - 160);
+                    
+                    g.setColor(Color.BLUE);
+                    if (PLAN_XS != null)
+                    {
+                    	for (int i = 0; i < PLAN_XS.length; i++)
+                    		PLAN_XS[i] -= xCam;
+                    	g.drawPolyline(PLAN_XS, PLAN_YS, PLAN_XS.length);
+                    }
+                    
+                    g.setColor(Color.RED);
+                    if (BESTLINE_XS != null)
+                    {
+                    	for (int i = 0; i < BESTLINE_XS.length; i++)
+                        	BESTLINE_XS[i] -= xCam;
+                    	g.drawPolyline(BESTLINE_XS, BESTLINE_YS, BESTLINE_XS.length);
+                    }
+                    
+                    if (SAVE_NEXT_FRAME) 
                 	{
 	                	BufferedImage im = new BufferedImage(320,240,BufferedImage.TYPE_INT_RGB);
 	                    Graphics gg = im.createGraphics();
@@ -239,16 +275,9 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
 						}
 	                    SAVE_NEXT_FRAME = false;
                 	}
-                    g.drawImage(image, 0, 0, null);
-                    
-                    int xCam = Math.max(0, (int) (mario.xOld + (mario.x - mario.xOld) * alpha) - 160);
-                    g.setColor(Color.RED);
-                    if (BESTLINE_XS != null)
-                    {
-                    	for (int i = 0; i < BESTLINE_XS.length; i++)
-                        	BESTLINE_XS[i] -= xCam;
-                    	g.drawPolyline(BESTLINE_XS, BESTLINE_YS, BESTLINE_XS.length);
-                    }
+                    /*
+                	 * Modification for debugging end (itu.ejuuragr)
+                	 */
                 }
             } else {
                 // Win or Die without renderer!! independently.

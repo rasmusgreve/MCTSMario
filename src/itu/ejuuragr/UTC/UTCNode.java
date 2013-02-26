@@ -90,6 +90,10 @@ public class UTCNode implements MCTSNode{
 	 */
 	public void reset()
 	{
+		for (UTCNode n : children)
+			if (n != null)
+				n.parent = null;
+		
 		children = new UTCNode[CHILDREN];
 		action = null;
 		parent = null;

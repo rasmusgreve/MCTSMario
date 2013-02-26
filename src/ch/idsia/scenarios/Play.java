@@ -26,6 +26,8 @@ public class Play {
         options.setAgent(controller);
         Task task = new ProgressTask(options);
         options.setMaxFPS(false);
+        //options.setLevelLength(10000);
+        //options.setPauseWorld(true);
         options.setVisualization(true);
         options.setNumberOfTrials(1);
         options.setMatlabFileName("");
@@ -36,6 +38,6 @@ public class Play {
         task.setOptions(options);
         System.out.println("Seed: " + options.getLevelRandSeed());
         System.out.println("Difficulty: " + options.getLevelDifficulty());
-        System.out.println ("Score: " + task.evaluate (controller)[0]);
+        System.out.println("Score: " + task.evaluate (controller)[0]);
     }
 }

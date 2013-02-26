@@ -22,23 +22,22 @@ import ch.idsia.mario.environments.Environment;
  */
 public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	
-	private static int TIME_PER_TICK = 39; // milliseconds
+	protected static int TIME_PER_TICK = 20; // milliseconds
 	public static int RANDOM_SAMPLES_LIMIT = 4;
 	private static final double cp = 1.0/Math.sqrt(2);
 	
-	private int maxDepth = 0;
+	protected int maxDepth = 0;
 	
 	private float lastX, lastY; //For simulation error correction
 	private int lastMode = 2;
 	
 	private String name = "BasicMCTS";
-	private UTCNode root;
+	protected UTCNode root;
 
 	@Override
 	public void reset() {
 		System.out.println("Agent Reset");
-		
-		root = null;
+		initRoot();
 	}
 	
 	@Override
@@ -65,20 +64,9 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	/**
-	 * Performs MCTS for the most optimal move for 39 ms and
-	 * returns the action that seems to lead to the best outcome.
-	 * It will reuse the tree for MAX_REUSES times and then
-	 * create a brand new tree with the given Environment.
-	 * 
-	 * @param obs The Environment just recieved from the game.
-	 * @return The action that seems to be best.
-	 */
-	public boolean[] search(Environment obs){
-		long startTime = System.currentTimeMillis();
-		long endTime = startTime + TIME_PER_TICK;
-		
+	
+	private void fixSimulationErrors(Environment obs)
+	{
 		if (root != null && root.state != null)
 		{
 			float[] marioPos = obs.getMarioFloatPos();
@@ -123,24 +111,36 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 		}
 		lastX = obs.getMarioFloatPos()[0];
 		lastY = obs.getMarioFloatPos()[1];
+	}
+	
+	/**
+	 * Performs MCTS for the most optimal move for 39 ms and
+	 * returns the action that seems to lead to the best outcome.
+	 * It will reuse the tree for MAX_REUSES times and then
+	 * create a brand new tree with the given Environment.
+	 * 
+	 * @param obs The Environment just recieved from the game.
+	 * @return The action that seems to be best.
+	 */
+	public boolean[] search(Environment obs){
+		long startTime = System.currentTimeMillis();
+		long endTime = startTime + TIME_PER_TICK;
 		
-
-		if (root == null)
-			initRoot(obs);
-		else
-			clearRoot(obs); 
+		fixSimulationErrors(obs);
+		//Before searching
+		clearRoot(obs);  //reset root, add observation information
 		
+		//Search
 		maxDepth = 0;
-		//int c = 1000;
-		//while (c-- > 0) {
 		while(System.currentTimeMillis() < endTime){
 			UTCNode v1 = treePolicy(root);
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
 		}
 		
-		System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
+		//System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
 		
+		//Selecting action
 		if(root.visited != 0){
 			UTCNode choice = root.getBestChild(0);
 			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
@@ -156,7 +156,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 		}
 	}
 	
-	private void drawFuture(UTCNode v)
+	protected void drawFuture(UTCNode v)
 	{
 		ArrayList<Integer> xs = new ArrayList<Integer>();
 		ArrayList<Integer> ys = new ArrayList<Integer>();
@@ -214,14 +214,13 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	 * 
 	 * @param obs The current state of the game to simulate from.
 	 */
-	private void initRoot(Environment obs){
+	private void initRoot(){
 		LevelScene	l = new LevelScene();
 		l.init();
 		l.level = new Level(1500,15);
 		
 
 		root = createRoot(l);
-		clearRoot(obs);
 		root.state.tick();
 	}
 	
@@ -230,7 +229,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	 * and get it ready for searching 
 	 * @param obs
 	 */
-	private void clearRoot(Environment obs)
+	protected void clearRoot(Environment obs)
 	{
 		root.reset();
 		root.state.setEnemies(obs.getEnemiesFloatPos());
