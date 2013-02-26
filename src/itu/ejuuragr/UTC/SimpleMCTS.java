@@ -129,10 +129,10 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 		lastY = obs.getMarioFloatPos()[1];
 		
 
-		//if (root == null)
+		if (root == null)
 			initRoot(obs);
-		//else
-		//	clearRoot(obs); 
+		else
+			clearRoot(obs); 
 		
 		maxDepth = 0;
 		//int c = 1000;
