@@ -5,6 +5,8 @@ import itu.ejuuragr.MCTSAgent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.level.Level;
@@ -24,7 +26,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	
 	private static int TIME_PER_TICK = 39; // milliseconds
 	public static int RANDOM_SAMPLES_LIMIT = 4;
-	private static final double cp = 1.0/Math.sqrt(2);
+	private static final double cp = 1.5/8;//1.0/Math.sqrt(2);
 	
 	private int maxDepth = 0;
 	
@@ -33,6 +35,8 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	
 	private String name = "BasicMCTS";
 	private UTCNode root;
+	
+	private HashMap<String, Integer> heuristic = new HashMap<String, Integer>();
 
 	@Override
 	public void reset() {
@@ -150,10 +154,45 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 			
 			
 			root = choice;
+			addHeuristic(choice.action);
 			return choice.action;
+			
 		}else{
 			return new boolean[5];
 		}
+	}
+	
+	private void addHeuristic(boolean[] action){
+		String sAction = actionToXML(action);
+		int lastValue = heuristic.containsKey(sAction) ? heuristic.get(sAction) : 0 ;
+		heuristic.put(sAction,  lastValue  + 1);
+	}
+	
+	private void printHeuristic(){
+		for(Entry<String, Integer> entry : heuristic.entrySet()){
+			System.out.println(entry.getKey() + ": "+entry.getValue());
+		}
+	}
+	
+	private String actionToXML(boolean[] action)
+	{
+		StringBuilder b = new StringBuilder("Move=\"");
+
+		if (action == null || action.length < 5)
+			b.append("Nothing");
+		else
+		{
+			if (action[0]) b.append("Left ");
+			if (action[1]) b.append("Right ");
+			if (action[2]) b.append("Down ");
+			if (action[3]) b.append("Jump ");
+			if (action[4]) b.append("Speed ");
+
+			//if (!action[0] && !action[1] && !action[2] && !action[3] && !action[4]) b.append("Nothing");
+
+		}
+		b.append("\"");
+		return b.toString();
 	}
 	
 	private void drawFuture(UTCNode v)
@@ -182,6 +221,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	private void logState(){
 		MarioComponent.SAVE_NEXT_FRAME = true;
 		root.outputTree("Tree.xml");
+		printHeuristic();
 	}
 	
 	public void keyPressed (KeyEvent e)
