@@ -24,7 +24,7 @@ import competition.cig.robinbaumgarten.astar.sprites.Mario;
 public class UTCNode implements MCTSNode{
 	
 	private static int CHILDREN = 16;
-	private static final int REPETITIONS = 1;
+	//private static final int REPETITIONS = 1; //Unused?
 	
 	public static Random rand = new Random(1337);
 	
@@ -240,9 +240,9 @@ public class UTCNode implements MCTSNode{
 	
 	private void advanceStep(LevelScene state, boolean[] action){
 		state.mario.setKeys(action);
-		for(int i = 0; i < REPETITIONS; i++){
+		//for(int i = 0; i < REPETITIONS; i++){
 			state.tick();
-		}
+		//}
 	}
 	
 	protected boolean[] getRandomAction(){
@@ -284,8 +284,8 @@ public class UTCNode implements MCTSNode{
 	private double marioShrunk(LevelScene state){
 		int before = marioSize(parent.state.mario);
 		int after = marioSize(state.mario);
-		if(parent != null && after < before) return 2.0;
-		if(parent != null && after > before) return 1/2.0;
+		if(after < before) return 2.0;
+		if(after > before) return 1/2.0;
 		return 1.0;
 	}
 	
@@ -327,7 +327,7 @@ public class UTCNode implements MCTSNode{
 	
 	private void getXMLRepresentation(StringBuilder b)
 	{
-		b.append("<Node " + actionToXML() + " " + String.format("Reward=\"%s\"",reward/this.visited) + ">");
+		b.append("<Node " + actionToXML(action) + " " + String.format("Reward=\"%s\"",reward/this.visited) + ">");
 		if (children != null)
 			for (UTCNode c : children)
 				if (c != null)
@@ -335,7 +335,7 @@ public class UTCNode implements MCTSNode{
 		b.append("</Node>");
 	}
 	
-	private String actionToXML()
+	private String actionToXML(boolean[] action)
 	{
 		StringBuilder b = new StringBuilder("Move=\"");
 
