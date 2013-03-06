@@ -9,7 +9,7 @@ import itu.ejuuragr.UTC.*;
 import java.util.*;
 public class PlanningMCTS extends SimpleMCTS {
 	
-	private static int PLAN_AHEAD = 5;
+	private static int PLAN_AHEAD = 3;
 	
 	private Queue<boolean[]> plan = new LinkedList<boolean[]>();
 

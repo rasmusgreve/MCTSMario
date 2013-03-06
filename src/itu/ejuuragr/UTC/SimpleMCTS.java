@@ -143,7 +143,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 			backup(v1,reward);
 		}
 		
-		//System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
+		System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
 		
 		//Selecting action
 		if(root.visited != 0){
@@ -155,7 +155,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 			
 			
 			root = choice;
-			addHeuristic(choice.action);
+			//addHeuristic(choice.action);
 			return choice.action;
 			
 		}else{
