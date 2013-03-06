@@ -77,6 +77,17 @@ public class MCTSTools {
 		return 0;
 	}
 	
+	/**
+	 * Checks if Mario is in a gap.
+	 * @author Robin Baumgarten
+	 * @param levelScene The LevelScene that contains the Mario and Level to check.
+	 * @return True if Mario is in a gap, else false.
+	 */
+	public static boolean isInGap(LevelScene levelScene){
+    	return (levelScene.level.isGap[(int) (levelScene.mario.x/16)] &&
+    			levelScene.mario.y > levelScene.level.gapHeight[(int) (levelScene.mario.x/16)]*16);
+	}
+	
 	/********************
 	 * XML Stuff
 	 ********************/
