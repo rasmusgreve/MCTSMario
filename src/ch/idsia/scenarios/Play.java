@@ -26,13 +26,14 @@ public class Play {
         options.setAgent(controller);
         Task task = new ProgressTask(options);
         options.setMaxFPS(false);
-        //options.setLevelLength(10000);
+        //options.setLevelLength(1000);
         //options.setPauseWorld(true);
         options.setVisualization(true);
         options.setNumberOfTrials(1);
         options.setMatlabFileName("");
         options.setLevelRandSeed((int) (Math.random () * Integer.MAX_VALUE));
         //options.setLevelRandSeed(1709316654);
+        //options.setLevelRandSeed(37462871);
         options.setLevelDifficulty(20);
         //options.setLevelType(2);
         task.setOptions(options);

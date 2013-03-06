@@ -336,7 +336,7 @@ public class AStarSimulator
     	}
     	
     	if (levelScene.verbose > 1) System.out.println("Search stopped. Remaining pool size: "+ posPool.size() + " Current remaining time: " + current.remainingTime);
-
+    	
     	levelScene = current.sceneSnapshot;
     }
     
