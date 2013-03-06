@@ -8,24 +8,10 @@ import itu.ejuuragr.UTC.UTCNode;
 public class MCTSTools {
 
 	//                                      {LEFT, RIGHT, DOWN, JUMP, SPEED}
-	public static final boolean[] buttons = {false, true, false, true, true};
-	
+	public static final boolean[] buttons = {true, true, false, true, true};	
+	public static final int CHILDREN = possibleActionsCount();
 
-	public static void main(String[] args)
-	{
-		boolean[] test1 = {false,true,false,false,true};
-		int idx = actionToIndex(test1);
-		boolean[] out = indexToAction(idx);
-		System.out.println(idx);
-		System.out.println(possibleActionsCount());
-		for (int i = 0; i < out.length; i++)
-			System.out.print(out[i] + " ");
-		System.out.println();
-	}
-	
-	
-	
-	public static int possibleActionsCount()
+	private static int possibleActionsCount()
 	{
 		int acts = 1;
 		for (int i = 0; i < 5; i++)
