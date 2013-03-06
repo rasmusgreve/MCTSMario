@@ -211,6 +211,7 @@ public class UTCNode implements MCTSNode{
 			reward = 0.0;
 		}else{
 			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0;
+
 			if (reward < 0 || reward > 1) 
 				{
 				System.out.println("Reward: " + reward);
