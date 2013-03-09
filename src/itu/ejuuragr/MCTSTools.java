@@ -11,6 +11,13 @@ public class MCTSTools {
 	public static final boolean[] buttons = {true, true, false, true, true};	
 	public static final int CHILDREN = possibleActionsCount();
 
+	public static final boolean DEBUG = true;
+	
+	public static void print(String message)
+	{
+		if (DEBUG) System.out.println(message);
+	}
+	
 	private static int possibleActionsCount()
 	{
 		int acts = 1;
@@ -75,6 +82,17 @@ public class MCTSTools {
 		if(mario.fire) return 2;
 		if(mario.large) return 1;
 		return 0;
+	}
+	
+	/**
+	 * Checks if Mario is in a gap.
+	 * @author Robin Baumgarten
+	 * @param levelScene The LevelScene that contains the Mario and Level to check.
+	 * @return True if Mario is in a gap, else false.
+	 */
+	public static boolean isInGap(LevelScene levelScene){
+    	return (levelScene.level.isGap[(int) (levelScene.mario.x/16)] &&
+    			levelScene.mario.y > levelScene.level.gapHeight[(int) (levelScene.mario.x/16)]*16);
 	}
 	
 	/********************

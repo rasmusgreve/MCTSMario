@@ -6,6 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
@@ -24,9 +25,11 @@ import ch.idsia.mario.environments.Environment;
  */
 public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	
-	protected static int TIME_PER_TICK = 20; // milliseconds
+	protected static int TIME_PER_TICK = 39; // milliseconds
 	public static int RANDOM_SAMPLES_LIMIT = 4;
-	private static final double cp = 1.0/Math.sqrt(2);
+	private LinkedList<Integer> nodeCounts = new LinkedList<Integer>();
+
+	private static final double cp = 1.5/8; //1.0/Math.sqrt(2); // 
 	
 	protected int maxDepth = 0;
 	
@@ -51,7 +54,6 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 		if (m != lastMode)
 			System.out.println("Mode changed: " + m);
 		lastMode = m;
-		
 		return search(obs);
 	}
 
@@ -145,7 +147,12 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 			backup(v1,reward);
 		}
 		
-		//System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
+		nodeCounts.add(root.visited);
+		int avg = 0;
+		for (Integer i : nodeCounts) avg += i;
+		avg /= nodeCounts.size();
+		
+		System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used (%4d nodes avg.)",maxDepth,root.visited,System.currentTimeMillis() - startTime,avg));
 		
 		//Selecting action
 		if(root.visited != 0){
@@ -157,7 +164,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 			
 			
 			root = choice;
-			addHeuristic(choice.action);
+			//addHeuristic(choice.action);
 			return choice.action;
 			
 		}else{
