@@ -1,6 +1,7 @@
 package itu.ejuuragr.UTC;
 
 import itu.ejuuragr.MCTSAgent;
+import itu.ejuuragr.MCTSTools;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -52,7 +53,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	public boolean[] getAction(Environment obs) {		
 		int m = obs.getMarioMode();
 		if (m != lastMode)
-			System.out.println("Mode changed: " + m);
+			MCTSTools.print("Mode changed: " + m);
 		lastMode = m;
 		return search(obs);
 	}
@@ -82,11 +83,11 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 				//if (marioPos[0] == lastX && marioPos[1] == lastY)
 				//	System.out.println("Game won!?");
 				if (root.state.mario.x == marioPos[0])
-					System.out.println(String.format("CORRECTED POSITIONS! y: %s -> %s", root.state.mario.y, marioPos[1]));
+					MCTSTools.print(String.format("CORRECTED POSITIONS! y: %s -> %s", root.state.mario.y, marioPos[1]));
 				else if	(root.state.mario.y == marioPos[1])
-					System.out.println(String.format("CORRECTED POSITIONS! x: %s -> %s", root.state.mario.x, marioPos[0]));
+					MCTSTools.print(String.format("CORRECTED POSITIONS! x: %s -> %s", root.state.mario.x, marioPos[0]));
 				else
-					System.out.println(String.format("CORRECTED POSITIONS! x: %s -> %s, y: %s -> %s", root.state.mario.x, marioPos[0], root.state.mario.y, marioPos[1]));
+					MCTSTools.print(String.format("CORRECTED POSITIONS! x: %s -> %s, y: %s -> %s", root.state.mario.x, marioPos[0], root.state.mario.y, marioPos[1]));
 			
 				// Set the simulator mario to the real coordinates (x and y) and estimated speeds (xa and ya)
 				root.state.mario.x = marioPos[0];
@@ -113,7 +114,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 					root.state.mario.large = false;
 				}
 				root.state.mario.deathTime = 0;
-				System.out.println(String.format("CORRECTED MARIO STATE! Fire: %s Large: %s", root.state.mario.fire, root.state.mario.large));
+				MCTSTools.print(String.format("CORRECTED MARIO STATE! Fire: %s Large: %s", root.state.mario.fire, root.state.mario.large));
 			}
 		}
 		lastX = obs.getMarioFloatPos()[0];
@@ -152,13 +153,13 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 		for (Integer i : nodeCounts) avg += i;
 		avg /= nodeCounts.size();
 		
-		System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used (%4d nodes avg.)",maxDepth,root.visited,System.currentTimeMillis() - startTime,avg));
+		MCTSTools.print(String.format("Depth: %2d, at %4d nodes %3dms used (%4d nodes avg.)",maxDepth,root.visited,System.currentTimeMillis() - startTime,avg));
 		
 		//Selecting action
 		if(root.visited != 0){
 			UTCNode choice = root.getBestChild(0);
 			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
-				System.out.println("I'm gonna die and i know it! ("+choice.state.mario.fire+" , " + choice.state.mario.large + " , " + choice.state.mario.deathTime + ") Reward:" + choice.reward);
+				MCTSTools.print("I'm gonna die and i know it! ("+choice.state.mario.fire+" , " + choice.state.mario.large + " , " + choice.state.mario.deathTime + ") Reward:" + choice.reward);
 			
 			drawFuture(root);
 			

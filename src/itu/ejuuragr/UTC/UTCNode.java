@@ -59,7 +59,7 @@ public class UTCNode implements MCTSNode{
 	public UTCNode expand() {
 		if (parent != null && calculateReward(state) == 0)
 		{
-			System.out.println("Expanding a node with 0 reward!!" + MCTSTools.actionToXML(action));
+			MCTSTools.print("Expanding a node with 0 reward!!" + MCTSTools.actionToXML(action));
 			UTCNode gp = this;
 			for (UTCNode p = this; p != null; p = p.parent) gp = p;
 			gp.outputTree("ZeroNodeExpanded.xml");
@@ -207,16 +207,20 @@ public class UTCNode implements MCTSNode{
 	 */
 	public double calculateReward(LevelScene state){
 		double reward;
-		if(state.mario.deathTime > 0 || MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0){
+		if(state.mario.deathTime > 0){
 			reward = 0.0;
-		}else{
+		}
+		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) {
+			reward = 0.01;
+		}
+		else{
 			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0;
 
 			if(MCTSTools.isInGap(state)) reward /= 10;
 			if (reward < 0 || reward > 1) 
 				{
-				System.out.println("Reward: " + reward);
-				System.out.println("X dif: " + (state.mario.x - parent.state.mario.x));
+				MCTSTools.print("Reward: " + reward);
+				MCTSTools.print("X dif: " + (state.mario.x - parent.state.mario.x));
 				}
 		}
 		//System.out.println("reward: " + reward);
