@@ -161,8 +161,8 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
 				MCTSTools.print("I'm gonna die and i know it! ("+choice.state.mario.fire+" , " + choice.state.mario.large + " , " + choice.state.mario.deathTime + ") Reward:" + choice.reward);
 			
-			drawFuture(root);
-			
+			if (MCTSTools.DEBUG)
+				drawFuture(root);
 			
 			root = choice;
 			//addHeuristic(choice.action);

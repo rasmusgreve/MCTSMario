@@ -57,7 +57,7 @@ public class UTCNode implements MCTSNode{
 	
 	@Override
 	public UTCNode expand() {
-		if (parent != null && calculateReward(state) == 0)
+		if (MCTSTools.DEBUG && parent != null && calculateReward(state) == 0)
 		{
 			MCTSTools.print("Expanding a node with 0 reward!!" + MCTSTools.actionToXML(action));
 			UTCNode gp = this;
@@ -211,17 +211,17 @@ public class UTCNode implements MCTSNode{
 			reward = 0.0;
 		}
 		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) {
-			reward = 0.01;
+			reward = 0.001; //Almost as bad is dying (but preferred)
 		}
 		else{
 			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0;
 
 			if(MCTSTools.isInGap(state)) reward /= 10;
 			if (reward < 0 || reward > 1) 
-				{
+			{
 				MCTSTools.print("Reward: " + reward);
 				MCTSTools.print("X dif: " + (state.mario.x - parent.state.mario.x));
-				}
+			}
 		}
 		//System.out.println("reward: " + reward);
 		return reward;
