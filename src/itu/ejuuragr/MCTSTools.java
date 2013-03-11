@@ -11,6 +11,13 @@ public class MCTSTools {
 	public static final boolean[] buttons = {true, true, false, true, true};	
 	public static final int CHILDREN = possibleActionsCount();
 
+	public static final boolean DEBUG = false;
+	
+	public static void print(String message)
+	{
+		if (DEBUG) System.out.println(message);
+	}
+	
 	private static int possibleActionsCount()
 	{
 		int acts = 1;
