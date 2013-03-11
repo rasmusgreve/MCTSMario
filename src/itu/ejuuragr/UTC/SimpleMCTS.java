@@ -24,10 +24,10 @@ import ch.idsia.mario.environments.Environment;
  */
 public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	
-	protected static int TIME_PER_TICK = 39; // milliseconds
+	protected static int TIME_PER_TICK = 20; // milliseconds
 	public static int RANDOM_SAMPLES_LIMIT = 4;
 
-	private static final double cp = 1.5/8; //1.0/Math.sqrt(2); // 
+	private static final double cp = 2.0;//1.0/Math.sqrt(2); // 1.5/8;
 	
 	protected int maxDepth = 0;
 	
@@ -146,7 +146,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 			backup(v1,reward);
 		}
 		
-		System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
+		//System.out.println(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
 		
 		//Selecting action
 		if(root.visited != 0){
@@ -154,7 +154,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
 				System.out.println("I'm gonna die and i know it! ("+choice.state.mario.fire+" , " + choice.state.mario.large + " , " + choice.state.mario.deathTime + ") Reward:" + choice.reward);
 			
-			drawFuture(root);
+			//drawFuture(root);
 			
 			
 			root = choice;
