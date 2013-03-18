@@ -5,7 +5,7 @@ import java.util.*;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.sprites.Mario;
 
-import itu.ejuuragr.UTC.UTCNode;
+import itu.ejuuragr.UCT.UTCNode;
 
 public class MCTSTools {
 
