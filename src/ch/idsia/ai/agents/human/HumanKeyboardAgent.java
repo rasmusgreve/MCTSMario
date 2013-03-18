@@ -39,7 +39,7 @@ public class HumanKeyboardAgent extends KeyAdapter implements Agent
     public boolean[] getAction(Environment observation)
     {
     	float[] pos = observation.getMarioFloatPos();
-    	//System.out.println(String.format("Mario pos: (%s,%s)",pos[0],pos[1]));
+    	System.out.println(String.format("Mario pos: (%s,%s)",pos[0],pos[1]));
     	//maxSpeed = Math.max(maxSpeed,pos[0]-lastX);
     	//System.out.println(String.format("xSpeed: %s, max:%s",pos[0]-lastX,maxSpeed));
     	//lastX = pos[0];

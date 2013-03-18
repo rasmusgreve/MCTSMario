@@ -1,5 +1,7 @@
 package itu.ejuuragr;
 
+import java.util.*;
+
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.sprites.Mario;
 
@@ -7,18 +9,31 @@ import itu.ejuuragr.UTC.UTCNode;
 
 public class MCTSTools {
 
-	//                                      {LEFT, RIGHT, DOWN, JUMP, SPEED}
-	public static final boolean[] buttons = {true, true, false, true, true};	
-	public static final int CHILDREN = possibleActionsCount();
-
-	public static final boolean DEBUG = true;
+	//                                {LEFT, RIGHT, DOWN, JUMP, SPEED}
+	public static boolean[] buttons = {true, true, false, true, true};
+	public static boolean[] defBtns = {false, false, false, false, false};
+	public static int CHILDREN = possibleActionsCount();
+	
+	public static List<boolean[]> actions = new LinkedList<boolean[]>();
+	static{
+		actions.add(new boolean[]{false, true, false, true, true});
+		actions.add(new boolean[]{false, true, false, true, false});
+		actions.add(new boolean[]{false, true, false, false, true});
+		actions.add(new boolean[]{false, false, false, true, true});
+		actions.add(new boolean[]{false, false, false, false, true});
+		actions.add(new boolean[]{false, true, false, false, false});
+		actions.add(new boolean[]{true, false, false, true, false});
+		actions.add(new boolean[]{true, false, false, false, false});
+	}
+	
+	public static final boolean DEBUG = !false;
 	
 	public static void print(String message)
 	{
 		if (DEBUG) System.out.println(message);
 	}
 	
-	private static int possibleActionsCount()
+	public static int possibleActionsCount()
 	{
 		int acts = 1;
 		for (int i = 0; i < 5; i++)
@@ -44,7 +59,7 @@ public class MCTSTools {
 	
 	public static boolean[] indexToAction(int index)
 	{
-		boolean[] action = new boolean[5];
+		boolean[] action = defBtns.clone();
 		
 		int j = 0;
 		for (int i = 0; i < 5; i++)

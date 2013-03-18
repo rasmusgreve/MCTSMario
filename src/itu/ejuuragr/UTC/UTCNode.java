@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Savepoint;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
@@ -38,6 +40,7 @@ public class UTCNode implements MCTSNode{
 	public UTCNode[] children = new UTCNode[MCTSTools.CHILDREN];
 	public double reward = 0;
 	public int visited = 0;
+	private int actionNum = 0;
 	
 	// for stats
 	public int numChildren = 0;
@@ -53,19 +56,23 @@ public class UTCNode implements MCTSNode{
 		this.state = state;
 		this.action = action;
 		this.parent = parent;
+		actionNum = 0;
 	}
 	
 	@Override
 	public UTCNode expand() {
-		if (MCTSTools.DEBUG && parent != null && calculateReward(state) == 0)
+		/*if (MCTSTools.DEBUG && parent != null && calculateReward(state) == 0)
 		{
 			MCTSTools.print("Expanding a node with 0 reward!!" + MCTSTools.actionToXML(action));
 			UTCNode gp = this;
 			for (UTCNode p = this; p != null; p = p.parent) gp = p;
 			gp.outputTree("ZeroNodeExpanded.xml");
 		}
+		return createChild(MCTSTools.actions.get(actionNum++));
+		*/
 		ArrayList<Integer> spaces = getUnexpanded();
 		return createChild(MCTSTools.indexToAction(spaces.get(rand.nextInt(spaces.size()))));
+		
 	}
 	
 	/**
@@ -74,6 +81,8 @@ public class UTCNode implements MCTSNode{
 	 * @return True if no more children can be created, else false.
 	 */
 	public boolean isExpanded(){
+		//return actionNum >= MCTSTools.actions.size();
+		
 		for(int i = 0; i < MCTSTools.CHILDREN; i++){
 			if(children[i] == null) return false;
 		}
@@ -111,6 +120,7 @@ public class UTCNode implements MCTSNode{
 		reward = 0;
 		visited = 0;
 		numChildren = 0;
+		actionNum = 0;
 	}
 	
 	/**
@@ -211,7 +221,7 @@ public class UTCNode implements MCTSNode{
 			reward = 0.0;
 		}
 		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) {
-			reward = 0.001; //Almost as bad is dying (but preferred)
+			reward = 0.0; 
 		}
 		else{
 			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0;

@@ -28,9 +28,10 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	
 	protected static int TIME_PER_TICK = 39; // milliseconds
 	public static int RANDOM_SAMPLES_LIMIT = 4;
+	private boolean SAVE_NEXT_TREE = false;
 	private LinkedList<Integer> nodeCounts = new LinkedList<Integer>();
 
-	private static final double cp = 1.5/8; //1.0/Math.sqrt(2); // 
+	protected static double cp = 1.5/8; //1.0/Math.sqrt(2); // 
 	
 	protected int maxDepth = 0;
 	
@@ -45,7 +46,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 
 	@Override
 	public void reset() {
-		System.out.println("Agent Reset");
+		MCTSTools.print("Agent Reset");
 		initRoot();
 	}
 	
@@ -148,12 +149,17 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 			backup(v1,reward);
 		}
 		
-		nodeCounts.add(root.visited);
-		int avg = 0;
-		for (Integer i : nodeCounts) avg += i;
-		avg /= nodeCounts.size();
-		
-		MCTSTools.print(String.format("Depth: %2d, at %4d nodes %3dms used (%4d nodes avg.)",maxDepth,root.visited,System.currentTimeMillis() - startTime,avg));
+		//Debug stuff
+		if (MCTSTools.DEBUG){
+			nodeCounts.add(root.visited);
+			int avg = 0;
+			for (Integer i : nodeCounts) avg += i;
+			avg /= nodeCounts.size();
+			MCTSTools.print(String.format("Depth: %2d, at %4d nodes %3dms used (%4d nodes avg.)",maxDepth,root.visited,System.currentTimeMillis() - startTime,avg));
+			if (SAVE_NEXT_TREE){
+				root.outputTree("Tree.xml");
+			}
+		}
 		
 		//Selecting action
 		if(root.visited != 0){
@@ -231,7 +237,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	
 	private void logState(){
 		MarioComponent.SAVE_NEXT_FRAME = true;
-		root.outputTree("Tree.xml");
+		SAVE_NEXT_TREE = true;
 		printHeuristic();
 	}
 	
