@@ -3,7 +3,7 @@ package itu.ejuuragr;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.sprites.Mario;
 
-import itu.ejuuragr.UTC.UTCNode;
+import itu.ejuuragr.UCT.UTCNode;
 
 public class MCTSTools {
 
@@ -11,7 +11,7 @@ public class MCTSTools {
 	public static final boolean[] buttons = {true, true, false, true, true};	
 	public static final int CHILDREN = possibleActionsCount();
 
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	
 	public static void print(String message)
 	{
