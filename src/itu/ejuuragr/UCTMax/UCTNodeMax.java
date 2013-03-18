@@ -13,7 +13,7 @@ import competition.cig.robinbaumgarten.astar.sprites.Mario;
 
 import itu.ejuuragr.MCTSTools;
 import itu.ejuuragr.UCT.SimpleMCTS;
-import itu.ejuuragr.UCT.UTCNode;
+import itu.ejuuragr.UCT.UCTNode;
 
 
 /**
@@ -26,9 +26,9 @@ import itu.ejuuragr.UCT.UTCNode;
  * @author Emil
  *
  */
-public class UCTNodeMax extends UTCNode{
+public class UCTNodeMax extends UCTNode{
 	
-	public UCTNodeMax(LevelScene state, boolean[] action, UTCNode parent) {
+	public UCTNodeMax(LevelScene state, boolean[] action, UCTNode parent) {
 		super(state, action, parent);
 	}
 
@@ -43,8 +43,8 @@ public class UCTNodeMax extends UTCNode{
 	}	
 	
 	@Override
-	public UTCNode createChild(boolean[] action){
-		UTCNode child = new UCTNodeMax(MCTSTools.advanceStepClone(state, action),action,this);
+	public UCTNode createChild(boolean[] action){
+		UCTNode child = new UCTNodeMax(MCTSTools.advanceStepClone(state, action),action,this);
 		children[MCTSTools.actionToIndex(action)] = child;
 		numChildren++;
 		

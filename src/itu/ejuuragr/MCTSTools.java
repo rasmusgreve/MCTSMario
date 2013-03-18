@@ -5,7 +5,7 @@ import java.util.*;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.sprites.Mario;
 
-import itu.ejuuragr.UCT.UTCNode;
+import itu.ejuuragr.UCT.UCTNode;
 
 public class MCTSTools {
 
@@ -131,18 +131,18 @@ public class MCTSTools {
 		return b.append("\"").toString();
 	}
 	
-	public static String getXMLRepresentation(UTCNode n)
+	public static String getXMLRepresentation(UCTNode n)
 	{
 		StringBuilder b = new StringBuilder();
 		getXMLRepresentation(n, b);
 		return b.toString();
 	}
 	
-	private static void getXMLRepresentation(UTCNode n, StringBuilder b)
+	private static void getXMLRepresentation(UCTNode n, StringBuilder b)
 	{
 		b.append("<Node " + actionToXML(n.action) + " " + String.format("Reward=\"%s\"",n.reward/n.visited) + ">");
 		if (n.children != null)
-			for (UTCNode c : n.children)
+			for (UCTNode c : n.children)
 				if (c != null)
 					getXMLRepresentation(c,b);		
 		b.append("</Node>");

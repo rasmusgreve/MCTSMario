@@ -25,7 +25,7 @@ import itu.ejuuragr.MCTSTools;
  * @author Emil
  *
  */
-public class UTCNode implements MCTSNode{
+public class UCTNode implements MCTSNode{
 	
 	//private static int CHILDREN = 16;
 	//private static final int REPETITIONS = 1; //Unused?
@@ -34,8 +34,8 @@ public class UTCNode implements MCTSNode{
 	
 	public LevelScene state = null;
 	public boolean[] action = new boolean[MCTSTools.CHILDREN];
-	public UTCNode parent = null;
-	public UTCNode[] children = new UTCNode[MCTSTools.CHILDREN];
+	public UCTNode parent = null;
+	public UCTNode[] children = new UCTNode[MCTSTools.CHILDREN];
 	public double reward = 0;
 	public int visited = 0;
 	
@@ -49,21 +49,21 @@ public class UTCNode implements MCTSNode{
 	 * @param action The action leading to the node's state.
 	 * @param parent The parent of the new node or null if it is root.
 	 */
-	public UTCNode(LevelScene state, boolean[] action, UTCNode parent){
+	public UCTNode(LevelScene state, boolean[] action, UCTNode parent){
 		this.state = state;
 		this.action = action;
 		this.parent = parent;
 	}
 	
 	@Override
-	public UTCNode expand() {
-		if (MCTSTools.DEBUG && parent != null && calculateReward(state) == 0)
+	public UCTNode expand() {
+		/*if (MCTSTools.DEBUG && parent != null && calculateReward(state) == 0)
 		{
 			MCTSTools.print("Expanding a node with 0 reward!!" + MCTSTools.actionToXML(action));
-			UTCNode gp = this;
-			for (UTCNode p = this; p != null; p = p.parent) gp = p;
+			UCTNode gp = this;
+			for (UCTNode p = this; p != null; p = p.parent) gp = p;
 			gp.outputTree("ZeroNodeExpanded.xml");
-		}
+		}*/
 		ArrayList<Integer> spaces = getUnexpanded();
 		return createChild(MCTSTools.indexToAction(spaces.get(rand.nextInt(spaces.size()))));
 	}
@@ -88,8 +88,8 @@ public class UTCNode implements MCTSNode{
 	 * @return The child node containing the state resulting from performing the
 	 * action on the current node.
 	 */
-	public UTCNode createChild(boolean[] action){
-		UTCNode child = new UTCNode(MCTSTools.advanceStepClone(state, action),action,this);
+	public UCTNode createChild(boolean[] action){
+		UCTNode child = new UCTNode(MCTSTools.advanceStepClone(state, action),action,this);
 		children[MCTSTools.actionToIndex(action)] = child;
 		numChildren++;
 		
@@ -101,11 +101,11 @@ public class UTCNode implements MCTSNode{
 	 */
 	public void reset()
 	{
-		for (UTCNode n : children)
+		for (UCTNode n : children)
 			if (n != null)
 				n.parent = null;
 		
-		children = new UTCNode[MCTSTools.CHILDREN];
+		children = new UCTNode[MCTSTools.CHILDREN];
 		action = null;
 		parent = null;
 		reward = 0;
@@ -137,7 +137,7 @@ public class UTCNode implements MCTSNode{
 	 * @param cp The constant to use in the exploration part of the confidence equation.
 	 * @return The direct child with the highest confidence value.
 	 */
-	public UTCNode getBestChild(double cp){
+	public UCTNode getBestChild(double cp){
 		int best = -1;
 		double score = -1;
 		for(int i = 0; i < MCTSTools.CHILDREN; i++){

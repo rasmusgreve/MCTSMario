@@ -28,14 +28,12 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
     /*
 	 * Modification for debugging (itu.ejuuragr)
 	 */
-    public static boolean SAVE_NEXT_FRAME = false;
-    public static int[] BESTLINE_XS;
-    public static int[] BESTLINE_YS;
-    
-    public static int[] PLAN_XS;
-    public static int[] PLAN_YS;
-    
-    
+	    public static boolean SAVE_NEXT_FRAME = false;
+	    public static int[] BESTLINE_XS;
+	    public static int[] BESTLINE_YS;
+	    
+	    public static int[] PLAN_XS;
+	    public static int[] PLAN_YS;
     /*
 	 * Modification for debugging end (itu.ejuuragr)
 	 */

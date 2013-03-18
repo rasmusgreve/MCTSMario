@@ -14,7 +14,7 @@ import itu.ejuuragr.UCT.*;
  */
 public class SimpleUCTMax extends SimpleMCTS {
 	
-	private String name = "SimpleMCTSMax";
+	private String name = "UCT Max";
 	
 	@Override
 	public String getName() {
@@ -34,7 +34,7 @@ public class SimpleUCTMax extends SimpleMCTS {
 	 * @param reward The reward for the given node (how good it is).
 	 */
 	@Override
-	public void backup(UTCNode v, double reward) {
+	public void backup(UCTNode v, double reward) {
 		int depth = 0;
 		while(v != null){
 			v.visited++;
@@ -46,7 +46,7 @@ public class SimpleUCTMax extends SimpleMCTS {
 	}
 	
 	@Override
-	public UTCNode createRoot(LevelScene state){
+	public UCTNode createRoot(LevelScene state){
 		return new UCTNodeMax(state, null, null);
 	}
 }

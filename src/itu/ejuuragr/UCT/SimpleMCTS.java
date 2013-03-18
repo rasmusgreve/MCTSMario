@@ -24,7 +24,7 @@ import ch.idsia.mario.environments.Environment;
  * @author Emil & Rasmus
  *
  */
-public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
+public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	
 	protected static int TIME_PER_TICK = 39; // milliseconds
 	public static int RANDOM_SAMPLES_LIMIT = 4;
@@ -36,7 +36,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	private int lastMode = 2;
 	
 	private String name = "BasicMCTS";
-	protected UTCNode root;
+	protected UCTNode root;
 	
 	private HashMap<String, Integer> heuristic = new HashMap<String, Integer>();
 	private LinkedList<Integer> nodeCounts = new LinkedList<Integer>();
@@ -141,7 +141,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 		//int nodesToCreate = 1100;
 		//while (nodesToCreate-- > 0){
 		while(System.currentTimeMillis() < endTime){
-			UTCNode v1 = treePolicy(root);
+			UCTNode v1 = treePolicy(root);
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
 		}
@@ -157,13 +157,16 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 		
 		//Selecting action
 		if(root.visited != 0){
-			UTCNode choice = root.getBestChild(0);
+			UCTNode choice = root.getBestChild(0);
 			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
 
 				MCTSTools.print("I'm gonna die and i know it! ("+choice.state.mario.fire+" , " + choice.state.mario.large + " , " + choice.state.mario.deathTime + ") Reward:" + choice.reward);
 			
 			if (MCTSTools.DEBUG)
+			{
 				drawFuture(root);
+				//drawEventHorizon(root);
+			}
 			
 			root = choice;
 			//addHeuristic(choice.action);
@@ -186,7 +189,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 		}
 	}
 	
-	protected void drawFuture(UTCNode v)
+	protected void drawFuture(UCTNode v)
 	{
 		ArrayList<Integer> xs = new ArrayList<Integer>();
 		ArrayList<Integer> ys = new ArrayList<Integer>();
@@ -207,6 +210,72 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 		}
 		MarioComponent.BESTLINE_XS = rx;
 		MarioComponent.BESTLINE_YS = ry;
+	}
+	
+	private void collectLeafs(UCTNode v, LinkedList<UCTNode> list)
+	{
+		if (v.numChildren == 0)
+		{
+			list.add(v);
+			return;
+		}
+		for (UCTNode c : v.children)
+		{
+			if (c != null)
+				collectLeafs(c, list);
+		}
+	}
+	
+	private ArrayList<UCTNode> order(LinkedList<UCTNode> leafs)
+	{
+		LinkedList<UCTNode> queue = leafs;
+		ArrayList<UCTNode> sorted = new ArrayList<UCTNode>();
+		
+		UCTNode current = queue.removeFirst();
+		sorted.add(current);
+		while (!queue.isEmpty())
+		{
+			double distance = 0.0;
+			UCTNode closest = null;
+			for (UCTNode n : queue)
+			{
+				double nd = distance(n,current);
+				if (distance <= nd)
+				{
+					distance = nd;
+					closest = n;
+				}
+			}
+			sorted.add(closest);
+			queue.remove(closest);
+			current = closest;
+		}
+		return sorted;
+	}
+	
+	private double distance(UCTNode a, UCTNode b)
+	{
+		double as = Math.pow(a.state.mario.x-b.state.mario.x,2);
+		double bs = Math.pow(a.state.mario.y-b.state.mario.y,2);
+		return Math.sqrt(as+bs);
+	}
+	
+	protected void drawEventHorizon(UCTNode v)
+	{
+		LinkedList<UCTNode> leafs = new LinkedList<UCTNode>();
+		collectLeafs(v, leafs);
+		ArrayList<UCTNode> ordered = order(leafs);
+	
+		int[] rx = new int[ordered.size()];
+		int[] ry = new int[ordered.size()];
+		for (int i = 0; i < ordered.size();i++)
+		{
+			UCTNode c = ordered.get(i);
+			rx[i] = (int)c.state.mario.x;
+			ry[i] = (int)c.state.mario.y;
+		}
+		MarioComponent.PLAN_XS = rx;
+		MarioComponent.PLAN_YS = ry;
 	}
 	
 	private void logState(){
@@ -235,8 +304,8 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 		}
     }
 	
-	public UTCNode createRoot(LevelScene state){
-		return new UTCNode(state, null, null);
+	public UCTNode createRoot(LevelScene state){
+		return new UCTNode(state, null, null);
 	}
 	
 	/**
@@ -274,7 +343,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	 * @param v The MCTreeNode that has recieved the reward.
 	 * @param reward The reward for the given node (how good it is).
 	 */
-	public void backup(UTCNode v, double reward) {
+	public void backup(UCTNode v, double reward) {
 		int depth = 0;
 		while(v != null){
 			v.visited++;
@@ -292,7 +361,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	 * @param node The node to simulate random actions on.
 	 * @return The final reward for the node after the simulations.
 	 */
-	public double defaultPolicy(UTCNode node) {
+	public double defaultPolicy(UCTNode node) {
 		//return node.calculateReward(node.state);
 
 		return node.advanceXandReward(RANDOM_SAMPLES_LIMIT);
@@ -306,7 +375,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 	 * @param v The root of the tree.
 	 * @return The new leaf.
 	 */
-	public UTCNode treePolicy(UTCNode v) { // may not be right
+	public UCTNode treePolicy(UCTNode v) { // may not be right
 		while(true){
 			if(!v.isExpanded()){
 				return v.expand();

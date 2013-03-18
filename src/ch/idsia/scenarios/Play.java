@@ -26,7 +26,7 @@ public class Play {
         options.setAgent(controller);
         Task task = new ProgressTask(options);
         options.setMaxFPS(false);
-        options.setLevelLength(1000);
+        //options.setLevelLength(1000);
         //options.setPauseWorld(true);
         options.setVisualization(true);
         options.setNumberOfTrials(1);
@@ -34,7 +34,7 @@ public class Play {
         options.setLevelRandSeed((int) (Math.random () * Integer.MAX_VALUE));
         //options.setLevelRandSeed(1709316654);
         //options.setLevelRandSeed(37462871);
-        //options.setLevelRandSeed(540219665);
+        options.setLevelRandSeed(1464510728);
         options.setLevelDifficulty(20);
         //options.setLevelType(2);
         task.setOptions(options);

@@ -49,7 +49,7 @@ public class PlanningUCT extends SimpleMCTS {
 		maxDepth = 0;
 		while(System.currentTimeMillis() < endTime){
 
-			UTCNode v1 = treePolicy(root);
+			UCTNode v1 = treePolicy(root);
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
 		}
@@ -60,7 +60,7 @@ public class PlanningUCT extends SimpleMCTS {
 		if (plan.isEmpty())
 		{
 			//Extract plan
-			UTCNode next = root.getBestChild(0);
+			UCTNode next = root.getBestChild(0);
 			this.clearRoot(obs);
 
 			for (int i = 0; i < PLAN_AHEAD; i++)
@@ -74,7 +74,7 @@ public class PlanningUCT extends SimpleMCTS {
 				root.state.tick();
 				
 				// carry on
-				UTCNode check = next.getBestChild(0);
+				UCTNode check = next.getBestChild(0);
 				if(check != null){
 					next = check;
 				}else{
