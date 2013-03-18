@@ -26,7 +26,7 @@ public class Play {
         options.setAgent(controller);
         Task task = new ProgressTask(options);
         options.setMaxFPS(false);
-        //options.setLevelLength(1000);
+        options.setLevelLength(1000);
         //options.setPauseWorld(true);
         options.setVisualization(true);
         options.setNumberOfTrials(1);

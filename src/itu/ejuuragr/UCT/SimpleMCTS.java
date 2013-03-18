@@ -94,7 +94,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UTCNode> {
 					root.state.mario.ya = (marioPos[1] - lastY) * 0.85f; //+ 3f;
 				root.state.mario.y = marioPos[1];
 			}
-			if (root.state.mario.fire && obs.getMarioMode() < 2 || root.state.mario.large && obs.getMarioMode() < 1)
+			if (root.state.mario.fire && obs.getMarioMode() < 2 || root.state.mario.large && obs.getMarioMode() < 1 || root.state.mario.deathTime > 0)
 			{
 				if (obs.getMarioMode() == 2)
 				{
