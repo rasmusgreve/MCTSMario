@@ -153,6 +153,8 @@ public class UTCNode implements MCTSNode{
 	}
 	
 	public double advanceXandReward(int ticks){
+		// check for immediate death
+		if(this.calculateReward(state) == 0.0) return 0.0; // no need to check further
 		
 		LevelScene copy = null;
 		try {
