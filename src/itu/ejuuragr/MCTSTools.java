@@ -14,7 +14,7 @@ public class MCTSTools {
 	public static boolean[] defBtns = {false, false, false, false, false};
 	public static int CHILDREN = possibleActionsCount();
 	
-	public static List<boolean[]> actions = new LinkedList<boolean[]>();
+	public static List<boolean[]> actions = new ArrayList<boolean[]>();
 	static{
 		actions.add(new boolean[]{false, true, false, true, true});
 		actions.add(new boolean[]{false, true, false, true, false});
@@ -31,6 +31,30 @@ public class MCTSTools {
 	public static void print(String message)
 	{
 		if (DEBUG) System.out.println(message);
+	}
+	
+	public static void buildActions(boolean[] buttons, boolean[] defaultButtonState)
+	{
+		int numActions = 1;
+		for (int i = 0; i < 5; i++)
+			if (buttons[i])
+				numActions <<= 1;
+		
+		actions.clear();
+		
+		for (int index = 0; index < numActions; index++)
+		{
+			boolean[] action = defaultButtonState.clone();
+			
+			int j = 0;
+			for (int i = 0; i < 5; i++)
+			{
+				if (!buttons[i]) continue;
+				action[i] = ((index & 1<<j) != 0);
+				j++;
+			}
+			actions.add(action);
+		}
 	}
 	
 	public static int possibleActionsCount()
