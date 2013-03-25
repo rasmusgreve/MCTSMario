@@ -31,6 +31,7 @@ public class UCTNode implements MCTSNode{
 	//private static final int REPETITIONS = 1; //Unused?
 	
 	public static Random rand = new Random(1337);
+	private static double TERMINAL_MARGIN = 0.0;
 	
 	public LevelScene state = null;
 	public boolean[] action = new boolean[MCTSTools.CHILDREN];
@@ -123,7 +124,7 @@ public class UCTNode implements MCTSNode{
 	 * @return A value of how attractive the node is to look into.
 	 */
 	public double calculateConfidence(double cp){ //TODO: FUCKING DYRT
-		if(reward <= 0.0001) return 0.0;
+		if(reward <= TERMINAL_MARGIN) return reward;
 		
 		double exploitation = reward/this.visited;
 		double exploration = cp*Math.sqrt((2*Math.log(parent.visited))/this.visited); // Det er SQRT's SKYLD! :(
@@ -155,7 +156,8 @@ public class UCTNode implements MCTSNode{
 	
 	public double advanceXandReward(int ticks){
 		// check for immediate death
-		if(this.calculateReward(state) == 0.0) return 0.0; // no need to check further
+		double curReward = this.calculateReward(state);
+		if(curReward <= TERMINAL_MARGIN) return curReward; // no need to check further
 		
 		LevelScene copy = null;
 		try {
@@ -214,7 +216,7 @@ public class UCTNode implements MCTSNode{
 			reward = 0.0;
 		}
 		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) {
-			reward = 0.001; //Almost as bad is dying (but preferred)
+			reward = 0.0; //Almost as bad is dying (but preferred)
 		}
 		else{
 			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0;
