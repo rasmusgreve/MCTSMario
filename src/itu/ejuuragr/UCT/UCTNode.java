@@ -37,7 +37,7 @@ public class UCTNode implements MCTSNode{
 	public UCTNode parent = null;
 	public UCTNode[] children = new UCTNode[MCTSTools.CHILDREN];
 	public double reward = 0;
-	public int visited = 0;
+	public int visited = 1;
 	
 	// for stats
 	public int numChildren = 0;
@@ -53,6 +53,7 @@ public class UCTNode implements MCTSNode{
 		this.state = state;
 		this.action = action;
 		this.parent = parent;
+		if(parent != null) this.reward = this.calculateReward(state);
 	}
 	
 	@Override
@@ -109,7 +110,7 @@ public class UCTNode implements MCTSNode{
 		action = null;
 		parent = null;
 		reward = 0;
-		visited = 0;
+		visited = 1;
 		numChildren = 0;
 	}
 	

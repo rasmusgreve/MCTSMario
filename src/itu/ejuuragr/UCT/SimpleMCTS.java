@@ -344,7 +344,8 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	 * @param reward The reward for the given node (how good it is).
 	 */
 	public void backup(UCTNode v, double reward) {
-		int depth = 0;
+		int depth = 1;
+		v = v.parent;
 		while(v != null){
 			v.visited++;
 			v.reward += reward;
