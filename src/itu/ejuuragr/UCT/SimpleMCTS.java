@@ -28,7 +28,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	
 	protected static int TIME_PER_TICK = 39; // milliseconds
 	public static int RANDOM_SAMPLES_LIMIT = 4;
-	private static final double cp = 1.5/8;// 1.0/Math.sqrt(2); // 1.5/8;
+	protected static final double cp = 1.5/8;// 1.0/Math.sqrt(2); // 1.5/8;
 	
 	protected int maxDepth = 0;
 	
@@ -184,9 +184,12 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	}
 	
 	private void printHeuristic(){
+		int total = 0;
 		for(Entry<String, Integer> entry : heuristic.entrySet()){
 			System.out.println(entry.getKey() + ": "+entry.getValue());
+			total += entry.getValue();
 		}
+		System.out.println("Total moves: "+total);
 	}
 	
 	protected void drawFuture(UCTNode v)
@@ -281,7 +284,15 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	private void logState(){
 		MarioComponent.SAVE_NEXT_FRAME = true;
 		root.outputTree("Tree.xml");
-		printHeuristic();
+		//printHeuristic();
+		printActions();
+	}
+	
+	private void printActions(){
+		System.out.println("Actions by index:");
+		for(int i = 0; i < MCTSTools.CHILDREN; i++){
+			System.out.println(i + ": "+MCTSTools.actionToXML(MCTSTools.indexToAction(i)));
+		}
 	}
 	
 	public void keyPressed (KeyEvent e)
