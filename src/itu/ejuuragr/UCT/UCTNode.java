@@ -31,7 +31,7 @@ public class UCTNode implements MCTSNode{
 	//private static final int REPETITIONS = 1; //Unused?
 	
 	public static Random rand = new Random(1337);
-	private static double TERMINAL_MARGIN = 0.0;
+	protected static double TERMINAL_MARGIN = 0.0;
 	
 	public LevelScene state = null;
 	public boolean[] action = new boolean[MCTSTools.CHILDREN];
