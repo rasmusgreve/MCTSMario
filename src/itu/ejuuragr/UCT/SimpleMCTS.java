@@ -156,7 +156,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		}
 		
 		//Selecting action
-		if(root.visited != 0){
+		if(root.visited != 1){
 			UCTNode choice = root.getBestChild(0);
 			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
 
