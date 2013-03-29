@@ -211,7 +211,6 @@ public class UCTNode implements MCTSNode{
 	 * 0 is worst and 1 is best.
 	 */
 	public double calculateReward(LevelScene state){
-		if(parent == null) System.out.println("No Parent");
 		double reward;
 		if(state.mario.deathTime > 0){
 			reward = 0.0;

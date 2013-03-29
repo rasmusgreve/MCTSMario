@@ -164,7 +164,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 			
 			if (MCTSTools.DEBUG)
 			{
-				//drawFuture(root);
+				drawFuture(root);
 				//drawEventHorizon(root);
 			}
 			

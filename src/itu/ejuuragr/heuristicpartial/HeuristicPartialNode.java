@@ -52,7 +52,6 @@ public class HeuristicPartialNode extends UCTNode {
 		return child;
 	}
 
-	// This is where it REALLY happens!
 	public MCTSTools.Tuple<HeuristicPartialNode,Boolean> getBestChildPair(double cp) {
 		double newScore = calculateConfidenceNew(cp);
 		int best = -1;
@@ -88,11 +87,6 @@ public class HeuristicPartialNode extends UCTNode {
 			
 			return new MCTSTools.Tuple<HeuristicPartialNode,Boolean>((HeuristicPartialNode)createChild(MCTSTools.indexToAction(index)),true);
 		}
-		System.err.println("Returning null, no best found");
-		System.err.println("numChildren: "+this.numChildren);
-		System.err.print("actionScores: ");
-		for(int i : actionScores) System.err.print(i + ",");
-		System.err.println();
 		return null;
 	}
 	
