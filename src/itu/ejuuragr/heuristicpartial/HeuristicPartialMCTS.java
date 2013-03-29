@@ -2,6 +2,7 @@ package itu.ejuuragr.heuristicpartial;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
+import itu.ejuuragr.MCTSTools;
 import itu.ejuuragr.UCT.SimpleMCTS;
 import itu.ejuuragr.UCT.UCTNode;
 
@@ -19,11 +20,14 @@ public class HeuristicPartialMCTS extends SimpleMCTS{
 
 	@Override
 	public UCTNode treePolicy(UCTNode v) {
+		HeuristicPartialNode w = (HeuristicPartialNode) v;
+		MCTSTools.Tuple<HeuristicPartialNode,Boolean> p;
 		do{
-			v = v.getBestChild(cp);
+			p = w.getBestChildPair(cp);
+			w = p.first;
 		}
-		while(v.numChildren > 0); // is it new
-		return v;
+		while(!p.second); // until it is a leaf
+		return w;
 	}
 
 }

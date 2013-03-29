@@ -134,6 +134,16 @@ public class MCTSTools {
     			levelScene.mario.y > levelScene.level.gapHeight[(int) (levelScene.mario.x/16)]*16);
 	}
 	
+	public static class Tuple<T,V>{
+		public T first;
+		public V second;
+
+		public Tuple(T first, V second){
+			this.first = first;
+			this.second = second;
+		}
+	}
+	
 	/********************
 	 * XML Stuff
 	 ********************/

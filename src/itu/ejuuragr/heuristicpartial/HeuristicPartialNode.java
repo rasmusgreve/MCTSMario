@@ -28,8 +28,8 @@ public class HeuristicPartialNode extends UCTNode {
 	 * 
 	 */
 	
-	private static final int[] actionScores = {9,22,17,0,19,15,20,0,18,20,223,0,20,16,213,0};
-	private static final int scoreSum = 674;
+	private int[] actionScores = new int[]{9,22,17,0,19,15,20,0,18,20,223,0,20,16,213,0};
+	private int scoreSum = 612;
 
 	public HeuristicPartialNode(LevelScene state, boolean[] action,
 			UCTNode parent) {
@@ -46,16 +46,18 @@ public class HeuristicPartialNode extends UCTNode {
 	}
 
 	// This is where it REALLY happens!
-	@Override
-	public UCTNode getBestChild(double cp) {
+	public MCTSTools.Tuple<HeuristicPartialNode,Boolean> getBestChildPair(double cp) {
+		double newScore = calculateConfidenceNew(cp);
 		int best = -1;
 		double score = -1;
 		for(int i = 0; i < MCTSTools.CHILDREN; i++){
 			double curScore;
 			if(children[i] != null){
 				curScore = children[i].calculateConfidence(cp);
-			}else{ // the difference
-				curScore = calculateConfidenceNew(i, cp);
+			}else if(actionScores[i] != 0){ // the difference
+				curScore = newScore;
+			}else{
+				continue;
 			}
 			
 			if(curScore > score || (curScore == score && rand.nextBoolean())){
@@ -65,14 +67,30 @@ public class HeuristicPartialNode extends UCTNode {
 		}
 		
 		if(best > -1){
-			if(children[best] != null) return children[best];
-			return createChild(MCTSTools.indexToAction(best));
+			if(children[best] != null) return new MCTSTools.Tuple<HeuristicPartialNode,Boolean>((HeuristicPartialNode)children[best],false); // existing node
+
+			// find best child left (heuristically weighted random)
+			int randomToken = rand.nextInt(scoreSum) + 1;
+			int index = -1;
+			while(randomToken > 0){
+				index++;
+				randomToken -= this.actionScores[index];
+			}
+			this.scoreSum -= this.actionScores[index];
+			this.actionScores[index] = 0;
+			
+			return new MCTSTools.Tuple<HeuristicPartialNode,Boolean>((HeuristicPartialNode)createChild(MCTSTools.indexToAction(index)),true);
 		}
+		System.err.println("Returning null, no best found");
+		System.err.println("numChildren: "+this.numChildren);
+		System.err.print("actionScores: ");
+		for(int i : actionScores) System.err.print(i + ",");
+		System.err.println();
 		return null;
 	}
 	
-	private double calculateConfidenceNew(int index, double cp){		
-		double exploitation = 0.5 + (1.0 * actionScores[index]) / scoreSum;
+	private double calculateConfidenceNew(double cp){		
+		double exploitation = 0.5;
 		double exploration = cp*Math.sqrt(2*Math.log(this.visited)); // this is same has dividing by 1 because the new node has obviously never been visited
 		//System.out.printf("Exploit: %f Explore: %f\n", exploitation, exploration);
 		return exploitation + exploration;
