@@ -4,7 +4,6 @@ import competition.cig.robinbaumgarten.astar.LevelScene;
 
 import itu.ejuuragr.UCT.SimpleMCTS;
 import itu.ejuuragr.UCT.UCTNode;
-import itu.ejuuragr.UCTMax.UCTNodeMax;
 
 public class LimitedActions1 extends SimpleMCTS {
 
@@ -16,6 +15,7 @@ public class LimitedActions1 extends SimpleMCTS {
 
 	@Override
 	public UCTNode createRoot(LevelScene state){
-		return new UCTNodeMax(state, null, null);
+		return null;
+		//return new UCTNodeMax(state, null, null); SORRY :D
 	}
 }
