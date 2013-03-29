@@ -1,11 +1,7 @@
 package itu.ejuuragr.softmax;
 
-import ch.idsia.mario.environments.Environment;
-
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
-import itu.ejuuragr.MCTSAgent;
-import itu.ejuuragr.MCTSNode;
 import itu.ejuuragr.UCT.SimpleMCTS;
 import itu.ejuuragr.UCT.UCTNode;
 
