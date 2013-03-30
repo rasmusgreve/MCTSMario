@@ -215,7 +215,7 @@ public class UCTNode implements MCTSNode{
 			reward = 0.0;
 		}
 		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) {
-			reward = 0.0; //Almost as bad is dying (but preferred)
+			reward = 0.0;
 		}
 		else{
 			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0;

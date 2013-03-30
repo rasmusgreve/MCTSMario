@@ -1,26 +1,26 @@
-package itu.ejuuragr.UCT;
+package itu.ejuuragr.highdk;
 
-import itu.ejuuragr.MCTSTools;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
-public class MacroActionsNode extends UCTNode {
+import itu.ejuuragr.MCTSTools;
+import itu.ejuuragr.UCT.SimpleMCTS;
+import itu.ejuuragr.UCT.UCTNode;
 
-	public MacroActionsNode(LevelScene state, boolean[] action, UCTNode parent) {
+public class HoleDetectionNode extends UCTNode {
+
+	public HoleDetectionNode(LevelScene state, boolean[] action, UCTNode parent) {
 		super(state, action, parent);
-		
 	}
-
 	
 	@Override
 	public UCTNode createChild(boolean[] action){
-		MacroActionsNode child = new MacroActionsNode(MCTSTools.advanceStepClone(state, action, MacroActions.ACTION_SIZE),action,this);
+		HoleDetectionNode child = new HoleDetectionNode(MCTSTools.advanceStepClone(state, action),action,this);
 		children[MCTSTools.actionToIndex(action)] = child;
 		numChildren++;
 		
 		return child;
 	}
 	
-	@Override
 	public double calculateReward(LevelScene state){
 		double reward;
 		if(state.mario.deathTime > 0){
@@ -30,16 +30,19 @@ public class MacroActionsNode extends UCTNode {
 			reward = 0.0;
 		}
 		else{
-			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((2+MacroActions.ACTION_SIZE+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0; //This is changed
+			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0;
 
-			if(MCTSTools.isInGap(state)) reward /= 10;
-			/*if (reward < 0 || reward > 1) //TODO: Why does this have to be commented?
+			
+			if(HoleDetection.USE_HOLE_DETECTION && MCTSTools.isInGap(state)) reward /= 10; //This is changed
+			
+			if (reward < 0 || reward > 1) 
 			{
 				MCTSTools.print("Reward: " + reward);
 				MCTSTools.print("X dif: " + (state.mario.x - parent.state.mario.x));
-			}*/
+			}
 		}
 		//System.out.println("reward: " + reward);
 		return reward;
 	}
+
 }
