@@ -5,7 +5,7 @@ import competition.cig.robinbaumgarten.astar.LevelScene;
 
 public class MacroActions extends SimpleMCTS {
 
-	public static final int ACTION_SIZE = 3;
+	public static final int ACTION_SIZE = 3; //How many times to repeat each action
 	int moveCount = Integer.MAX_VALUE; //Start invalid every time
 	boolean[] curAction;
 	
