@@ -10,7 +10,7 @@ public class LimitedActions1 extends SimpleMCTS {
 	{
 		setName("LimitedActions1(-down)");
 		MCTSTools.buttons = new boolean[]{true, true, false, true, true};
-		MCTSTools.buildActions();
+		MCTSTools.buildActionsFromButtons();
 	}
 	
 }

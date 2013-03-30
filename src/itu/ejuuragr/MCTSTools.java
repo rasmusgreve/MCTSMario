@@ -10,12 +10,12 @@ import itu.ejuuragr.UCT.UCTNode;
 public class MCTSTools {
 
 	//                                {LEFT, RIGHT, DOWN, JUMP, SPEED}
-	public static boolean[] buttons = {true, true, true, true, true};
+	public static boolean[] buttons = {true, true, false, true, true};
 	public static boolean[] defaultButtonState = {false, false, false, false, false};
 	public static int CHILDREN;
 	public static List<boolean[]> actions = new ArrayList<boolean[]>();
 	static{
-		buildActions();
+		buildActionsFromButtons();
 	}
 	
 	
@@ -26,6 +26,9 @@ public class MCTSTools {
 		if (DEBUG) System.out.println(message);
 	}
 	
+	/**
+	 * Set the possible actions
+	 */
 	public static void setActions(boolean[][] actionsToAdd)
 	{
 		actions.clear();
@@ -41,7 +44,7 @@ public class MCTSTools {
 	 * @param buttons Array of buttons, true if it is pushable
 	 * @param defaultButtonState Array of buttons giving the default state (used if not pushable)
 	 */
-	public static void buildActions()
+	public static void buildActionsFromButtons()
 	{
 		int numActions = 1;
 		for (int i = 0; i < 5; i++)
@@ -98,11 +101,16 @@ public class MCTSTools {
 	 * @return
 	 */
 	public static LevelScene advanceStepClone(LevelScene state, boolean[] action){
+		return advanceStepClone(state, action, 1);
+	}	
+	
+	public static LevelScene advanceStepClone(LevelScene state, boolean[] action, int repetitions){
 		try {
 			
 			LevelScene result = (LevelScene) state.clone();
 			result.mario.setKeys(action);
-			result.tick();
+			while (repetitions-- > 0)
+				result.tick();
 			return result;
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();

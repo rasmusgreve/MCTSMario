@@ -37,6 +37,7 @@ public class UCTNode implements MCTSNode{
 	public UCTNode[] children = new UCTNode[MCTSTools.CHILDREN];
 	public double reward = 0;
 	public int visited = 1;
+	public static int REPETITIONS = 1;
 	
 	// for stats
 	public int numChildren = 0;
@@ -189,9 +190,9 @@ public class UCTNode implements MCTSNode{
 	
 	private void advanceStep(LevelScene state, boolean[] action){
 		state.mario.setKeys(action);
-		//for(int i = 0; i < REPETITIONS; i++){
+		for(int i = 0; i < REPETITIONS; i++){
 			state.tick();
-		//}
+		}
 	}
 	
 	protected boolean[] getRandomAction(){
