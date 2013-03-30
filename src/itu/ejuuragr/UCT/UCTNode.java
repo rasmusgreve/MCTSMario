@@ -5,12 +5,10 @@ import itu.ejuuragr.MCTSNode;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.util.Random;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
-import competition.cig.robinbaumgarten.astar.sprites.Mario;
 
 import itu.ejuuragr.MCTSTools;
 
@@ -123,11 +121,11 @@ public class UCTNode implements MCTSNode{
 	 * @param cp The constant applied to the exploration part of the equation.
 	 * @return A value of how attractive the node is to look into.
 	 */
-	public double calculateConfidence(double cp){ //TODO: FUCKING DYRT
+	public double calculateConfidence(double cp){
 		if(reward <= TERMINAL_MARGIN) return reward;
 		
 		double exploitation = reward/this.visited;
-		double exploration = cp*Math.sqrt((2*Math.log(parent.visited))/this.visited); // Det er SQRT's SKYLD! :(
+		double exploration = cp*Math.sqrt((2*Math.log(parent.visited))/this.visited);
 		//System.out.printf("Exploit: %f Explore: %f\n", exploitation, exploration);
 		return exploitation + exploration;
 	}

@@ -10,21 +10,14 @@ import itu.ejuuragr.UCT.UCTNode;
 public class MCTSTools {
 
 	//                                {LEFT, RIGHT, DOWN, JUMP, SPEED}
-	public static boolean[] buttons = {true, true, false, true, true};
-	public static boolean[] defBtns = {false, false, false, false, false};
-	public static int CHILDREN = possibleActionsCount();
-	
+	public static boolean[] buttons = {true, true, true, true, true};
+	public static boolean[] defaultButtonState = {false, false, false, false, false};
+	public static int CHILDREN;
 	public static List<boolean[]> actions = new ArrayList<boolean[]>();
 	static{
-		actions.add(new boolean[]{false, true, false, true, true});
-		actions.add(new boolean[]{false, true, false, true, false});
-		actions.add(new boolean[]{false, true, false, false, true});
-		actions.add(new boolean[]{false, false, false, true, true});
-		actions.add(new boolean[]{false, false, false, false, true});
-		actions.add(new boolean[]{false, true, false, false, false});
-		actions.add(new boolean[]{true, false, false, true, false});
-		actions.add(new boolean[]{true, false, false, false, false});
+		buildActions();
 	}
+	
 	
 	public static final boolean DEBUG = true;
 	
@@ -33,7 +26,22 @@ public class MCTSTools {
 		if (DEBUG) System.out.println(message);
 	}
 	
-	public static void buildActions(boolean[] buttons, boolean[] defaultButtonState)
+	public static void setActions(boolean[][] actionsToAdd)
+	{
+		actions.clear();
+		for (boolean[] a : actionsToAdd)
+		{
+			actions.add(a);
+		}
+		CHILDREN = actions.size();
+	}
+	
+	/**
+	 * Build a set of actions from a setting of pushable buttons and their default state
+	 * @param buttons Array of buttons, true if it is pushable
+	 * @param defaultButtonState Array of buttons giving the default state (used if not pushable)
+	 */
+	public static void buildActions()
 	{
 		int numActions = 1;
 		for (int i = 0; i < 5; i++)
@@ -46,56 +54,49 @@ public class MCTSTools {
 		{
 			boolean[] action = defaultButtonState.clone();
 			
-			int j = 0;
-			for (int i = 0; i < 5; i++)
+			int j = 0; //j: The value of the button
+			for (int i = 0; i < 5; i++) //i: The position of the button
 			{
-				if (!buttons[i]) continue;
-				action[i] = ((index & 1<<j) != 0);
+				if (!buttons[i]) continue; //Don't change from default and don't increment value (j)
+				action[i] = ((index & 1<<j) != 0); //Build the action based on bit pattern of the index
 				j++;
 			}
 			actions.add(action);
 		}
+		CHILDREN = actions.size();
 	}
 	
-	public static int possibleActionsCount()
-	{
-		int acts = 1;
-		for (int i = 0; i < 5; i++)
-			if (buttons[i])
-				acts <<= 1;
-		return acts;
-	}
-	
+	/**
+	 * Get the index corresponding to a given action
+	 * @param action The action to find the index for
+	 * @return The corresponding index
+	 */
 	public static int actionToIndex(boolean[] action)
 	{
-		int index = 0;
-		int j = 0;
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < CHILDREN; i++)
 		{
-			if (!buttons[i]) continue;
-			if (action[i])
-				index += 1<<j;
-			j++;
+			if (Arrays.equals(actions.get(i),action))
+				return i;
 		}
-		
-		return index;
+		throw new IllegalArgumentException("The given action is invalid");
 	}
 	
+	/**
+	 * Get an actions corresponding to a given index
+	 * @param index The index of the action to find
+	 * @return The corresponding action
+	 */
 	public static boolean[] indexToAction(int index)
 	{
-		boolean[] action = defBtns.clone();
-		
-		int j = 0;
-		for (int i = 0; i < 5; i++)
-		{
-			if (!buttons[i]) continue;
-			action[i] = ((index & 1<<j) != 0);
-			j++;
-		}
-		
-		return action;
+		return actions.get(index);
 	}
 	
+	/**
+	 * Clone a LevelScene, advance a step on the clone and return it
+	 * @param state
+	 * @param action
+	 * @return
+	 */
 	public static LevelScene advanceStepClone(LevelScene state, boolean[] action){
 		try {
 			
