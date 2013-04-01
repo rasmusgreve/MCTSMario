@@ -7,8 +7,11 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead{}
-\fancyhead[LO,RE]{\slshape \leftmark}
-
+\fancyhead[L]{\slshape MCTS Mario}
+\fancyhead[R]{\slshape IT University of Copenhagen}
+\fancyfoot{}
+\fancyfoot[C]{\thepage}
+\graphicspath{ {C:\Users\Rasmus\workspace\MCTSMario\Rapport} }
 
 \begin{document}
 \title{Enhancements for Monte Carlo Tree Search in The Mario AI Framework}
@@ -18,6 +21,7 @@
 %        \and \emph{Supervisor:}\\Julian Togelius\\\texttt{juto@itu.dk}}
 \maketitle
 \thispagestyle{empty} %Removes default pagenumber from frontpage
+
 \begin{abstract}
 (Bare copy/paste-ish fra projektbasen, skal skrives om!)
 In this experiment we explore different implementations and enhancements of the Monte Carlo Tree Search algorithm for an AI, in order to evaluate their performance and results in the Super Mario AI Benchmark tool. 
@@ -35,16 +39,39 @@ In this experiment we explore different implementations and enhancements of the 
 \clearpage
 
 \section{Background}
+Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by random sampling in the decision space until an outcome can be determined. A very nice quality of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires very little domain knowledge as a naïve implementation only require knowledge of the action space and a means of simulating the outcome of an action.
+
+Searching in MCTS is done by iteratively by building a search tree where the nodes are game states, and the edges are actions. A node is added to the tree in each iteration and based on the value of the new node, the values of parent nodes are updated.
+An iteration of MCTS consists of four steps:
+\begin{enumerate}
+\item Selection (A node to be expanded is chosen)
+\item Expansion (The node is expanded by simulating the associated action)
+\item Simulation (The game is simulated with random moves until terminal)
+\item Back propagation (The result propagates up through the tree)
+\end{enumerate}
+
+Choosing which node to expand can be done in multiple ways. Upper Confidence Bound (UCB) is a bandit based approach to choosing the most urgent node to expand. The quality with UCB is that it allows for prioritizing between exploration of less tried nodes, and exploitation of seemingly promising nodes.
+\textbf{OBS! Præcis hvilken ligning skal vi skrive her????}
+\begin{equation}
+\label{eq:ucb1}
+\displaystyle UCB_j = \overline{X}_j + \sqrt{\frac{2 * \log(n)}{n_j}}
+\end{equation}
+$X_j$ is the average (i.e. expected) reward. $n$ is the total number of plays and $n_j$ is the number of times action $j$ was tried.
+
 \begin{itemize}
 \item Om MCTS \cite{mctssurvey}
 \item Om UCB og UCT \cite{mctssurvey} måske også \cite{mspacman}
 \item (kort!) Om The Mario AI Framework  \cite{mario}
+\item Om forbedringer
 \end{itemize}
 \clearpage
 
-\section{Approach and Improvements}
-\subsection{Monte Carlo Tree Search with UCT}
-Kilde \cite{mctssurvey}
+\section{Approach and Enhancements}
+In this section we will go over the different implementations and enhancements that we have experimented with. For enhancements including a value that can be tweaked we have tried finding the optimal setting, and in the end we have combined enhancements which complement each other well.
+
+\subsection{Monte Carlo Tree Search with UCB}
+To have a baseline for comparison and an implementation to build on, we started by implementing the basic Monte Carlo Tree Search algorithm with Upper Confidence Bounds for selection of nodes.
+Source \cite{mctssurvey}
 \subsection{Domain knowledge}
 \subsubsection{Limited actions}
 Hvis vi er nødt til at begrænse ham til ikke at bruge $\downarrow$ til alle de andre implementationer skal det fremgå her!
@@ -96,7 +123,7 @@ We use equation \ref{eq:softmax_equation} to calculate the exploration part for 
 \end{table}
 \begin{figure}[h]
 \centering
-\includegraphics[width=6cm]{img/Forfulgt}
+\includegraphics[width=6cm]{Forfulgt.png}
 \caption{Mario being followed}
 \label{fig:followed}
 \end{figure}

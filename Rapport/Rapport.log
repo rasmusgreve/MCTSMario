@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.1.31)  2 APR 2013 00:02
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.1.31)  2 APR 2013 01:47
 entering extended mode
 **Rapport.tex
 (C:\Users\Rasmus\workspace\MCTSMario\Rapport\Rapport.tex
@@ -358,23 +358,19 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \f@ncyO@olf=\skip53
 \f@ncyO@orf=\skip54
 )
-
-Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
-less on input line 10.
-
 (C:\Users\Rasmus\workspace\MCTSMario\Rapport\Rapport.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
+LaTeX Font Info:    ... okay on input line 16.
 
 (C:\Users\Rasmus\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -390,11 +386,11 @@ LaTeX Font Info:    ... okay on input line 13.
 \makeMPintoPDFobject=\count105
 \everyMPtoPDFconversion=\toks23
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 19.
+LaTeX Font Info:    Try loading font information for U+msa on input line 22.
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 19.
+LaTeX Font Info:    Try loading font information for U+msb on input line 22.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
@@ -403,22 +399,22 @@ File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 {C:/Users/Rasmus/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 39.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 62.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 39.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 62.
  [3
 
 ] [4
 
 ]
-<img/Forfulgt.png, id=25, 321.2pt x 240.9pt>
-File: img/Forfulgt.png Graphic file (type png)
- <use img/Forfulgt.png>
-Package pdftex.def Info: img/Forfulgt.png used on input line 99.
+<Forfulgt.png, id=28, 321.2pt x 240.9pt>
+File: Forfulgt.png Graphic file (type png)
+ <use Forfulgt.png>
+Package pdftex.def Info: Forfulgt.png used on input line 126.
 (pdftex.def)             Requested size: 170.71652pt x 128.04028pt.
 
 
@@ -426,36 +422,39 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 [5
 
-] [6 <C:/Users/Rasmus/workspace/MCTSMario/Rapport/img/Forfulgt.png (PNG copy)>]
- [7
+] [6 <C:/Users/Rasmus/workspace/MCTSMario/Rapport/Forfulgt.png (PNG copy)>]
+[7
 
 ] [8
 
 ] (C:\Users\Rasmus\workspace\MCTSMario\Rapport\Rapport.aux) ) 
 Here is how much of TeX's memory you used:
- 2392 strings out of 493921
- 28901 string characters out of 3144873
- 83402 words of memory out of 3000000
- 5662 multiletter control sequences out of 15000+200000
- 12632 words of font info for 49 fonts, out of 3000000 for 9000
+ 2400 strings out of 493921
+ 28956 string characters out of 3144873
+ 83488 words of memory out of 3000000
+ 5670 multiletter control sequences out of 15000+200000
+ 12978 words of font info for 50 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  27i,10n,43p,786b,236s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files 
 (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files (x
 86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files (x86
 )/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Program Files (x86)/M
-iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiK
-TeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX
- 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX 2.9/f
-onts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
-e1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
-/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmtt12.pfb>
-Output written on Rapport.pdf (8 pages, 173113 bytes).
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files (x86)/MiK
+TeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files (x86)/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/
+fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/
+type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmr9.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/pu
+blic/amsfonts/cm/cmsl10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public
+/amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmtt12.pfb>
+Output written on Rapport.pdf (8 pages, 202185 bytes).
 PDF statistics:
- 78 PDF objects out of 1000 (max. 8388607)
+ 90 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
