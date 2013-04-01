@@ -6,6 +6,9 @@
 \usepackage{graphicx}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
+\fancyhead{}
+\fancyhead[LO,RE]{\slshape \leftmark}
+
 
 \begin{document}
 \title{Enhancements for Monte Carlo Tree Search in The Mario AI Framework}
@@ -14,7 +17,7 @@
         \and Rasmus Greve\\\texttt{ragr@itu.dk}}
 %        \and \emph{Supervisor:}\\Julian Togelius\\\texttt{juto@itu.dk}}
 \maketitle
-
+\thispagestyle{empty} %Removes default pagenumber from frontpage
 \begin{abstract}
 (Bare copy/paste-ish fra projektbasen, skal skrives om!)
 In this experiment we explore different implementations and enhancements of the Monte Carlo Tree Search algorithm for an AI, in order to evaluate their performance and results in the Super Mario AI Benchmark tool. 
@@ -29,6 +32,7 @@ with compositions that greatly increase the performance of the AI.
 
 \section{Introduction}
 In this experiment we explore different implementations and enhancements of the Monte Carlo Tree Search algorithm for an AI, in order to evaluate their performance and results in the Super Mario AI Benchmark tool. 
+\clearpage
 
 \section{Background}
 \begin{itemize}
@@ -36,78 +40,69 @@ In this experiment we explore different implementations and enhancements of the 
 \item Om UCB og UCT \cite{mctssurvey} måske også \cite{mspacman}
 \item (kort!) Om The Mario AI Framework  \cite{mario}
 \end{itemize}
+\clearpage
 
 \section{Approach and Improvements}
-
 \subsection{Monte Carlo Tree Search with UCT}
 Kilde \cite{mctssurvey}
-
 \subsection{Domain knowledge}
-
 \subsubsection{Limited actions}
 Hvis vi er nødt til at begrænse ham til ikke at bruge $\downarrow$ til alle de andre implementationer skal det fremgå her!
 \subsubsection{Hole detection}
 Hvis vi er nødt til at bruge hulgenkendelse til alle de andre implementationer skal det fremgå her!
-
 \subsection{Softmax Backup}
 \begin{equation}\label{eq:softmax_equation}
 exploitation = Q * maxReward + (1 - Q ) * averageReward
 \end{equation}
-
 We use equation \ref{eq:softmax_equation} to calculate the exploration part for the confidence of nodes
 \subsection{Macro actions}
 \cite{salesman}
 \subsection{Heuristic Partial Tree Expansion Policy}
 \subsection{Checkpoints}
-
 \subsection{(Combination)}
+\clearpage
 
 \section{Results}
 \renewcommand{\arraystretch}{1.5}
-
 \begin{table}[h]
 	\centering
-\begin{tabular}{| l | l |}
-	\hline
-	\textbf{Method} & \textbf{Score} \\ \hline
-	Softmax backup q = 0 (UCT) & 34,162 \\ \hline
-	Softmax backup q = $\frac{1}{8}$ & - \\ \hline
-	Softmax backup q = $\frac{1}{4}$ & 34,387 \\ \hline
-	Softmax backup q = $\frac{1}{2}$ & 34,147 \\ \hline
-	Softmax backup q = 1 & 26,842 \\ \hline
-\end{tabular}
+	\begin{tabular}{| l | l |}
+		\hline
+		\textbf{Method} & \textbf{Score} \\ \hline
+		Softmax backup q = 0 (UCT) & 34,162 \\ \hline
+		Softmax backup q = $\frac{1}{8}$ & - \\ \hline
+		Softmax backup q = $\frac{1}{4}$ & 34,387 \\ \hline
+		Softmax backup q = $\frac{1}{2}$ & 34,147 \\ \hline
+		Softmax backup q = 1 & 26,842 \\ \hline
+	\end{tabular}
 	\caption{Results of using Softmax backup with different q values}
 	\label{tab:softmax_results}
 \end{table}
-
 \begin{table}[h]
 	\centering
-\begin{tabular}{| l | l | l |}
-	\hline
-	\textbf{Method} & \textbf{Avg. number of nodes} & \textbf{Score} \\ \hline
-	MCTS w/ UCT, limit = 0			& - & - \\ \hline
-	MCTS w/ UCT, limit = 1			& - & - \\ \hline
-	MCTS w/ UCT, limit = 2			& - & - \\ \hline
-	MCTS w/ UCT, limit = 4			& - & - \\ \hline
-	MCTS w/ UCT, limit = 8			& - & - \\ \hline
-	MCTS w/ UCT, limit = 16			& - & - \\ \hline
-	MCTS w/ UCT, limit = $\infty$	& - & - \\ \hline
-\end{tabular}
+	\begin{tabular}{| l | l | l |}
+		\hline
+		\textbf{Method} & \textbf{Avg. number of nodes} & \textbf{Score} \\ \hline
+		MCTS w/ UCT, limit = 0			& - & - \\ \hline
+		MCTS w/ UCT, limit = 1			& - & - \\ \hline
+		MCTS w/ UCT, limit = 2			& - & - \\ \hline
+		MCTS w/ UCT, limit = 4			& - & - \\ \hline
+		MCTS w/ UCT, limit = 8			& - & - \\ \hline
+		MCTS w/ UCT, limit = 16			& - & - \\ \hline
+		MCTS w/ UCT, limit = $\infty$	& - & - \\ \hline
+	\end{tabular}
 	\caption{Results of using UCT with a different limit for random moves}
 	\label{tab:uct_results}
 \end{table}
-
 \begin{figure}[h]
 \centering
 \includegraphics[width=6cm]{img/Forfulgt}
 \caption{Mario being followed}
 \label{fig:followed}
 \end{figure}
-
 Her er noget mere tekst, reference til figur \ref{fig:followed}
-
+\clearpage
 \section{Conclusion}
-
 \clearpage
 \begin{thebibliography}{99}
 
