@@ -1,25 +1,19 @@
-\documentclass[10pt,a4paper,twoside]{article}
+\documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-
-%Note: Jeg har sat den op til at være 2-sidet, hvilket giver skiftende margener
-%      Det ser lidt underligt ud i PDF'en, men jeg tror det giver en god effekt
-
+\usepackage{fancyhdr}
+\pagestyle{fancy}
 
 \begin{document}
 \title{Enhancements for Monte Carlo Tree Search in The Mario AI Framework}
 \date{May 22, 2013}
-\author{\\Emil Juul Jacobsen\\\texttt{ejuu@itu.dk}        
-        \and \\Rasmus Greve\\\texttt{ragr@itu.dk}
-        \and \emph{Supervisor:}\\Julian Togelius\\\texttt{juto@itu.dk}}
+\author{Emil Juul Jacobsen\\\texttt{ejuu@itu.dk}        
+        \and Rasmus Greve\\\texttt{ragr@itu.dk}}
+%        \and \emph{Supervisor:}\\Julian Togelius\\\texttt{juto@itu.dk}}
 \maketitle
-
-\begin{center}
-IT University of Copenhagen
-\end{center}
 
 \begin{abstract}
 (Bare copy/paste-ish fra projektbasen, skal skrives om!)
@@ -31,8 +25,7 @@ framework. We have identified a set of refinements and alterations of the algori
 and through implementation and evaluation of these individually we came up
 with compositions that greatly increase the performance of the AI.
 \end{abstract}
-
-\pagebreak
+\clearpage
 
 \section{Introduction}
 In this experiment we explore different implementations and enhancements of the Monte Carlo Tree Search algorithm for an AI, in order to evaluate their performance and results in the Super Mario AI Benchmark tool. 
@@ -44,16 +37,24 @@ In this experiment we explore different implementations and enhancements of the 
 \item (kort!) Om The Mario AI Framework  \cite{mario}
 \end{itemize}
 
-
-
 \section{Approach and Improvements}
 
 \subsection{Monte Carlo Tree Search with UCT}
-\cite{mctssurvey}
-\subsection{Softmax Backup}
-\subsection{High domain knowledge}
+Kilde \cite{mctssurvey}
+
+\subsection{Domain knowledge}
+
 \subsubsection{Limited actions}
+Hvis vi er nødt til at begrænse ham til ikke at bruge $\downarrow$ til alle de andre implementationer skal det fremgå her!
 \subsubsection{Hole detection}
+Hvis vi er nødt til at bruge hulgenkendelse til alle de andre implementationer skal det fremgå her!
+
+\subsection{Softmax Backup}
+\begin{equation}\label{eq:softmax_equation}
+exploitation = Q * maxReward + (1 - Q ) * averageReward
+\end{equation}
+
+We use equation \ref{eq:softmax_equation} to calculate the exploration part for the confidence of nodes
 \subsection{Macro actions}
 \cite{salesman}
 \subsection{Heuristic Partial Tree Expansion Policy}
@@ -64,9 +65,9 @@ In this experiment we explore different implementations and enhancements of the 
 \section{Results}
 \renewcommand{\arraystretch}{1.5}
 
-\begin{table}
+\begin{table}[h]
 	\centering
-\begin{tabular}[h]{| l | l |}
+\begin{tabular}{| l | l |}
 	\hline
 	\textbf{Method} & \textbf{Score} \\ \hline
 	Softmax backup q = 0 (UCT) & 34,162 \\ \hline
@@ -79,9 +80,9 @@ In this experiment we explore different implementations and enhancements of the 
 	\label{tab:softmax_results}
 \end{table}
 
-\begin{table}
+\begin{table}[h]
 	\centering
-\begin{tabular}[h]{| l | l | l |}
+\begin{tabular}{| l | l | l |}
 	\hline
 	\textbf{Method} & \textbf{Avg. number of nodes} & \textbf{Score} \\ \hline
 	MCTS w/ UCT, limit = 0			& - & - \\ \hline
@@ -92,45 +93,22 @@ In this experiment we explore different implementations and enhancements of the 
 	MCTS w/ UCT, limit = 16			& - & - \\ \hline
 	MCTS w/ UCT, limit = $\infty$	& - & - \\ \hline
 \end{tabular}
-	\caption{Results of using UCT with a different number of random moves}
+	\caption{Results of using UCT with a different limit for random moves}
 	\label{tab:uct_results}
 \end{table}
 
-Her er noget tekst
-
-\begin{figure}[h] %h: ca her, t: sidetop, b: sidebund
+\begin{figure}[h]
 \centering
 \includegraphics[width=6cm]{img/Forfulgt}
 \caption{Mario being followed}
 \label{fig:followed}
 \end{figure}
 
-Her er noget mere tekst, som det ses på billede \ref{fig:followed}
+Her er noget mere tekst, reference til figur \ref{fig:followed}
 
 \section{Conclusion}
 
-\section{Some Sums DEMO}
-
-Here are a few sums\footnote{Additions of sets of numbers}  I know.\label{sec:formulas}
-
-\begin{eqnarray}
-1+2+3+\cdots+n&=&\frac{n(n+1)}{2}\label{linear}\\
-1^2+2^2+3^2+\cdots+n^2&=& \frac{n(n+1)(2n+1)}{6}\label{squares}\\
-1^3+2^3+3^3+\cdots+n^3&=& \frac{n^2(n+1)^2}{4}\label{cubes}
-\end{eqnarray}
-
-I can find the sum of the first 10 squares easily with formula~(\ref{squares}) above.
-
-\pagebreak
-
-\section{A Cool Relationship DEMO}
-
-Take a look at formulas~(\ref{linear}) and~(\ref{cubes}) on
-page~\pageref{linear} of section~\ref{sec:formulas}. Notice that the
-right side of~(\ref{cubes}) is the square of the right side
-of~(\ref{linear}).
-
-
+\clearpage
 \begin{thebibliography}{99}
 
 \bibitem{mctssurvey}
