@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{graphicx}
 
 %Note: Jeg har sat den op til at være 2-sidet, hvilket giver skiftende margener
 %      Det ser lidt underligt ud i PDF'en, men jeg tror det giver en god effekt
@@ -10,10 +11,15 @@
 
 \begin{document}
 \title{Enhancements for Monte Carlo Tree Search in The Mario AI Framework}
-\date{May 2, 2013}
-\author{Emil Juul Jacobsen\\\texttt{ejuu@itu.dk}        
-        \and Rasmus Greve\\\texttt{ragr@itu.dk}}
+\date{May 22, 2013}
+\author{\\Emil Juul Jacobsen\\\texttt{ejuu@itu.dk}        
+        \and \\Rasmus Greve\\\texttt{ragr@itu.dk}
+        \and \emph{Supervisor:}\\Julian Togelius\\\texttt{juto@itu.dk}}
 \maketitle
+
+\begin{center}
+IT University of Copenhagen
+\end{center}
 
 \begin{abstract}
 (Bare copy/paste-ish fra projektbasen, skal skrives om!)
@@ -43,22 +49,31 @@ In this experiment we explore different implementations and enhancements of the 
 \section{Approach and Improvements}
 
 \subsection{Monte Carlo Tree Search with UCT}
+\cite{mctssurvey}
 \subsection{Softmax Backup}
-\subsection{Higher domain knowledge}
+\subsection{High domain knowledge}
 \subsubsection{Limited actions}
 \subsubsection{Hole detection}
 \subsection{Macro actions}
-Måske ref til artikel \cite{salesman}
+\cite{salesman}
 \subsection{Heuristic Partial Tree Expansion Policy}
 \subsection{Checkpoints}
 
 \subsection{(Combination)}
 
 \section{Results}
+Her er noget tekst
+
+\begin{figure}[h] %h: ca her, t: sidetop, b: sidebund
+\centering
+\includegraphics[width=6cm]{img/Forfulgt}
+\caption{Mario being followed}
+\label{fig:followed}
+\end{figure}
+
+Her er noget mere tekst, som det ses på billede \ref{fig:followed}
 
 \section{Conclusion}
-
-
 
 \section{Some Sums DEMO}
 
