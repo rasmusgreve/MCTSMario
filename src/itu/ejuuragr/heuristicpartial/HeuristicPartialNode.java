@@ -28,19 +28,25 @@ public class HeuristicPartialNode extends UCTNode {
 	 * 
 	 */
 	
-	private int[] actionScores = {9,22,17,0,19,15,20,0,18,20,223,0,20,16,213,0};
-	private int scoreSum = 612;
+	private int[] actionScores;
+	private int scoreSum;
 
 	public HeuristicPartialNode(LevelScene state, boolean[] action,
 			UCTNode parent) {
 		super(state, action, parent);
+		setScores();
 	}
 
 	@Override
 	public void reset() {
 		super.reset();
-		this.actionScores = new int[]{9,22,17,0,19,15,20,0,18,20,223,0,20,16,213,0};
-		this.scoreSum = 612;
+		setScores();
+	}
+	
+	private void setScores(){                       //                                         X                                        X
+		this.actionScores = MCTSTools.CHILDREN == 32 ? new int[]{9,22,17,0,10,0,0,0,19,15,20,0,0,0,0,0,18,20,223,0,10,0,0,0,20,16,213,0,0,0,0,0} 
+		: new int[]{9,22,17,0,19,15,20,0,18,20,223,0,20,16,213,0};
+		this.scoreSum = MCTSTools.CHILDREN == 32 ? 632 : 612;
 	}
 
 	@Override
