@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.1.31)  1 APR 2013 23:59
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.1.31)  2 APR 2013 00:02
 entering extended mode
 **Rapport.tex
 (C:\Users\Rasmus\workspace\MCTSMario\Rapport\Rapport.tex
@@ -439,7 +439,7 @@ Here is how much of TeX's memory you used:
  5662 multiletter control sequences out of 15000+200000
  12632 words of font info for 49 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 27i,10n,43p,309b,236s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 27i,10n,43p,786b,236s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files 
 (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files (x
 86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files (x86
@@ -453,7 +453,7 @@ onts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
 e1/public/amsfonts/cm/cmsl10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1
 /public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
 ublic/amsfonts/cm/cmtt12.pfb>
-Output written on Rapport.pdf (8 pages, 172615 bytes).
+Output written on Rapport.pdf (8 pages, 173113 bytes).
 PDF statistics:
  78 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
