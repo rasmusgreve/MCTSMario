@@ -57,8 +57,8 @@ public class MCTSTools {
 		{
 			boolean[] action = defaultButtonState.clone();
 			
-			int j = 0; //j: The value of the button
-			for (int i = 0; i < 5; i++) //i: The position of the button
+			int j = 0; //j: Moves through output button
+			for (int i = 0; i < 5; i++) //i: Moves through input button
 			{
 				if (!buttons[i]) continue; //Don't change from default and don't increment value (j)
 				action[i] = ((index & 1<<j) != 0); //Build the action based on bit pattern of the index

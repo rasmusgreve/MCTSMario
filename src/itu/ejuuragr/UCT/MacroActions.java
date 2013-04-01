@@ -1,5 +1,6 @@
 package itu.ejuuragr.UCT;
 
+import itu.ejuuragr.MCTSTools;
 import ch.idsia.mario.environments.Environment;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
@@ -12,7 +13,7 @@ public class MacroActions extends SimpleMCTS {
 	
 	public MacroActions()
 	{
-		UCTNode.REPETITIONS = ACTION_SIZE; //Ugly but easy (sorry)
+		UCTNode.REPETITIONS = ACTION_SIZE; //Ugly but easy (sorry) (TODO: change it?)
 	}
 	
 	@Override
@@ -24,20 +25,24 @@ public class MacroActions extends SimpleMCTS {
 	@Override
 	public boolean[] getAction(Environment obs)
 	{
-		if (moveCount++ >= ACTION_SIZE) //Done
+		if (moveCount++ >= ACTION_SIZE) //Calculate next move
 		{
 			curAction = super.getAction(obs);
 			moveCount = 1;
 		}
 		else
 		{
-			//Continue work on current tree without changing anything else
+			//Continue work on current tree
 			long startTime = System.currentTimeMillis();
 			long endTime = startTime + TIME_PER_TICK;
 			while(System.currentTimeMillis() < endTime){
 				UCTNode v1 = treePolicy(root);
 				double reward = defaultPolicy(v1);
 				backup(v1,reward);
+			}
+			if (MCTSTools.DEBUG)
+			{
+				drawFuture(root);
 			}
 		}
 		return curAction;
