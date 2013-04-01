@@ -237,7 +237,7 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
                 if (width != 320 || height != 240) {
                         g.drawImage(image, 0, 0, 640 * 2, 480 * 2, null);  
                 } else {
-                	g.drawImage(image, 0, 0, null);
+                	
                     
                 	/*
                 	 * Modification for debugging (itu.ejuuragr)
@@ -245,22 +245,22 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
                 	
                     int xCam = Math.max(0, (int)mario.xOld - 160);
                     
-                    g.setColor(Color.BLUE);
+                    og.setColor(Color.BLUE);
                     if (PLAN_XS != null)
                     {
                     	for (int i = 0; i < PLAN_XS.length; i++)
                     		PLAN_XS[i] -= xCam;
-                    	g.drawPolyline(PLAN_XS, PLAN_YS, PLAN_XS.length);
+                    	og.drawPolyline(PLAN_XS, PLAN_YS, PLAN_XS.length);
                     }
                     
-                    g.setColor(Color.RED);
+                    og.setColor(Color.RED);
                     if (BESTLINE_XS != null)
                     {
                     	for (int i = 0; i < BESTLINE_XS.length; i++)
                         	BESTLINE_XS[i] -= xCam;
-                    	g.drawPolyline(BESTLINE_XS, BESTLINE_YS, BESTLINE_XS.length);
+                    	og.drawPolyline(BESTLINE_XS, BESTLINE_YS, BESTLINE_XS.length);
                     }
-                    
+                    g.drawImage(image, 0, 0, null);
                     if (SAVE_NEXT_FRAME) 
                 	{
 	                	BufferedImage im = new BufferedImage(320,240,BufferedImage.TYPE_INT_RGB);
