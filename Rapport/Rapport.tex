@@ -62,6 +62,40 @@ In this experiment we explore different implementations and enhancements of the 
 \subsection{(Combination)}
 
 \section{Results}
+\renewcommand{\arraystretch}{1.5}
+
+\begin{table}
+	\centering
+\begin{tabular}[h]{| l | l |}
+	\hline
+	\textbf{Method} & \textbf{Score} \\ \hline
+	Softmax backup q = 0 (UCT) & 34,162 \\ \hline
+	Softmax backup q = $\frac{1}{8}$ & - \\ \hline
+	Softmax backup q = $\frac{1}{4}$ & 34,387 \\ \hline
+	Softmax backup q = $\frac{1}{2}$ & 34,147 \\ \hline
+	Softmax backup q = 1 & 26,842 \\ \hline
+\end{tabular}
+	\caption{Results of using Softmax backup with different q values}
+	\label{tab:softmax_results}
+\end{table}
+
+\begin{table}
+	\centering
+\begin{tabular}[h]{| l | l | l |}
+	\hline
+	\textbf{Method} & \textbf{Avg. number of nodes} & \textbf{Score} \\ \hline
+	MCTS w/ UCT, limit = 0			& - & - \\ \hline
+	MCTS w/ UCT, limit = 1			& - & - \\ \hline
+	MCTS w/ UCT, limit = 2			& - & - \\ \hline
+	MCTS w/ UCT, limit = 4			& - & - \\ \hline
+	MCTS w/ UCT, limit = 8			& - & - \\ \hline
+	MCTS w/ UCT, limit = 16			& - & - \\ \hline
+	MCTS w/ UCT, limit = $\infty$	& - & - \\ \hline
+\end{tabular}
+	\caption{Results of using UCT with a different number of random moves}
+	\label{tab:uct_results}
+\end{table}
+
 Her er noget tekst
 
 \begin{figure}[h] %h: ca her, t: sidetop, b: sidebund
