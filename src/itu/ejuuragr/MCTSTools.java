@@ -18,6 +18,31 @@ public class MCTSTools {
 		buildActionsFromButtons();
 	}
 	
+	public static void printObservation(byte[][] observation)
+	{
+		System.out.println("-------------------------------------");
+		for (int x = 0; x < observation.length; x++)
+		{
+			for (int y = 0; y < observation[x].length; y++)
+			{
+				if (x == 11 && y == 11)
+					System.out.print("MARIO");
+				else if (observation[x][y] == 0)
+					System.out.print("     ");
+				else if (observation[x][y] < 0)
+					System.out.print("XXXXX");
+				else if (observation[x][y] == 34)
+					System.out.print("C    ");
+				else if (observation[x][y] < 0)
+					System.out.print("XXXXX");
+				else
+					System.out.print(String.format("%4d ",observation[x][y]));
+			}
+			System.out.println();
+		}
+	}
+	
+	
 	public static final boolean DEBUG = true;
 	
 	public static void print(String message)

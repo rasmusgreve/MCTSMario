@@ -49,6 +49,8 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	
 	@Override
 	public boolean[] getAction(Environment obs) {
+		System.out.println("Mario y: " + obs.getMarioFloatPos()[1]);
+		MCTSTools.printObservation(obs.getLevelSceneObservationZ(0));
 		int m = obs.getMarioMode();
 		if (m != lastMode)
 			MCTSTools.print("Mode changed: " + m);
