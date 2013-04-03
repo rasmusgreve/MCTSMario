@@ -23,7 +23,7 @@ public class HeuristicPartialMCTS extends SimpleMCTS{
 		HeuristicPartialNode w = (HeuristicPartialNode) v;
 		MCTSTools.Tuple<HeuristicPartialNode,Boolean> p;
 		do{
-			p = w.getBestChildPair(cp);
+			p = w.getBestChildTuple(cp);
 			w = p.first;
 		}
 		while(!p.second); // until it is a leaf

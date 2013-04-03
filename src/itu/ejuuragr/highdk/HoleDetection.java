@@ -6,6 +6,11 @@ import itu.ejuuragr.UCT.SimpleMCTS;
 import itu.ejuuragr.UCT.UCTNode;
 
 public class HoleDetection extends SimpleMCTS {
+	
+	public HoleDetection()
+	{
+		setName("HoleDetectionUCT (" + USE_HOLE_DETECTION + ")");
+	}
 
 	public static boolean USE_HOLE_DETECTION = false;
 	
