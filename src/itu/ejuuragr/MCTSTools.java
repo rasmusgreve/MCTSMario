@@ -26,17 +26,17 @@ public class MCTSTools {
 			for (int y = 0; y < observation[x].length; y++)
 			{
 				if (x == 11 && y == 11)
-					System.out.print("MARIO");
+					System.out.print(" M ");
 				else if (observation[x][y] == 0)
-					System.out.print("     ");
+					System.out.print("   ");
 				else if (observation[x][y] < 0)
-					System.out.print("XXXXX");
+					System.out.print("XXX");
 				else if (observation[x][y] == 34)
-					System.out.print("C    ");
+					System.out.print(" C ");
 				else if (observation[x][y] < 0)
-					System.out.print("XXXXX");
+					System.out.print("XXX");
 				else
-					System.out.print(String.format("%4d ",observation[x][y]));
+					System.out.print(String.format("%2d ",observation[x][y]));
 			}
 			System.out.println();
 		}
