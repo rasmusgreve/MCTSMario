@@ -255,12 +255,13 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
                     	og.drawPolyline(PLAN_XS, PLAN_YS, PLAN_XS.length);
                     }
                     
-                    og.setColor(Color.pink);
+                    og.setColor(Color.blue);
                     if (checkpoints != null)
                     {
                     	for (float[] pos : checkpoints)
                     	{
                     		int x = (int)pos[0], y = (int)pos[1];
+                    		x -= xCam;
                     		og.drawLine(x, y+8, x+8, y);
                     		og.drawLine(x+8, y, x, y-8);
                     		og.drawLine(x, y-8, x-8, y);
