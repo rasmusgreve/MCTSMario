@@ -36,7 +36,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	private int lastMode = 2;
 	
 	private String name = "BasicMCTS";
-	protected UCTNode root;
+	protected UCTNode root = null;
 	
 	private HashMap<String, Integer> heuristic = new HashMap<String, Integer>();
 	private LinkedList<Integer> nodeCounts = new LinkedList<Integer>();
@@ -44,7 +44,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	@Override
 	public void reset() {
 		MCTSTools.print("Agent Reset");
-		initRoot();
+		//initRoot();
 	}
 	
 	@Override
@@ -131,6 +131,8 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	public boolean[] search(Environment obs){
 		long startTime = System.currentTimeMillis();
 		long endTime = startTime + TIME_PER_TICK;
+		
+		if(root == null) initRoot();
 		
 		fixSimulationErrors(obs);
 		//Before searching
