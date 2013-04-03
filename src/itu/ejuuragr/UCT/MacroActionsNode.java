@@ -30,7 +30,7 @@ public class MacroActionsNode extends UCTNode {
 			reward = 0.0;
 		}
 		else{
-			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((2+MacroActions.ACTION_SIZE+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0; //This is changed
+			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((1+MacroActions.ACTION_SIZE+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0; //This is changed
 
 			if(MCTSTools.isInGap(state)) reward /= 10;
 			/*if (reward < 0 || reward > 1) //TODO: Why does this have to be commented?

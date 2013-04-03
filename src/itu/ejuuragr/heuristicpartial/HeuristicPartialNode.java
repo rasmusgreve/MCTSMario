@@ -58,7 +58,7 @@ public class HeuristicPartialNode extends UCTNode {
 		return child;
 	}
 
-	public MCTSTools.Tuple<HeuristicPartialNode,Boolean> getBestChildPair(double cp) {
+	public MCTSTools.Tuple<HeuristicPartialNode,Boolean> getBestChildTuple(double cp) {
 		double newScore = calculateConfidenceNew(cp);
 		int best = -1;
 		double score = -1;
@@ -97,7 +97,7 @@ public class HeuristicPartialNode extends UCTNode {
 	}
 	
 	private double calculateConfidenceNew(double cp){		
-		double exploitation = 0.5;
+		double exploitation = 0.55;
 		double exploration = cp*Math.sqrt(2*Math.log(this.visited)); // this is same has dividing by 1 because the new node has obviously never been visited
 		//System.out.printf("Exploit: %f Explore: %f\n", exploitation, exploration);
 		return exploitation + exploration;
