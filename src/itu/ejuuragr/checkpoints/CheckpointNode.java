@@ -13,7 +13,7 @@ public class CheckpointNode extends UCTNode {
 	private static final float CLEAR_DISTANCE = 8.0f; // the distance needed to get a checkpoint
 
 	private ArrayList<float[]> checkpoints; // [[x,y],[x,y], ... ] Ordered by x-value
-	private int cleared;
+	public int cleared;
 	
 	public CheckpointNode(LevelScene state, boolean[] action, UCTNode parent, ArrayList<float[]> checkpoints, int cleared) {
 		super(state, action, parent);
@@ -21,8 +21,11 @@ public class CheckpointNode extends UCTNode {
 		this.cleared = cleared;
 		
 		// check for completed checkpoint
-		if(distToPoint(checkpoints.get(cleared)) <= CLEAR_DISTANCE){
+		double dist = distToPoint(checkpoints.get(cleared));
+		//MCTSTools.print("Distance: "+dist);
+		if(dist <= CLEAR_DISTANCE){
 			cleared++; // progress
+			MCTSTools.print("Checkpoint cleared!");
 		}
 		this.reward = calculateReward(state); 
 	}
@@ -36,14 +39,15 @@ public class CheckpointNode extends UCTNode {
 	public double calculateReward(LevelScene state) {
 		if(checkpoints == null) return 0.0;
 		
-		double checkpointValue = 0.75 / checkpoints.size(); // value for each checkpoint
+		double checkpointValue = 0.75 / (checkpoints.size()-1); // value for each checkpoint
 		
 		double result = 0.25; // default value
-		result += cleared * checkpointValue; // value for cleared checkpoints
+		result += (cleared-1) * checkpointValue; // value for cleared checkpoints
 		result += checkpointValue * // progress towards next
 				(distToPoint(checkpoints.get(cleared)) / 
 						distBetweenPoints(checkpoints.get(cleared - 1), checkpoints.get(cleared))); 
 		
+		//MCTSTools.print("Cleared: "+ this.cleared + " Reward: "+result);
 		return result;
 	}
 	

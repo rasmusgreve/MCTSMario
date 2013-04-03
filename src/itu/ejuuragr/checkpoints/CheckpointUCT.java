@@ -3,9 +3,11 @@ package itu.ejuuragr.checkpoints;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import ch.idsia.mario.engine.MarioComponent;
 import ch.idsia.mario.environments.Environment;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
+import itu.ejuuragr.MCTSTools;
 import itu.ejuuragr.UCT.SimpleMCTS;
 import itu.ejuuragr.UCT.UCTNode;
 
@@ -36,8 +38,20 @@ public class CheckpointUCT extends SimpleMCTS {
 
 	@Override
 	protected void clearRoot(Environment obs) {
+		MCTSTools.print("Root cleared = "+((CheckpointNode)root).cleared);
+		System.out.println("root reward: "+root.calculateReward(root.state));
+		
 		super.clearRoot(obs);
-		((CheckpointNode)root).setCheckpoints(calculateCheckpoints());
+		ArrayList<float[]> cp = calculateCheckpoints();
+		((CheckpointNode)root).setCheckpoints(cp);
+		
+		MarioComponent.checkpoints = cp;
+		
+		// print positions
+		MCTSTools.print("Mario pos: "+obs.getMarioFloatPos()[0] + " , "+obs.getMarioFloatPos()[1]);
+		for(float[] fs : cp){
+			MCTSTools.print("Checkpoint: "+fs[0] + " , "+fs[1]);
+		}
 	}
 
 	private ArrayList<float[]> calculateCheckpoints() {		
@@ -46,7 +60,8 @@ public class CheckpointUCT extends SimpleMCTS {
 		
 		ArrayList<float[]> checkpoints = new ArrayList<float[]>(5);
 		// starting position (for progress towards first checkpoint)
-		checkpoints.add(new float[]{marioCoords[0], marioCoords[1]});
+		//checkpoints.add(new float[]{marioCoords[0], marioCoords[1]});
+		checkpoints.add(indexToCoordinates(11,11,marioCoords));
 		
 		// top of high towers
 		checkpoints.addAll(findTowers(scene, marioCoords));
@@ -67,7 +82,8 @@ public class CheckpointUCT extends SimpleMCTS {
 			for(int x = 0; x < scene[y].length; x++){
 				if(scene[y][x] == CANNON && scene[y+3][x] == TOWER_BASE){
 					// there is a high tower
-					result.add(indexToCoordinates(x, y, marioCoords));
+					result.add(indexToCoordinates(x, y-1, marioCoords));
+					System.out.println("Tower found!");
 				}
 			}
 		}
@@ -90,6 +106,7 @@ public class CheckpointUCT extends SimpleMCTS {
 			
 			if(lastWasGap && !isGap){
 				result.add(indexToCoordinates(x, lowestAir(scene, x), marioCoords));
+				System.out.println("Gap end found!");
 			}
 			
 			lastWasGap = isGap;
