@@ -6,11 +6,10 @@ import competition.cig.robinbaumgarten.astar.LevelScene;
 
 import itu.ejuuragr.MCTSTools;
 import itu.ejuuragr.UCT.UCTNode;
-import itu.ejuuragr.heuristicpartial.HeuristicPartialNode;
 
 public class CheckpointNode extends UCTNode {
 	
-	private static final float CLEAR_DISTANCE = 8.0f; // the distance needed to get a checkpoint
+	public static final float CLEAR_DISTANCE = 8.0f; // the distance needed to get a checkpoint
 
 	private ArrayList<float[]> checkpoints; // [[x,y],[x,y], ... ] Ordered by x-value
 	public int cleared;
@@ -25,7 +24,7 @@ public class CheckpointNode extends UCTNode {
 		//MCTSTools.print("Distance: "+dist);
 		if(dist <= CLEAR_DISTANCE){
 			cleared++; // progress
-			MCTSTools.print("Checkpoint cleared!");
+			MCTSTools.print("Checkpoint "+(cleared-1)+" cleared!");
 		}
 		this.reward = calculateReward(state); 
 	}
@@ -38,16 +37,20 @@ public class CheckpointNode extends UCTNode {
 	@Override
 	public double calculateReward(LevelScene state) {
 		if(checkpoints == null) return 0.0;
+		if (parent != null && MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) reward = 0.0;
 		
 		double checkpointValue = 0.75 / (checkpoints.size()-1); // value for each checkpoint
 		
-		double result = 0.25; // default value
-		result += (cleared-1) * checkpointValue; // value for cleared checkpoints
-		result += checkpointValue * // progress towards next
-				(distToPoint(checkpoints.get(cleared)) / 
-						distBetweenPoints(checkpoints.get(cleared - 1), checkpoints.get(cleared))); 
+		double baseValue = 0.25; // default value
+		double clearedValue = (cleared-1) * checkpointValue; // value for cleared checkpoints
+		double progress = Math.max(0.0, 1.0 - (distToPoint(checkpoints.get(cleared)) / 
+				distBetweenPoints(checkpoints.get(cleared - 1), checkpoints.get(cleared))));
+		double progressValue = checkpointValue * progress; // progress towards next
 		
-		//MCTSTools.print("Cleared: "+ this.cleared + " Reward: "+result);
+		double result = baseValue + clearedValue + progressValue;
+		//if(MCTSTools.isInGap(state)) reward /= 10;
+				 
+		//MCTSTools.print("Reward: "+(baseValue + clearedValue + progressValue)+" cleared: "+clearedValue + " progress: "+progressValue + " ("+checkpoints.size() + " cps)");
 		return result;
 	}
 	

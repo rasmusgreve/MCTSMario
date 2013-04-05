@@ -72,7 +72,18 @@ public class CheckpointUCT extends SimpleMCTS {
 		// top end of screen point
 		checkpoints.add(findEnd(scene, marioCoords));
 		
+		manageCheckpoints(checkpoints, marioCoords);
+		
 		return checkpoints;
+	}
+
+	private void manageCheckpoints(ArrayList<float[]> checkpoints, float[] marioCoords) {		
+		// order them from left to right
+		
+	}
+	
+	private boolean inFront(float[] pos, float[] marioCoords){
+		return marioCoords[0] - CheckpointNode.CLEAR_DISTANCE - pos[0] > 0.0f;
 	}
 
 	private ArrayList<float[]> findTowers(byte[][] scene, float[] marioCoords) {
@@ -82,7 +93,8 @@ public class CheckpointUCT extends SimpleMCTS {
 			for(int x = 0; x < scene[y].length; x++){
 				if(scene[y][x] == CANNON && scene[y+3][x] == TOWER_BASE){
 					// there is a high tower
-					result.add(indexToCoordinates(x, y-1, marioCoords));
+					float[] pos = indexToCoordinates(x, y-1, marioCoords);
+					if(inFront(pos,marioCoords)) result.add(pos);
 					System.out.println("Tower found!");
 				}
 			}
@@ -93,6 +105,7 @@ public class CheckpointUCT extends SimpleMCTS {
 	private ArrayList<float[]> findGapEnds(byte[][] scene, float[] marioCoords) {
 		ArrayList<float[]> result = new ArrayList<float[]>();
 		
+		boolean hasSeenGround = false;
 		boolean lastWasGap = false;
 		for(int x = 0; x < scene[0].length; x++){
 			boolean isGap = true;
@@ -100,12 +113,14 @@ public class CheckpointUCT extends SimpleMCTS {
 			for(int y = 0; y < scene.length; y++){
 				if(scene[y][x] != AIR){
 					isGap = false;
+					hasSeenGround = true;
 					break;
 				}
 			}
 			
-			if(lastWasGap && !isGap){
-				result.add(indexToCoordinates(x, lowestAir(scene, x), marioCoords));
+			if(hasSeenGround && lastWasGap && !isGap){
+				float[] pos = indexToCoordinates(x, lowestAir(scene, x), marioCoords);
+				if(inFront(pos,marioCoords)) result.add(pos);
 				System.out.println("Gap end found!");
 			}
 			
