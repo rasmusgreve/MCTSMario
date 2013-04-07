@@ -13,7 +13,7 @@ public class MacroActions extends SimpleMCTS {
 	
 	public MacroActions()
 	{
-		UCTNode.REPETITIONS = ACTION_SIZE; //Ugly but easy (sorry) (TODO: change it?)
+		UCTNode.REPETITIONS = ACTION_SIZE; //Ugly but easy
 	}
 	
 	@Override
