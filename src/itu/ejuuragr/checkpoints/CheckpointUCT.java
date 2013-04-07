@@ -33,25 +33,30 @@ public class CheckpointUCT extends SimpleMCTS {
 	@Override
 	public boolean[] getAction(Environment obs) {
 		observations = obs;
+		//print2DByte(obs.getLevelSceneObservationZ(0));
 		return super.getAction(obs);
 	}
+	
+    private void print2DByte(byte[][] array){
+    	for(int y = 0; y < array.length; y++){
+    		printByteArray(array[y]);
+    		System.out.println();
+    	}
+    }
+    
+    private void printByteArray(byte[] array){
+		for(int x = 0; x < array.length; x++){
+			System.out.printf("%4d,",array[x]);
+		}
+    }
 
 	@Override
-	protected void clearRoot(Environment obs) {
-		MCTSTools.print("Root cleared = "+((CheckpointNode)root).cleared);
-		System.out.println("root reward: "+root.calculateReward(root.state));
-		
+	protected void clearRoot(Environment obs) {		
 		super.clearRoot(obs);
 		ArrayList<float[]> cp = calculateCheckpoints();
 		((CheckpointNode)root).setCheckpoints(cp);
 		
 		MarioComponent.checkpoints = cp;
-		
-		// print positions
-		MCTSTools.print("Mario pos: "+obs.getMarioFloatPos()[0] + " , "+obs.getMarioFloatPos()[1]);
-		for(float[] fs : cp){
-			MCTSTools.print("Checkpoint: "+fs[0] + " , "+fs[1]);
-		}
 	}
 
 	private ArrayList<float[]> calculateCheckpoints() {		
@@ -72,7 +77,18 @@ public class CheckpointUCT extends SimpleMCTS {
 		// top end of screen point
 		checkpoints.add(findEnd(scene, marioCoords));
 		
+		manageCheckpoints(checkpoints, marioCoords);
+		
 		return checkpoints;
+	}
+
+	private void manageCheckpoints(ArrayList<float[]> checkpoints, float[] marioCoords) {		
+		// order them from left to right
+		
+	}
+	
+	private boolean inFront(float[] pos, float[] marioCoords){
+		return marioCoords[0] + CheckpointNode.CLEAR_DISTANCE < pos[0];
 	}
 
 	private ArrayList<float[]> findTowers(byte[][] scene, float[] marioCoords) {
@@ -82,8 +98,12 @@ public class CheckpointUCT extends SimpleMCTS {
 			for(int x = 0; x < scene[y].length; x++){
 				if(scene[y][x] == CANNON && scene[y+3][x] == TOWER_BASE){
 					// there is a high tower
-					result.add(indexToCoordinates(x, y-1, marioCoords));
-					System.out.println("Tower found!");
+					float[] pos = indexToCoordinates(x, y-1, marioCoords);
+					if(inFront(pos,marioCoords)){
+						result.add(pos);
+						//System.out.printf("Tower found! [%2d,%2d] (%2f,%2f)\n",x,y,pos[0],pos[1]);
+					}
+					
 				}
 			}
 		}
@@ -93,20 +113,21 @@ public class CheckpointUCT extends SimpleMCTS {
 	private ArrayList<float[]> findGapEnds(byte[][] scene, float[] marioCoords) {
 		ArrayList<float[]> result = new ArrayList<float[]>();
 		
+		boolean hasSeenGround = false;
 		boolean lastWasGap = false;
 		for(int x = 0; x < scene[0].length; x++){
-			boolean isGap = true;
 			// is this a gap
-			for(int y = 0; y < scene.length; y++){
-				if(scene[y][x] != AIR){
-					isGap = false;
-					break;
+			boolean isGap = isGap(x,scene);
+			if(!isGap) hasSeenGround = true;
+
+			// is it after gap
+			if(hasSeenGround && lastWasGap && !isGap){
+				float[] pos = indexToCoordinates(x, lowestAir(scene, x), marioCoords);
+				if(inFront(pos,marioCoords)){
+					result.add(pos);
+					//System.out.printf("Gap found! [%2d,%2d] (%2f,%2f)\n",x,lowestAir(scene, x),pos[0],pos[1]);
 				}
-			}
-			
-			if(lastWasGap && !isGap){
-				result.add(indexToCoordinates(x, lowestAir(scene, x), marioCoords));
-				System.out.println("Gap end found!");
+				
 			}
 			
 			lastWasGap = isGap;
@@ -114,17 +135,25 @@ public class CheckpointUCT extends SimpleMCTS {
 		return result;
 	}
 	
+	private boolean isGap(int x, byte[][] scene) {
+		for(int y = 0; y < scene.length; y++){
+			if(scene[y][x] != AIR){
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private float[] findEnd(byte[][] scene, float[] marioCoords) {
-		return indexToCoordinates(21, lowestAir(scene, 21), marioCoords);
+		int x = 21;
+		while(x > 0 && isGap(x,scene)) x--;
+		return indexToCoordinates(x, lowestAir(scene, x), marioCoords);
 	}
 	
 	private int lowestAir(byte[][] scene, int x){
-		for(int y = scene.length-1; y >= 0; y--){
-			if(scene[y][x] == AIR){
-				return y;
-			}
-		}
-		return -1;
+		int y = 0;
+		while( y < 22 && scene[y][x] == AIR) y++;
+		return y-1;
 	}
 	
 	private float[] indexToCoordinates(int x, int y, float[] marioCoords){
