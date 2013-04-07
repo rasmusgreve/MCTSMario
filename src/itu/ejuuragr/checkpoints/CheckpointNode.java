@@ -21,10 +21,8 @@ public class CheckpointNode extends UCTNode {
 		
 		// check for completed checkpoint
 		double dist = distToPoint(checkpoints.get(cleared));
-		//MCTSTools.print("Distance: "+dist);
 		if(dist <= CLEAR_DISTANCE){
 			cleared++; // progress
-			MCTSTools.print("Checkpoint "+(cleared-1)+" cleared!");
 		}
 		this.reward = calculateReward(state); 
 	}
@@ -48,7 +46,7 @@ public class CheckpointNode extends UCTNode {
 		double progressValue = checkpointValue * progress; // progress towards next
 		
 		double result = baseValue + clearedValue + progressValue;
-		//if(MCTSTools.isInGap(state)) reward /= 10;
+		if(MCTSTools.isInGap(state)) reward /= 10;
 				 
 		//MCTSTools.print("Reward: "+(baseValue + clearedValue + progressValue)+" cleared: "+clearedValue + " progress: "+progressValue + " ("+checkpoints.size() + " cps)");
 		return result;
@@ -56,7 +54,7 @@ public class CheckpointNode extends UCTNode {
 	
 	@Override
 	public UCTNode createChild(boolean[] action) {
-		UCTNode child = new CheckpointNode(MCTSTools.advanceStepClone(state, action),action,this, checkpoints, cleared);
+		UCTNode child = new CheckpointNode(MCTSTools.advanceStepClone(state, action),action, this, checkpoints, cleared);
 		children[MCTSTools.actionToIndex(action)] = child;
 		numChildren++;
 		
