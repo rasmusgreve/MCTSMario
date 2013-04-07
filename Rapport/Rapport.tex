@@ -39,7 +39,7 @@ In this experiment we explore different implementations and enhancements of the 
 \clearpage
 
 \section{Background}
-Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by random sampling in the decision space until an outcome can be determined. A very nice quality of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires very little domain knowledge as a naïve implementation only require knowledge of the action space and a means of simulating the outcome of an action.
+Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by random sampling in the decision space until an outcome can be determined. A very nice quality of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires no or very little domain knowledge as a naïve implementation only require knowledge of the action space and a means of simulating the outcome of an action. %TODO Not naive!
 
 Searching in MCTS is done by iteratively by building a search tree where the nodes are game states, and the edges are actions. A node is added to the tree in each iteration and based on the value of the new node, the values of parent nodes are updated.
 An iteration of MCTS consists of four steps:
@@ -74,11 +74,12 @@ To have a baseline for comparison and an implementation to build on, we started 
 Source \cite{mctssurvey}
 \subsection{Domain knowledge}
 While MCTS on it's own does show some intelligent behaviour, we felt like we had to introduce some domain knowledge to the algorithm to make it perform better. Otherwise most of the enhancements to make wouldn't really show much difference, as it in any case would lead to quite a large amount of random behaviour.
+
 \subsubsection{Limited actions}
 
 %TODO Down button
 
-The absolute first piece of domain knowledge that we introduced was to remove the possibility of pressing the down arrow making Mario duck. In a very cases it indeed does make sense to duck - under a bullet or a flying monster - but while it can be of use, it also doubles the action space from 16 to 32 possible actions which reduces the reachable depth significantly.
+The absolute first piece of domain knowledge that we introduced was to remove the possibility of pressing the down arrow making Mario duck. In a very few cases it indeed does make sense to duck - under a bullet or a flying monster - but while it can be of use, it also doubles the action space from 16 to 32 possible actions which reduces the reachable depth significantly.
 Another important factor that made us disable the down button was that while the down button is pressed, pressing left or right does not make Mario move. %TODO 
 
 %TODO Specific actions
