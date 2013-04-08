@@ -2,11 +2,17 @@ package itu.ejuuragr.softmax;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
+import itu.ejuuragr.MCTSTools;
 import itu.ejuuragr.UCT.SimpleMCTS;
 import itu.ejuuragr.UCT.UCTNode;
 
 public class SoftMaxMCTS extends SimpleMCTS {
 
+	public SoftMaxMCTS()
+	{
+
+	}
+	
 	@Override
 	public String getName() {
 		return "SoftMaxMCTS";

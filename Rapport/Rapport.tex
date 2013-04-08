@@ -41,16 +41,8 @@ In this experiment we explore different implementations and enhancements of the 
 \section{Background}
 %TODO Fill this space
 \subsection{Monte Carlo Tree Search}
-Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by random sampling in the decision space until an outcome can be determined. A very nice quality of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires no or very little domain knowledge as a naïve implementation only require knowledge of the action space and a means of simulating the outcome of an action. %TODO Not naive, something else!
 
-Searching in MCTS is done iteratively by building a search tree where the nodes are game states, and the edges are actions. A node is added to the tree in each iteration and based on the reward of the new node, the reward of parent nodes are updated.
-An iteration of MCTS consists of four steps:
-\begin{enumerate}
-\item Selection (A node to be expanded is chosen)
-\item Expansion (The node is expanded by simulating the associated actions)
-\item Simulation (The game is simulated with random moves until terminal)
-\item Back propagation (The result propagates up through the tree)
-\end{enumerate}
+Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by random sampling in the decision space until an outcome can be determined. A very nice quality of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires no or very little domain knowledge as a naïve implementation only require knowledge of the action space and a means of simulating the outcome of an action. %TODO Not naive, something else!
 
 \subsection{Upper Confidence Bounds for Trees}
 Choosing which node to expand can be done in multiple ways. Upper Confidence Bound (UCB) is a bandit based approach to choosing the most urgent node to expand. The quality with UCB is that it allows for prioritizing between exploration of less tried nodes, and exploitation of seemingly promising nodes.
@@ -62,48 +54,88 @@ Choosing which node to expand can be done in multiple ways. Upper Confidence Bou
 $X_j$ is the average (i.e. expected) reward. $n$ is the total number of plays and $n_j$ is the number of times action $j$ was tried.
 
 \subsection{The Mario AI Framework}
+The Super Mario implementation we use to test our enhancements in, is a framework 
 
-\subsection{Enhancements and Improvements}
 
-\begin{itemize}
-\item Om MCTS \cite{mctssurvey}
-\item Om UCB og UCT \cite{mctssurvey} måske også \cite{mspacman}
-\item (kort!) Om The Mario AI Framework  \cite{mario}
-\item Om forbedringer
-\end{itemize}
+\subsection{Foundation}
+Vi tager simulationen fra Baumgarten
+
 \clearpage
 
 \section{Approach and Enhancements}
 In this section we will go over the different implementations and enhancements that we have experimented with. For enhancements including a value that can be tweaked we have tried finding the optimal setting, and in the end we have combined enhancements which complement each other well.
 
 \subsection{Monte Carlo Tree Search with UCB}
+\subsubsection{Description}
 To have a baseline for comparison and an implementation to build on, we started by implementing the basic Monte Carlo Tree Search algorithm with Upper Confidence Bounds for selection of nodes.
 Source \cite{mctssurvey}
+
+\subsubsection{Implementation}
+
+\subsubsection{Behaviour}
+
 \subsection{Domain knowledge}
 While MCTS on it's own does show some intelligent behaviour, we felt like we had to introduce some domain knowledge to the algorithm to make it perform better. Otherwise most of the enhancements to make wouldn't really show much difference, as it in any case would lead to quite a large amount of random behaviour.
 
-\subsubsection{Limited actions}
-
-%TODO Down button
-
+\subsubsection{Description}
+\paragraph{Down button}
 The absolute first piece of domain knowledge that we introduced was to remove the possibility of pressing the down arrow making Mario duck. In a very few cases it indeed does make sense to duck - under a bullet or a flying monster - but while it can be of use, it also doubles the action space from 16 to 32 possible actions which reduces the reachable depth significantly.
-Another important factor that made us disable the down button was that while the down button is pressed, pressing left or right does not make Mario move. %TODO 
+Another important factor that made us disable the down button was that while the down button is pressed, pressing left or right does not make Mario move.
 
-%TODO Specific actions
+\paragraph{Specific actions}
+Blablabla om specifikke actions
 
-Hvis vi er nødt til at begrænse ham til ikke at bruge $\downarrow$ til alle de andre implementationer skal det fremgå her!
-\subsubsection{Hole detection}
-Hvis vi er nødt til at bruge hulgenkendelse til alle de andre implementationer skal det fremgå her!
+\paragraph{Hole Detection}
+Blablabla om hole detection
+
+\subsubsection{Implementation}
+
+\paragraph{Down button and specific actions}
+Blablabla om specifikke actions
+\paragraph{Hole detection}
+Blablabla om hole detection
+
+\subsubsection{Behaviour}
+
+\paragraph{Down button and specific actions}
+Blablabla om specifikke actions
+\paragraph{Hole detection}
+Blablabla om hole detection
+
+%---------------------------------------------------------
 \subsection{Softmax Backup}
+\subsubsection{Description}
 \begin{equation}\label{eq:softmax_equation}
 exploitation = Q * maxReward + (1 - Q ) * averageReward
 \end{equation}
 We use equation \ref{eq:softmax_equation} to calculate the exploration part for the confidence of nodes
+
+\subsubsection{Implementation}
+
+\subsubsection{Behaviour}
+
+%---------------------------------------------------------
 \subsection{Macro actions}
 \cite{salesman}
+\subsubsection{Description}
+\subsubsection{Implementation}
+\subsubsection{Behaviour}
+%---------------------------------------------------------
 \subsection{Heuristic Partial Tree Expansion Policy}
+\subsubsection{Description}
+\subsubsection{Implementation}
+\subsubsection{Behaviour}
+%---------------------------------------------------------
 \subsection{Checkpoints}
+\subsubsection{Description}
+\subsubsection{Implementation}
+\subsubsection{Behaviour}
+%---------------------------------------------------------
 \subsection{(Combination)}
+\subsubsection{Description}
+\subsubsection{Implementation}
+\subsubsection{Behaviour}
+
 \clearpage
 
 \section{Results}
@@ -117,11 +149,12 @@ We use equation \ref{eq:softmax_equation} to calculate the exploration part for 
 		Softmax backup q = $\frac{1}{8}$ & - \\ \hline
 		Softmax backup q = $\frac{1}{4}$ & 34,387 \\ \hline
 		Softmax backup q = $\frac{1}{2}$ & 34,147 \\ \hline
-		Softmax backup q = 1 & 26,842 \\ \hline
+		Softmax backup q = 1 (Max) & 26,842 \\ \hline
 	\end{tabular}
 	\caption{Results of using Softmax backup with different q values}
 	\label{tab:softmax_results}
 \end{table}
+
 \begin{table}[h]
 	\centering
 	\begin{tabular}{| l | l | l |}
@@ -138,12 +171,33 @@ We use equation \ref{eq:softmax_equation} to calculate the exploration part for 
 	\caption{Results of using UCT with a different limit for random moves}
 	\label{tab:uct_results}
 \end{table}
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{| l | l |}
+		\hline
+		\textbf{Method} & \textbf{Score} \\ \hline
+		MCTS w/ UCT, cp = 0			 			& - \\ \hline
+		MCTS w/ UCT, cp = $\frac{1.5}{8}$		& - \\ \hline
+		MCTS w/ UCT, cp = $\frac{1}{4}$		 	& - \\ \hline
+		MCTS w/ UCT, cp = $\frac{1}{3}$		 	& - \\ \hline
+		MCTS w/ UCT, cp = $\frac{1}{2}$		 	& - \\ \hline
+		MCTS w/ UCT, cp = $\frac{1}{\sqrt{2}}$	& - \\ \hline
+		MCTS w/ UCT, cp = $2$			 		& - \\ \hline
+		MCTS w/ UCT, cp = $5$			 		& - \\ \hline
+		MCTS w/ UCT, cp = $10$		 			& - \\ \hline
+	\end{tabular}
+	\caption{Results of using UCT with different weight between exploration and exploitation}
+	\label{tab:uct_cp_results}
+\end{table}
+
 \begin{figure}[h]
 \centering
 \includegraphics[width=6cm]{Forfulgt.png}
 \caption{Mario being followed}
 \label{fig:followed}
 \end{figure}
+
 Her er noget mere tekst, reference til figur \ref{fig:followed}
 \clearpage
 \section{Conclusion}
