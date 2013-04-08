@@ -35,7 +35,7 @@ public class CheckpointNode extends UCTNode {
 	@Override
 	public double calculateReward(LevelScene state) {
 		if(checkpoints == null) return 0.0;
-		if (parent != null && MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) reward = 0.0;
+		if (parent != null && MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) return 0;
 		
 		double checkpointValue = 0.75 / (checkpoints.size()-1); // value for each checkpoint
 		
@@ -46,7 +46,7 @@ public class CheckpointNode extends UCTNode {
 		double progressValue = checkpointValue * progress; // progress towards next
 		
 		double result = baseValue + clearedValue + progressValue;
-		if(MCTSTools.isInGap(state)) reward /= 10;
+		if(MCTSTools.isInGap(state)) result /= 10;
 				 
 		//MCTSTools.print("Reward: "+(baseValue + clearedValue + progressValue)+" cleared: "+clearedValue + " progress: "+progressValue + " ("+checkpoints.size() + " cps)");
 		return result;

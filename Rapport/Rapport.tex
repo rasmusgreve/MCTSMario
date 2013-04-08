@@ -39,7 +39,9 @@ In this experiment we explore different implementations and enhancements of the 
 \clearpage
 
 \section{Background}
-Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by random sampling in the decision space until an outcome can be determined. A very nice quality of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires no or very little domain knowledge as a naïve implementation only require knowledge of the action space and a means of simulating the outcome of an action. %TODO Not naive!
+%TODO Fill this space
+\subsection{Monte Carlo Tree Search}
+Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by random sampling in the decision space until an outcome can be determined. A very nice quality of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires no or very little domain knowledge as a naïve implementation only require knowledge of the action space and a means of simulating the outcome of an action. %TODO Not naive, something else!
 
 Searching in MCTS is done by iteratively by building a search tree where the nodes are game states, and the edges are actions. A node is added to the tree in each iteration and based on the value of the new node, the values of parent nodes are updated.
 An iteration of MCTS consists of four steps:
@@ -50,6 +52,7 @@ An iteration of MCTS consists of four steps:
 \item Back propagation (The result propagates up through the tree)
 \end{enumerate}
 
+\subsection{Upper Confidence Bounds for Trees}
 Choosing which node to expand can be done in multiple ways. Upper Confidence Bound (UCB) is a bandit based approach to choosing the most urgent node to expand. The quality with UCB is that it allows for prioritizing between exploration of less tried nodes, and exploitation of seemingly promising nodes.
 \textbf{OBS! Præcis hvilken ligning skal vi skrive her????}
 \begin{equation}
@@ -57,6 +60,10 @@ Choosing which node to expand can be done in multiple ways. Upper Confidence Bou
 \displaystyle UCB_j = \overline{X}_j + \sqrt{\frac{2 * \log(n)}{n_j}}
 \end{equation}
 $X_j$ is the average (i.e. expected) reward. $n$ is the total number of plays and $n_j$ is the number of times action $j$ was tried.
+
+\subsection{The Mario AI Framework}
+
+\subsection{Enhancements and Improvements}
 
 \begin{itemize}
 \item Om MCTS \cite{mctssurvey}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.1.31)  3 APR 2013 12:39
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9) (preloaded format=pdflatex 2013.1.31)  8 APR 2013 10:35
 entering extended mode
 **Rapport.tex
 (C:\Users\Rasmus\workspace\MCTSMario\Rapport\Rapport.tex
@@ -399,13 +399,13 @@ File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 {C:/Users/Rasmus/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2
 
 ]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 62.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 69.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 62.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 69.
  [3
 
 ] [4
@@ -414,7 +414,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 <Forfulgt.png, id=31, 321.2pt x 240.9pt>
 File: Forfulgt.png Graphic file (type png)
  <use Forfulgt.png>
-Package pdftex.def Info: Forfulgt.png used on input line 135.
+Package pdftex.def Info: Forfulgt.png used on input line 143.
 (pdftex.def)             Requested size: 170.71652pt x 128.04028pt.
 
 
@@ -452,7 +452,7 @@ blic/amsfonts/cm/cmsl10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publ
 ic/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public
 /amsfonts/cm/cmti10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/a
 msfonts/cm/cmtt12.pfb>
-Output written on Rapport.pdf (9 pages, 204089 bytes).
+Output written on Rapport.pdf (9 pages, 205014 bytes).
 PDF statistics:
  93 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
