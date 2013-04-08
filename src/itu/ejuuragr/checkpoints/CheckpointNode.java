@@ -35,7 +35,8 @@ public class CheckpointNode extends UCTNode {
 	@Override
 	public double calculateReward(LevelScene state) {
 		if(checkpoints == null) return 0.0;
-		if (parent != null && MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) return 0;
+		if (parent != null && MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) return 0.0;
+
 		
 		double checkpointValue = 0.75 / (checkpoints.size()-1); // value for each checkpoint
 		
