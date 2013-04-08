@@ -139,18 +139,25 @@ public class UCTNode implements MCTSNode{
 	 * @return The direct child with the highest confidence value.
 	 */
 	public UCTNode getBestChild(double cp){
-		int best = -1;
+		//int best = -1;
+		ArrayList<Integer> best = new ArrayList<Integer>();
 		double score = -1;
 		for(int i = 0; i < MCTSTools.CHILDREN; i++){
 			if(children[i] != null){
 				double curScore = children[i].calculateConfidence(cp);
-				if(curScore > score || (curScore == score && rand.nextBoolean())){
+				if (curScore > score)
+				{
 					score = curScore;
-					best = i;
+					best.clear();
+					best.add(i);
+				}
+				if (curScore == score)
+				{
+					best.add(i);
 				}
 			}
 		}
-		return best > -1 ? children[best] : null;
+		return best.isEmpty() ? null : children[best.get(rand.nextInt(best.size()))];
 	}
 	
 	public double advanceXandReward(int ticks){
