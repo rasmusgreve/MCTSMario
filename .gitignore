@@ -1,3 +1,8 @@
+./Rapport/*.pdf
+./Rapport/*.synctex.gz
+./Rapport/Rapport.log
+
+
 #################
 ## Eclipse
 #################

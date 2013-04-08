@@ -51,7 +51,8 @@ Choosing which node to expand can be done in multiple ways. Upper Confidence Bou
 \label{eq:ucb1}
 \displaystyle UCB_j = \overline{X}_j + \sqrt{\frac{2 * \log(n)}{n_j}}
 \end{equation}
-$X_j$ is the average (i.e. expected) reward. $n$ is the total number of plays and $n_j$ is the number of times action $j$ was tried.
+Here $X_j$ is the average (i.e. expected) reward. $n$ is the total number of plays and $n_j$ is the number of times action $j$ was tried. Since the exploration term of the equation depends on how explored the node is compared to the parent, the confidence in a node will increase steadily until the node is eventually explored. The exploitation term will, however, make sure that good nodes will be explored more frequently than less promising ones.
+ 
 
 \subsection{The Mario AI Framework}
 The Super Mario implementation we use to test our enhancements in, is a framework 
