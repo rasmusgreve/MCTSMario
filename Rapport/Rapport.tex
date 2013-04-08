@@ -54,12 +54,11 @@ An iteration of MCTS consists of four steps:
 
 \subsection{Upper Confidence Bounds for Trees}
 Choosing which node to expand can be done in multiple ways. Upper Confidence Bound (UCB) is a bandit based approach to choosing the most urgent node to expand. The quality with UCB is that it allows for prioritizing between exploration of less tried nodes, and exploitation of seemingly promising nodes.
-\textbf{OBS! Præcis hvilken ligning skal vi skrive her????}
 \begin{equation}
 \label{eq:ucb1}
 \displaystyle UCB_j = \overline{X}_j + \sqrt{\frac{2 * \log(n)}{n_j}}
 \end{equation}
-$X_j$ is the average (i.e. expected) reward. $n$ is the total number of plays and $n_j$ is the number of times action $j$ was tried.
+Here $X_j$ is the average (i.e. expected) reward. $n$ is the total number of plays and $n_j$ is the number of times action $j$ was tried. Since the exploration term of the equation depends on how explored the node is compared to the parent, the confidence in a node will increase steadily until the node is eventually explored. The exploitation term will, however, make sure that good nodes will be explored more frequently than less promising ones.
 
 \subsection{The Mario AI Framework}
 
