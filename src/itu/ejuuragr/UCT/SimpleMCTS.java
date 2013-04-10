@@ -173,7 +173,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 			}
 			
 			root = choice;
-			//addHeuristic(choice.action);
+			addHeuristic(choice.action);
 			return choice.action;
 			
 		}else{
@@ -267,28 +267,10 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		return Math.sqrt(as+bs);
 	}
 	
-	protected void drawEventHorizon(UCTNode v)
-	{
-		LinkedList<UCTNode> leafs = new LinkedList<UCTNode>();
-		collectLeafs(v, leafs);
-		ArrayList<UCTNode> ordered = order(leafs);
-	
-		int[] rx = new int[ordered.size()];
-		int[] ry = new int[ordered.size()];
-		for (int i = 0; i < ordered.size();i++)
-		{
-			UCTNode c = ordered.get(i);
-			rx[i] = (int)c.state.mario.x;
-			ry[i] = (int)c.state.mario.y;
-		}
-		MarioComponent.PLAN_XS = rx;
-		MarioComponent.PLAN_YS = ry;
-	}
-	
 	private void logState(){
 		MarioComponent.SAVE_NEXT_FRAME = true;
 		root.outputTree("Tree.xml");
-		//printHeuristic();
+		printHeuristic();
 		printActions();
 	}
 	
