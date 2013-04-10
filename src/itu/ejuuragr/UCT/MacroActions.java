@@ -7,19 +7,20 @@ import competition.cig.robinbaumgarten.astar.LevelScene;
 public class MacroActions extends SimpleMCTS {
 
 	public static final int ACTION_SIZE = 3; //How many times to repeat each action
-	int moveCount = Integer.MAX_VALUE; //Start invalid every time
+	int moveCount = Integer.MAX_VALUE-1;
 	boolean[] curAction;
-	
 	
 	public MacroActions()
 	{
-		UCTNode.REPETITIONS = ACTION_SIZE; //Ugly but easy
+		setName("MacroActions (" + ACTION_SIZE + ")");
 	}
 	
 	@Override
 	public UCTNode createRoot(LevelScene state)
 	{
-		return new MacroActionsNode(state, null, null);
+		MacroActionsNode n = new MacroActionsNode(state, null, null);
+		n.REPETITIONS = ACTION_SIZE;
+		return n;
 	}
 	
 	@Override

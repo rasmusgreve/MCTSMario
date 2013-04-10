@@ -10,7 +10,7 @@ import itu.ejuuragr.UCT.UCTNode;
 
 public class SoftMaxUCTNode extends UCTNode {
 	
-	private static final double Q = 0.25; // 0.0 is average only, 1.0 is max only
+	public static double Q = 0.25; // 0.0 is average only, 1.0 is max only
 	public ArrayList<Double> rewards = new ArrayList<Double>(64);
 	public double maxReward = -1;
 
@@ -22,17 +22,14 @@ public class SoftMaxUCTNode extends UCTNode {
 
 	@Override
 	public double calculateConfidence(double cp){		
-		// copy-pasted
 		if(reward <= TERMINAL_MARGIN) return 0.0;
 		
-		double max = Q*maxReward;
-		double avg = (1.0 - Q)*average(rewards);
+		double max = Q * maxReward;
+		double avg = (1.0 - Q) * average(rewards);
 		double exploitation = max + avg; // softmax
 		
-		//System.out.printf("max: %.2f avg: %.2f tot: %.2f\n",max,avg,exploitation);
-		
 		double exploration = cp*Math.sqrt((2*Math.log(parent.visited))/this.visited);
-		//System.out.printf("Exploit: %f Explore: %f\n", exploitation, exploration);
+		
 		return exploitation + exploration;
 	}
 

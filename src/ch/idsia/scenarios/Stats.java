@@ -12,13 +12,14 @@ import ch.idsia.utils.StatisticalSummary;
 public class Stats {
 
     final static int numberOfTrials = 100;
+    public static String[] ARGUMENTS;
 
     public static void main(String[] args) {
-
+    	ARGUMENTS = args;
         Agent controller = AgentsPool.load (args[0]);
         final int startingSeed = Integer.parseInt (args[1]);
         doStats (controller, startingSeed);
-        //System.exit(0);
+        System.exit(0);
 
     }
 

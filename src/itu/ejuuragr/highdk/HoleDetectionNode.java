@@ -22,26 +22,23 @@ public class HoleDetectionNode extends UCTNode {
 	}
 	
 	public double calculateReward(LevelScene state){
-		double reward;
+		
 		if(state.mario.deathTime > 0){
-			reward = 0.0;
+			return 0.0;
 		}
 		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) {
-			reward = 0.0;
+			return 0.0;
 		}
-		else{
-			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0;
-
-			
-			if(HoleDetection.USE_HOLE_DETECTION && MCTSTools.isInGap(state)) reward /= 10; //This is changed
-			
-			if (reward < 0 || reward > 1) 
-			{
-				MCTSTools.print("Reward: " + reward);
-				MCTSTools.print("X dif: " + (state.mario.x - parent.state.mario.x));
-			}
+		
+		double reward;
+		reward = 0.5 + ((state.mario.x - parent.state.mario.x)/MAX_XDIF)/2.0;
+		if(MCTSTools.isInGap(state)) reward /= 10; //This is changed
+		
+		if (reward < 0 || reward > 1) 
+		{
+			MCTSTools.print("Reward: " + reward);
+			MCTSTools.print("X dif: " + (state.mario.x - parent.state.mario.x));
 		}
-		//System.out.println("reward: " + reward);
 		return reward;
 	}
 
