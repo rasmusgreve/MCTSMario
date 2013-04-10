@@ -35,24 +35,41 @@ with compositions that greatly increase the performance of the AI.
 \clearpage
 
 \section{Introduction}
-In this experiment we explore different implementations and enhancements of the Monte Carlo Tree Search (MCTS) algorithm for an AI, in order to evaluate their performance and results in the Super Mario AI Benchmark tool. The MCTS algorithm has shown great results in various classical board games but has (to our knowledge) not been tested on a real-time physics-based game like Super Mario. Like some of the games that MCTS has proven effective in, Super Mario has a great branching factor of the state space but differs in that simulating actions is quite computationally heavy. These differences make several modifications of the core algorithm interesting for our experiment because they can help build the tree in a manner that uses the simulations more effectively. %TODO
+In this experiment we explore different implementations and enhancements of the Monte Carlo Tree Search (MCTS) algorithm for an AI, in order to evaluate their performance and results in the Super Mario AI Benchmark tool \cite{mario}. The MCTS algorithm has shown great results in various classical board games but has (to our knowledge) not been tested on a real-time physics-based game like Super Mario. Like some of the games that MCTS has proven effective in, Super Mario has a large branching factor of the state space but differs in that simulating actions is quite computationally expensive. These differences make several modifications of the core algorithm interesting for our experiment because they can help build the tree in a manner that uses the simulations more effectively. %TODO
 \clearpage
 
 \section{Background}
 %TODO Fill this space
 \subsection{Monte Carlo Tree Search}
 
-Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by random sampling in the decision space until an outcome can be determined. A very nice quality of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires no or very little domain knowledge as a naïve implementation only require knowledge of the action space and a means of simulating the outcome of an action. %TODO Not naive, something else!
+Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by random sampling in the decision space until an outcome can be determined. A very nice property of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires no or very little domain knowledge as a naïve implementation only require knowledge of the action space and a means of simulating the outcome of an action. %TODO Not naive, something else!
+
+
+Searching in MCTS is done by iteratively by building a search tree where the nodes are game states, and the edges are actions. A node is added to the tree in each iteration and recursively, based on the reward of the new node, the values of parent nodes are updated.
+A single iteration of the MCTS building process consists of these four steps:
+\begin{enumerate}
+\item Tree Policy (A node to be expanded is chosen)
+\item Expansion (The node is expanded by simulating the associated action)
+\item Default Policy (The game is simulated with random moves until terminal)
+\item Backpropagation (The result propagates up through the tree)
+\end{enumerate}
+Modifications to this core algorithm will change one or more of these steps. We will note for each modification what steps they modify.
+\subsubsection{Tree Policy}
+First the algorithm must search through the tree and determine what existing node to expand. This is done by traversing the tree until we find a node that is not fully expanded. Modifications to this part of the algorithm generally differs in the choice between existing child nodes when looking at a fully expanded node.
+\subsubsection{Expansion}
+From the node that is not fully expanded a new child node is created corresponding to performing a specific action to the state of the current node. Differences in policies here are due to selecting the new child and how the action is performed (e.g. section \ref{macro}).
+\subsubsection{Default Policy}
+The default policy determines what is done leading up to the final calculation of the reward for the new node. For the basic MCTS this is doing random actions until we reach terminal which could either be a win or a loss.
+\subsubsection{Backpropagation}
+The final reward calculated after performing the default policy is saved in the node, and propagated up the tree to all ancestors. This value will then be used by the tree policy in later iterations.
 
 \subsection{Upper Confidence Bounds for Trees}
 Choosing which node to expand can be done in multiple ways. Upper Confidence Bound (UCB) is a bandit based approach to choosing the most urgent node to expand. The quality with UCB is that it allows for prioritizing between exploration of less tried nodes, and exploitation of seemingly promising nodes.
-\textbf{OBS! Præcis hvilken ligning skal vi skrive her????}
 \begin{equation}
 \label{eq:ucb1}
 \displaystyle UCB_j = \overline{X}_j + \sqrt{\frac{2 * \log(n)}{n_j}}
 \end{equation}
 Here $X_j$ is the average (i.e. expected) reward. $n$ is the total number of plays and $n_j$ is the number of times action $j$ was tried. Since the exploration term of the equation depends on how explored the node is compared to the parent, the confidence in a node will increase steadily until the node is eventually explored. The exploitation term will, however, make sure that good nodes will be explored more frequently than less promising ones.
- 
 
 \subsection{The Mario AI Framework}
 The Super Mario implementation we use to test our enhancements in, is a framework 
@@ -119,6 +136,7 @@ We use equation \ref{eq:softmax_equation} to calculate the exploration part for 
 
 %---------------------------------------------------------
 \subsection{Macro actions}
+\label{macro}
 \cite{salesman}
 \subsubsection{Description}
 \subsubsection{Implementation}
