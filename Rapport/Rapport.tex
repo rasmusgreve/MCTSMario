@@ -56,7 +56,9 @@ Here $X_j$ is the average (i.e. expected) reward. $n$ is the total number of pla
 
 \subsection{The Mario AI Framework}
 The Super Mario implementation we use to test our enhancements in, is a framework 
+\subsubsection{The Game API}
 
+\subsubsection{Performance measurement}
 
 \subsection{Foundation}
 Vi tager simulationen fra Baumgarten
@@ -192,6 +194,26 @@ We use equation \ref{eq:softmax_equation} to calculate the exploration part for 
 	\label{tab:uct_cp_results}
 \end{table}
 
+\begin{table}[h]
+	\centering
+	\begin{tabular}{| l | l |}
+		\hline
+		\textbf{Method} & \textbf{Score} \\ \hline
+		UCT (Softmax q = 0)				& - \\ \hline
+		Max (Softmax q = 1)				& - \\ \hline
+		Softmax							& - \\ \hline
+		Limited Actions		 			& - \\ \hline
+		Hole Detection		 			& - \\ \hline
+		Macro Actions		 			& - \\ \hline
+		H. Partial Expansion			& - \\ \hline
+		Checkpoints						& - \\ \hline
+		(Combination)					& - \\ \hline
+	\end{tabular}
+	\caption{Results from all the different enhancements}
+	\label{tab:method_results}
+\end{table}
+
+
 \begin{figure}[h]
 \centering
 \includegraphics[width=6cm]{Forfulgt.png}
@@ -219,6 +241,7 @@ T. Pepels and M. H. Winands, “Enhancements for Monte-Carlo Tree Search in Ms P
 
 \bibitem{mario}
 S. Karakovskiy and J. Togelius, “The mario ai benchmark and competitions,” Computational Intelligence and AI in Games, IEEE Transactions on, vol. 4, no. 1, pp. 55–67, 2012.
+
 \end{thebibliography}
 
 \end{document}
