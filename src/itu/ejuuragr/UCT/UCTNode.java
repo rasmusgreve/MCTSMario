@@ -23,11 +23,7 @@ import itu.ejuuragr.MCTSTools;
  * @author Emil
  *
  */
-public class UCTNode implements MCTSNode{
-	
-	//private static int CHILDREN = 16;
-	//private static final int REPETITIONS = 1; //Unused?
-	
+public class UCTNode implements MCTSNode{	
 	public static Random rand = new Random(1337);
 	protected static double TERMINAL_MARGIN = 0.0;
 	
@@ -35,9 +31,12 @@ public class UCTNode implements MCTSNode{
 	public boolean[] action = new boolean[MCTSTools.CHILDREN];
 	public UCTNode parent = null;
 	public UCTNode[] children = new UCTNode[MCTSTools.CHILDREN];
+	
 	public double reward = 0;
 	public int visited = 1;
-	public static int REPETITIONS = 1;
+	public int REPETITIONS = 1;
+	
+	public double MAX_XDIF = ((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0);
 	
 	// for stats
 	public int numChildren = 0;
@@ -58,13 +57,6 @@ public class UCTNode implements MCTSNode{
 	
 	@Override
 	public UCTNode expand() {
-		/*if (MCTSTools.DEBUG && parent != null && calculateReward(state) == 0)
-		{
-			MCTSTools.print("Expanding a node with 0 reward!!" + MCTSTools.actionToXML(action));
-			UCTNode gp = this;
-			for (UCTNode p = this; p != null; p = p.parent) gp = p;
-			gp.outputTree("ZeroNodeExpanded.xml");
-		}*/
 		ArrayList<Integer> spaces = getUnexpanded();
 		return createChild(MCTSTools.indexToAction(spaces.get(rand.nextInt(spaces.size()))));
 	}
@@ -127,7 +119,6 @@ public class UCTNode implements MCTSNode{
 		
 		double exploitation = reward/this.visited;
 		double exploration = cp*Math.sqrt((2*Math.log(parent.visited))/this.visited);
-		//System.out.printf("Exploit: %f Explore: %f\n", exploitation, exploration);
 		return exploitation + exploration;
 	}
 	
@@ -139,7 +130,6 @@ public class UCTNode implements MCTSNode{
 	 * @return The direct child with the highest confidence value.
 	 */
 	public UCTNode getBestChild(double cp){
-		//int best = -1;
 		ArrayList<Integer> best = new ArrayList<Integer>();
 		double score = -1;
 		for(int i = 0; i < MCTSTools.CHILDREN; i++){
@@ -151,7 +141,7 @@ public class UCTNode implements MCTSNode{
 					best.clear();
 					best.add(i);
 				}
-				if (curScore == score)
+				else if (curScore == score)
 				{
 					best.add(i);
 				}
@@ -217,24 +207,19 @@ public class UCTNode implements MCTSNode{
 	 * 0 is worst and 1 is best.
 	 */
 	public double calculateReward(LevelScene state){
-		double reward;
 		if(state.mario.deathTime > 0){
-			reward = 0.0;
+			return 0.0;
 		}
 		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) {
-			reward = 0.0;
+			return 0.0;
 		}
-		else{
-			reward = 0.5 + ((state.mario.x - parent.state.mario.x)/((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0))/2.0;
-
-			if(MCTSTools.isInGap(state)) reward /= 10;
-			if (reward < 0 || reward > 1) 
-			{
-				MCTSTools.print("Reward: " + reward);
-				MCTSTools.print("X dif: " + (state.mario.x - parent.state.mario.x));
-			}
+		
+		double reward;
+		// 0.5 for standing still, 1 for sprinting right, 0 for sprinting left
+		reward = 0.5 + ((state.mario.x - parent.state.mario.x)/MAX_XDIF)/2.0;
+		if (reward < 0 || reward > 1){
+			MCTSTools.print("Warning! Reward out of bounds: " + reward);
 		}
-		//System.out.println("reward: " + reward);
 		return reward;
 	}
 	

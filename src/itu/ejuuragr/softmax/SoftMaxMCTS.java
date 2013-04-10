@@ -1,21 +1,26 @@
 package itu.ejuuragr.softmax;
 
+import ch.idsia.scenarios.Stats;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
-import itu.ejuuragr.MCTSTools;
 import itu.ejuuragr.UCT.SimpleMCTS;
 import itu.ejuuragr.UCT.UCTNode;
 
 public class SoftMaxMCTS extends SimpleMCTS {
-
+	
 	public SoftMaxMCTS()
 	{
-
+		if (Stats.ARGUMENTS != null && Stats.ARGUMENTS.length >= 5)
+		{
+			SoftMaxUCTNode.Q = Double.parseDouble(Stats.ARGUMENTS[4]);
+			System.out.println("Setting Q = " + SoftMaxUCTNode.Q);
+		}
 	}
+	
 	
 	@Override
 	public String getName() {
-		return "SoftMaxMCTS";
+		return "SoftMaxMCTS (Q=" + SoftMaxUCTNode.Q + ")";
 	}
 
 	@Override
@@ -35,7 +40,7 @@ public class SoftMaxMCTS extends SimpleMCTS {
 			w = (SoftMaxUCTNode) w.parent;
 			depth++;
 		}
-		if(depth > maxDepth) maxDepth = depth;
+		maxDepth = Math.max(maxDepth, depth);
 	}
 
 }

@@ -9,10 +9,8 @@ public class HoleDetection extends SimpleMCTS {
 	
 	public HoleDetection()
 	{
-		setName("HoleDetectionUCT (" + USE_HOLE_DETECTION + ")");
+		setName("HoleDetectionUCT");
 	}
-
-	public static boolean USE_HOLE_DETECTION = false;
 	
 	@Override
 	public UCTNode createRoot(LevelScene state)

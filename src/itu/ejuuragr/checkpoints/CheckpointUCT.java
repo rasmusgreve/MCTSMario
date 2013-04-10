@@ -1,13 +1,11 @@
 package itu.ejuuragr.checkpoints;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import ch.idsia.mario.engine.MarioComponent;
 import ch.idsia.mario.environments.Environment;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
-import itu.ejuuragr.MCTSTools;
 import itu.ejuuragr.UCT.SimpleMCTS;
 import itu.ejuuragr.UCT.UCTNode;
 
@@ -15,7 +13,6 @@ public class CheckpointUCT extends SimpleMCTS {
 	
 	private static final int AIR = 0;
 	private static final int CANNON = 14;
-	private static final int CANNON_MOUNT = 30;
 	private static final int TOWER_BASE = 46;
 	
 	private Environment observations;
@@ -33,22 +30,8 @@ public class CheckpointUCT extends SimpleMCTS {
 	@Override
 	public boolean[] getAction(Environment obs) {
 		observations = obs;
-		//print2DByte(obs.getLevelSceneObservationZ(0));
 		return super.getAction(obs);
 	}
-	
-    private void print2DByte(byte[][] array){
-    	for(int y = 0; y < array.length; y++){
-    		printByteArray(array[y]);
-    		System.out.println();
-    	}
-    }
-    
-    private void printByteArray(byte[] array){
-		for(int x = 0; x < array.length; x++){
-			System.out.printf("%4d,",array[x]);
-		}
-    }
 
 	@Override
 	protected void clearRoot(Environment obs) {		
@@ -65,7 +48,6 @@ public class CheckpointUCT extends SimpleMCTS {
 		
 		ArrayList<float[]> checkpoints = new ArrayList<float[]>(5);
 		// starting position (for progress towards first checkpoint)
-		//checkpoints.add(new float[]{marioCoords[0], marioCoords[1]});
 		checkpoints.add(indexToCoordinates(11,11,marioCoords));
 		
 		// top of high towers
@@ -77,13 +59,26 @@ public class CheckpointUCT extends SimpleMCTS {
 		// top end of screen point
 		checkpoints.add(findEnd(scene, marioCoords));
 		
-		manageCheckpoints(checkpoints, marioCoords);
+		manageCheckpoints(checkpoints);
 		
 		return checkpoints;
 	}
 
-	private void manageCheckpoints(ArrayList<float[]> checkpoints, float[] marioCoords) {		
+	private void manageCheckpoints(ArrayList<float[]> checkpoints) {		
 		// order them from left to right
+		for (int i = 0; i < checkpoints.size();i++)
+		{
+			for (int j = i+1; j < checkpoints.size();j++)
+			{
+				if (checkpoints.get(i)[0] > checkpoints.get(j)[0])
+				{
+					//Swap
+					float[] aux = checkpoints.get(i);
+					checkpoints.set(i, checkpoints.get(j));
+					checkpoints.set(j, aux);
+				}
+			}
+		}
 		
 	}
 	

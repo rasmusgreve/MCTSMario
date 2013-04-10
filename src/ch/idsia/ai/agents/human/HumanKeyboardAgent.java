@@ -4,8 +4,6 @@ import ch.idsia.ai.agents.Agent;
 import ch.idsia.mario.engine.sprites.Mario;
 import ch.idsia.mario.environments.Environment;
 
-import itu.ejuuragr.UCT.SimpleMCTS;
-
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -23,8 +21,6 @@ public class HumanKeyboardAgent extends KeyAdapter implements Agent
     List<boolean[]> history = new ArrayList<boolean[]>();
     private boolean[] Action = null;
     private String Name = "HumanKeyboardAgent";
-    private float lastX = 50;
-    private float maxSpeed = 0;
 
     public HumanKeyboardAgent()
     {
@@ -40,12 +36,6 @@ public class HumanKeyboardAgent extends KeyAdapter implements Agent
 
     public boolean[] getAction(Environment observation)
     {
-    	float[] pos = observation.getMarioFloatPos();
-    	System.out.println(String.format("Mario pos: (%s,%s)",pos[0],pos[1]));
-    	//maxSpeed = Math.max(maxSpeed,pos[0]-lastX);
-    	//System.out.println(String.format("xSpeed: %s, max:%s",pos[0]-lastX,maxSpeed));
-    	//lastX = pos[0];
-        float[] enemiesPos = observation.getEnemiesFloatPos();
         return Action;
     }
 

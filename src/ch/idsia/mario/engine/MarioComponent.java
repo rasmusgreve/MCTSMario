@@ -33,9 +33,6 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
 	    public static int[] BESTLINE_YS;
 	    
 	    public static ArrayList<float[]> checkpoints;
-	    
-	    public static int[] PLAN_XS;
-	    public static int[] PLAN_YS;
     /*
 	 * Modification for debugging end (itu.ejuuragr)
 	 */
@@ -246,14 +243,6 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
                 	 */
                 	
                     int xCam = Math.max(0, (int)mario.xOld - 160);
-                    
-                    og.setColor(Color.BLUE);
-                    if (PLAN_XS != null)
-                    {
-                    	for (int i = 0; i < PLAN_XS.length; i++)
-                    		PLAN_XS[i] -= xCam;
-                    	og.drawPolyline(PLAN_XS, PLAN_YS, PLAN_XS.length);
-                    }
                     
                     og.setColor(Color.blue);
                     if (checkpoints != null)
