@@ -47,7 +47,6 @@ public class CheckpointNode extends UCTNode {
 		double progressValue = checkpointValue * progress; // progress towards next
 		
 		double result = baseValue + clearedValue + progressValue;
-		if(MCTSTools.isInGap(state)) result /= 10;
 				 
 		//MCTSTools.print("Reward: "+(baseValue + clearedValue + progressValue)+" cleared: "+clearedValue + " progress: "+progressValue + " ("+checkpoints.size() + " cps)");
 		return result;

@@ -37,9 +37,6 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	private String name = "BasicMCTS";
 	protected UCTNode root = null;
 	
-	private LinkedList<Integer> nodeCounts = new LinkedList<Integer>();
-
-	
 	public SimpleMCTS()
 	{
 		if (Stats.ARGUMENTS != null && Stats.ARGUMENTS.length >= 4)
@@ -55,7 +52,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	@Override
 	public void reset() {
 		MCTSTools.print("Agent Reset");
-		//initRoot();
+		root = null;
 	}
 	
 	@Override
@@ -144,14 +141,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 			backup(v1,reward);
 		}
 		
-		if(MCTSTools.DEBUG){
-			nodeCounts.add(root.visited);
-			int avg = 0;
-			for (Integer i : nodeCounts) avg += i;
-			avg /= nodeCounts.size();
-			
-			MCTSTools.print(String.format("Depth: %2d, at %4d nodes %3dms used (%4d nodes avg.)",maxDepth,root.visited,System.currentTimeMillis() - startTime,avg));
-		}
+		MCTSTools.print(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
 		
 		if (SAVE_NEXT_TREE)
 			root.outputTree("Tree.xml");

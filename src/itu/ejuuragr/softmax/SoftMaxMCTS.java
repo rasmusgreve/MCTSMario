@@ -15,12 +15,7 @@ public class SoftMaxMCTS extends SimpleMCTS {
 			SoftMaxUCTNode.Q = Double.parseDouble(Stats.ARGUMENTS[4]);
 			System.out.println("Setting Q = " + SoftMaxUCTNode.Q);
 		}
-	}
-	
-	
-	@Override
-	public String getName() {
-		return "SoftMaxMCTS (Q=" + SoftMaxUCTNode.Q + ")";
+		setName("SoftMaxMCTS (Q=" + SoftMaxUCTNode.Q + ")");
 	}
 
 	@Override

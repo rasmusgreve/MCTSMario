@@ -32,7 +32,7 @@ public class HoleDetectionNode extends UCTNode {
 		
 		double reward;
 		reward = 0.5 + ((state.mario.x - parent.state.mario.x)/MAX_XDIF)/2.0;
-		if(MCTSTools.isInGap(state)) reward /= 10; //This is changed
+		if(MCTSTools.isInGap(state)) reward /= 10;
 		
 		if (reward < 0 || reward > 1) 
 		{
