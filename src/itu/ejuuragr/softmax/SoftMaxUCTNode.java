@@ -10,7 +10,7 @@ import itu.ejuuragr.UCT.UCTNode;
 
 public class SoftMaxUCTNode extends UCTNode {
 	
-	public static double Q = 0.25; // 0.0 is average only, 1.0 is max only
+	public static double Q = 0.75; // 0.0 is average only, 1.0 is max only
 	public ArrayList<Double> rewards = new ArrayList<Double>(64);
 	public double maxReward = -1;
 
