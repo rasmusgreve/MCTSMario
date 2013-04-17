@@ -18,7 +18,7 @@ public class MCTSTools {
 		buildActionsFromButtons();
 	}
 	
-	public static final boolean DEBUG = !!true;
+	public static final boolean DEBUG = !true;
 	
 	public static void printObservation(byte[][] observation)
 	{

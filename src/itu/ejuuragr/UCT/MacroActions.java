@@ -67,16 +67,13 @@ public class MacroActions extends SimpleMCTS {
 			if (isInDanger(obs))
 			{
 				CURRENT_ACTION_SIZE = 1;
-				System.out.println("Using MICRO actions");
 			}
 			else
 			{
 				CURRENT_ACTION_SIZE = MACRO_ACTION_SIZE;
-				System.out.println("Using MACRO actions");
 			}
 			curAction = super.getAction(obs);
 			moveCount = 1;
-			setName("MacroActions (" + CURRENT_ACTION_SIZE + ")");
 		}
 		else
 		{
