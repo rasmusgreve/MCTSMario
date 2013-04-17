@@ -9,8 +9,8 @@ public class MacroActions extends SimpleMCTS {
 	public static final int MACRO_ACTION_SIZE = 3; //How many times to repeat each action
 	public static final int MONSTER_DANGER_DISTANCE_BACKWARD = 2; //Threshold distance backwards of monsters for switching to micro actions
 	public static final int MONSTER_DANGER_DISTANCE_FORWARD = 4; //Threshold distance forwards of monsters for switching to micro actions
-	public static final int MONSTER_DANGER_DISTANCE_DOWN = 3; //Threshold distance down of monsters for switching to micro actions
-	public static final int MONSTER_DANGER_DISTANCE_UP = 3; //Threshold distance up of monsters for switching to micro actions
+	public static final int MONSTER_DANGER_DISTANCE_DOWN = 5; //Threshold distance down of monsters for switching to micro actions
+	public static final int MONSTER_DANGER_DISTANCE_UP = 5; //Threshold distance up of monsters for switching to micro actions
 	public static final int HOLE_DANGER_DISTANCE = 3; //Threshold distance to holes for switching to micro actions
 	
 	public static int CURRENT_ACTION_SIZE = MACRO_ACTION_SIZE; //The current action size (1 when in danger)
