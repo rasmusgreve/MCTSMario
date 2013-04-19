@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
+\usepackage{siunitx}
 \pagestyle{fancy}
 \fancyhead{}
 \fancyhead[L]{\slshape MCTS Mario}
@@ -12,6 +13,7 @@
 \fancyfoot{}
 \fancyfoot[C]{\thepage}
 %\graphicspath{ {C:\Users\Rasmus\workspace\MCTSMario\Rapport} }
+\renewcommand{\si}[1]{\SI{#1}}
 
 \begin{document}
 \title{Enhancements for Monte Carlo Tree Search in The Mario AI Framework}
@@ -72,10 +74,24 @@ Choosing which node to expand can be done in multiple ways. Upper Confidence Bou
 Here $X_j$ is the average (i.e. expected) reward. $n$ is the total number of plays and $n_j$ is the number of times action $j$ was tried. Since the exploration term of the equation depends on how explored the node is compared to the parent, the confidence in a node will increase steadily until the node is eventually explored. The exploitation term will, however, make sure that good nodes will be explored more frequently than less promising ones.
 
 \subsection{The Mario AI Framework}
-The Super Mario implementation we use to test our enhancements in, is a framework 
+The framework we use to test our different artificial intelligences is called The Mario AI Benchmark 2009\cite{mario}. Through this framework we are able to implement the various AI algorithms in Java, test their performance and finally compare it to existing AIs.
 \subsubsection{The Game API}
+The interface required to implement an Agent is actually quite simple containing only five method where only 2 is relevant for the actual AI.
 
+The first method is simply \emph{reset()} that when called instructs the agent to reset all their internal content and prepare for a new simulation. This method is important for the benchmarking of the agents where the agent is playing several games consecutively.
+
+The single most important method is, however, \emph{getAction(Environment obs)}. This is where the agent actually does the calculations necessary to take an intelligent decision. In order for the game to run in real-time the agent can not use more than \si{40}{ms} since that would push the game below 25 frames per second.
+
+The \emph{Environment} provided to the agent contains all the information currently visible on the screen. The primary content of this environment is a matrix of the area surrounding Mario, Mario's coordinates and an array of coordinates for all enemies currently on the screen. The to-dimensional matrix of the environment has a width and height of 22 with Mario centered at the coordinates 11,11. Each cell contains the number for what type of terrain is at that location, these could mean ground, box, cannon-tower etc.
+
+The global coordinates provided for Mario can, with the enemy coordinates, be useful for determining how close he is to danger, and in our case to set up a correct simulation.
+
+With this information the agent is required to give an action back, which is the combination of buttons that Mario will press at this point of time. There are five different buttons available in this game; Left, Right, Down, Jump and Speed. The choices for these buttons are returned from the agent as an array with a boolean for each button.
 \subsubsection{Performance measurement}
+\label{benchmark}
+Apart from simply running and visualizing the game, the framework also includes a benchmarking tool called \emph{Stats}. When running this program with a given agent it will run 800 games of Super Mario at varying difficulty and from the results of these playthroughs it will calculate a final score for the agent. This score is based on the minimum, maximum and average score on the different difficulty levels, and is thereby actually independent of the number of games played at each difficulty. We have created a modification of this tool (\emph{MiniStats}) where each difficulty level is played fewer times, reducing the time needed for a benchmarking from 6 hours to about 30 minutes. The results from these test are valuable for getting an idea about the performance of a modification, but definitely gives a less conclusive result.
+
+Using this tool on different implementations of the agent will provide a fair comparison between them, enabling us to evaluate our different implementations against each other, and finished external agents.
 
 \subsection{Foundation}
 Vi tager simulationen fra Baumgarten

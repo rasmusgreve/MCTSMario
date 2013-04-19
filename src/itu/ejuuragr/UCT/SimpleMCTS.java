@@ -5,9 +5,7 @@ import itu.ejuuragr.MCTSTools;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.level.Level;
