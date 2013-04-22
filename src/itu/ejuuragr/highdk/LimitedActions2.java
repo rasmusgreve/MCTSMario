@@ -22,9 +22,9 @@ public class LimitedActions2 extends SimpleMCTS {
 			new boolean[]{true , false, false, true , true }, //Left Jump Speed
 			
 			new boolean[]{false, false, false, true , false}, //Jump
-			new boolean[]{false, false, false, true , true }, //Jump Speed
-			new boolean[]{false, false, true , false, false}, //Duck
-			new boolean[]{false, false, true , false, true }  //Duck Speed
+			new boolean[]{false, false, false, true , true } //Jump Speed
+			//new boolean[]{false, false, true , false, false}, //Duck
+			//new boolean[]{false, false, true , false, true }  //Duck Speed
 		});
 		
 	}

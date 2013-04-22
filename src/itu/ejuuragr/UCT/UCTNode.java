@@ -177,7 +177,7 @@ public class UCTNode implements MCTSNode{
 	 * 
 	 * @return An ArrayList of the indices for any missing children.
 	 */
-	private ArrayList<Integer> getUnexpanded(){
+	protected ArrayList<Integer> getUnexpanded(){
 		ArrayList<Integer> result = new ArrayList<Integer>();
 		for(int i = 0; i < MCTSTools.CHILDREN; i++){
 			if(children[i] == null) result.add(i);
@@ -218,7 +218,7 @@ public class UCTNode implements MCTSNode{
 		// 0.5 for standing still, 1 for sprinting right, 0 for sprinting left
 		reward = 0.5 + ((state.mario.x - parent.state.mario.x)/MAX_XDIF)/2.0;
 		
-		if(MCTSTools.isInGap(state)) reward /= 10; //TODO: Remove me!
+		//if(MCTSTools.isInGap(state)) reward /= 10; //TODO: Remove me!
 		
 		if (reward < 0 || reward > 1){
 			MCTSTools.print("Warning! Reward out of bounds: " + reward);
