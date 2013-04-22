@@ -3,17 +3,18 @@ package itu.ejuuragr.UCT;
 
 import itu.ejuuragr.MCTSTools;
 import ch.idsia.mario.environments.Environment;
+import ch.idsia.scenarios.Stats;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
 public class EnhancementTester extends SimpleMCTS {
 	
-	public static final boolean USE_SOFTMAX = false;
-	public static final boolean USE_MACRO_ACTIONS = false;
-	public static final boolean USE_PARTIAL_EXPANSION = false;
-	public static final boolean USE_ROULETTE_WHEEL_SELECTION = true;
+	public static boolean USE_SOFTMAX = false;
+	public static boolean USE_MACRO_ACTIONS = false;
+	public static boolean USE_PARTIAL_EXPANSION = false;
+	public static boolean USE_ROULETTE_WHEEL_SELECTION = true;
 	
-	public static final boolean USE_HOLE_DETECTION = false;
-	public static final boolean USE_LIMITED_ACTIONS = false;
+	public static boolean USE_HOLE_DETECTION = false;
+	public static boolean USE_LIMITED_ACTIONS = false;
 	
 	//Softmax
 	public static double Q = (USE_SOFTMAX) ? 0.25 : 0.0; // 0 = avg, 1 = max
@@ -35,7 +36,21 @@ public class EnhancementTester extends SimpleMCTS {
 	
 	public EnhancementTester()
 	{
+		
+		if (Stats.ARGUMENTS != null && Stats.ARGUMENTS.length >= 10)
+		{
+			USE_SOFTMAX = "1".equals(Stats.ARGUMENTS[4]);
+			USE_MACRO_ACTIONS = "1".equals(Stats.ARGUMENTS[5]);
+			USE_PARTIAL_EXPANSION = "1".equals(Stats.ARGUMENTS[6]);
+			USE_ROULETTE_WHEEL_SELECTION = "1".equals(Stats.ARGUMENTS[7]);
+			USE_HOLE_DETECTION = "1".equals(Stats.ARGUMENTS[8]);
+			USE_LIMITED_ACTIONS = "1".equals(Stats.ARGUMENTS[9]);
+			System.out.println("Settings: " + ((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
+		}
+		
 		setName(((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
+		
+		
 	}
 	
 	private boolean isInDanger(Environment obs)
