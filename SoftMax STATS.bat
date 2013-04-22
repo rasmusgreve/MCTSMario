@@ -22,8 +22,8 @@ echo Softmax done (3/7)
 
 echo %DATE% %TIME%
 
-echo Testing Softmax, RSL:4 cp:0.375 Q:0.25
-java itu.ejuuragr.MiniStats itu.ejuuragr.softmax.SoftMaxMCTS 0 4 0.375 0.25 >> "SoftMax 4 0.375 0.25.txt"
+echo Testing Softmax, RSL:4 cp:0.1875 Q:0.375
+java itu.ejuuragr.MiniStats itu.ejuuragr.softmax.SoftMaxMCTS 0 4 0.1875 0.375 >> "SoftMax 4 0.1875 0.375.txt"
 echo Softmax done (4/7)
 
 echo %DATE% %TIME%
@@ -34,8 +34,8 @@ echo Softmax done (5/7)
 
 echo %DATE% %TIME%
 
-echo Testing Softmax, RSL:4 cp:0.75 Q:0.5
-java itu.ejuuragr.MiniStats itu.ejuuragr.softmax.SoftMaxMCTS 0 4 0.75 0.5 >> "SoftMax 4 0.75 0.5.txt"
+echo Testing Softmax, RSL:4 cp:0.1875 Q:0.75
+java itu.ejuuragr.MiniStats itu.ejuuragr.softmax.SoftMaxMCTS 0 4 0.1875 0.75 >> "SoftMax 4 0.1875 0.75.txt"
 echo Softmax done (6/7)
 
 echo %DATE% %TIME%

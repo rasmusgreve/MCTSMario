@@ -8,7 +8,6 @@ public class MacroActionsNode extends UCTNode {
 	public MacroActionsNode(LevelScene state, boolean[] action, UCTNode parent) {
 		super(state, action, parent);
 		MAX_XDIF = ((MacroActions.CURRENT_ACTION_SIZE+SimpleMCTS.RANDOM_SAMPLES_LIMIT*MacroActions.CURRENT_ACTION_SIZE)*11.0);
-		//System.out.println("MAX X DIF: " + MAX_XDIF);
 	}
 	
 	@Override
