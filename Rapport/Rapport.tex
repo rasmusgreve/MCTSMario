@@ -94,7 +94,9 @@ Apart from simply running and visualizing the game, the framework also includes 
 Using this tool on different implementations of the agent will provide a fair comparison between them, enabling us to evaluate our different implementations against each other, and finished external agents.
 
 \subsection{Foundation}
-Vi tager simulationen fra Baumgarten
+The MCTS algorithm requires a correct simulation of future actions in order to determine what action lead to the best outcome. Therefore we are using the simulation classes by Robin Baumgarten extracted from the benchmark tool itself. This simulations lets us keep a game state for each tree node of our simulation and when needed we can copy the state, set the next action for Mario and progress the simulation one tick further.
+
+We also noticed that Baumgarten had problems with the gaps in his A* solution, and because of that the simulation includes information of whether or not Mario is currently inside a gap. We have chosen to use this small piece of code instead of calculating it again ourselves (In section \ref{hole}).
 
 \clearpage
 
@@ -102,7 +104,7 @@ Vi tager simulationen fra Baumgarten
 In this section we will go over the different implementations and enhancements that we have experimented with. For enhancements including a value that can be tweaked we have tried finding the optimal setting, and in the end we have combined enhancements which complement each other well.
 
 \subsection{Monte Carlo Tree Search with UCB}
-To have a baseline for comparison and an implementation to build on, we started by implementing the basic Monte Carlo Tree Search algorithm with Upper Confidence Bounds for selection of nodes.
+To have a baseline for comparison and an implementation to build on, we started by implementing the basic Monte Carlo Tree Search algorithm with Upper Confidence Bounds for selection of nodes. It is evident that many basic implementations of MCTS includes UCT\cite{mspacman}, which also makes good sense in our context, due to the positive effect of a tree unbalanced towards the best nodes.
 
 \subsubsection{Description}
 The characteristics of basic MCTS with UCB are that 
@@ -125,6 +127,7 @@ Another important factor that made us disable the down button was that while the
 Blablabla om specifikke actions
 
 \paragraph{Hole Detection}
+\label{hole}
 Blablabla om hole detection
 
 \subsubsection{Implementation}
