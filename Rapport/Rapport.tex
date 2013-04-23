@@ -119,28 +119,37 @@ Source \cite{mctssurvey}
 While MCTS on it's own does show some intelligent behaviour, we felt like we had to introduce some domain knowledge to the algorithm to make it perform better. Otherwise most of the enhancements to make wouldn't really show much difference, as it in any case would lead to quite a large amount of random behaviour.
 
 \subsubsection{Description}
-\paragraph{Down button}
+We have experimented with including two different types of domain knowledge; reducing the action space by eliminating some less sensible actions from the possibilities, and informing the search of danger conditions before the danger is really threatening.
+
+\paragraph{Down button} %TODO Skrives færdig når vi har endeligt besluttet om vi bruger -down hele tiden
 The absolute first piece of domain knowledge that we introduced was to remove the possibility of pressing the down arrow making Mario duck. In a very few cases it indeed does make sense to duck - under a bullet or a flying monster - but while it can be of use, it also doubles the action space from 16 to 32 possible actions which reduces the reachable depth significantly.
 Another important factor that made us disable the down button was that while the down button is pressed, pressing left or right does not make Mario move.
 
 \paragraph{Specific actions}
-Blablabla om specifikke actions
+A very important piece of domain knowledge that can be introduced is to reduce the action space by removing actions that either doesn't make any sense, or just doesn't make sense to consider.
+The actions that doesn't make any sense are combinations where both the left and the right key is pressed simultaneously, since a combination where neither of those keys are pressed exist as well.
+Since Mario isn't able to move left or right while ducking and it doesn't give a great advantage we also decided to eliminate all actions containing the down key.
+The final two actions we have removed in this enhancement is the action where no keys are pressed and the one where only the speed key is pressed. We chose to remove these as well since they would only be needed very rarely and removing them brings our total action space down to a set of 10 actions
 
 \paragraph{Hole Detection}
 \label{hole}
-Blablabla om hole detection
+While testing our different enhancements we quickly discovered that the distance we were able to simulate ahead was very limited. A frequently occurring obstacle in Super Mario is holes which Mario has to jump over in order to survive. This proved to be a challenge when the distance we could search was limited to only one or two blocks ahead, since Mario wouldn't discover the risk of dying at the bottom of a hole before he was well down in it.
+
 
 \subsubsection{Implementation}
 
 \paragraph{Down button and specific actions}
-Blablabla om specifikke actions
+In our test suite we made ourself a utility class with several reusable functions across different enhancements. Some of these methods had to do with determining which actions are available. Implementation of and testing these two enhancements was simply a matter of removing the down button altogether in the first case, and setting the exact available action in the latter.
+
+
 \paragraph{Hole detection}
-Blablabla om hole detection
+In order to reduce the risk of falling into the holes we added a enhancement to the reward function. Heavily inspired by Robin Baumgartens' implementation we made the reward function return a tenth of the computed value if the position was found to be in a hole.
 
 \subsubsection{Behaviour}
 
 \paragraph{Down button and specific actions}
 Blablabla om specifikke actions
+
 \paragraph{Hole detection}
 Blablabla om hole detection
 
@@ -159,9 +168,16 @@ We use equation \ref{eq:softmax_equation} to calculate the exploration part for 
 %---------------------------------------------------------
 \subsection{Macro actions}
 \label{macro}
-\cite{salesman}
+Powley et al demonstrate the benefits of using macro actions in MCTS for the physical traveling salesman problem\cite{salesman}. As the physical travelling salesman problem share the physical properties with Super Mario, this approach might also show an improvement for us.
+
 \subsubsection{Description}
+Searching using macro actions means that when a search node is expanded, instead of performing the action just once, the same action is performed multiple times in a row before a child node is generated. 
+%TODO Hvorfor giver det mening (forstærker gode/dårlige spor)
+%TODO Forøger søgetiden på samme træ
 \subsubsection{Implementation}
+%TODO Grundlæggende detaljer
+%TODO Vi skifter til micro hvis tæt på monster/hul
+
 \subsubsection{Behaviour}
 %---------------------------------------------------------
 \subsection{Heuristic Partial Tree Expansion Policy}
