@@ -2,12 +2,13 @@ package itu.ejuuragr.UCT;
 
 
 import itu.ejuuragr.MCTSTools;
+import itu.ejuuragr.softmax.SoftMaxUCTNode;
 import ch.idsia.mario.environments.Environment;
 import ch.idsia.scenarios.Stats;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
 public class EnhancementTester extends SimpleMCTS {
-	
+
 	public static boolean USE_SOFTMAX 					= true;
 	public static boolean USE_MACRO_ACTIONS 			= true;
 	public static boolean USE_PARTIAL_EXPANSION 		= true;
@@ -37,17 +38,19 @@ public class EnhancementTester extends SimpleMCTS {
 	public EnhancementTester()
 	{
 		
-		if (Stats.ARGUMENTS != null && Stats.ARGUMENTS.length >= 10)
+		if (Stats.ARGUMENTS != null && Stats.ARGUMENTS.length >= 11)
 		{
-			USE_SOFTMAX = "1".equals(Stats.ARGUMENTS[4]);
-			USE_MACRO_ACTIONS = "1".equals(Stats.ARGUMENTS[5]);
-			USE_PARTIAL_EXPANSION = "1".equals(Stats.ARGUMENTS[6]);
-			USE_ROULETTE_WHEEL_SELECTION = "1".equals(Stats.ARGUMENTS[7]);
-			USE_HOLE_DETECTION = "1".equals(Stats.ARGUMENTS[8]);
-			USE_LIMITED_ACTIONS = "1".equals(Stats.ARGUMENTS[9]);
+			Q = Double.parseDouble(Stats.ARGUMENTS[4]);
+			System.out.println("Setting Q = " + Q);
+			USE_SOFTMAX = "1".equals(Stats.ARGUMENTS[5]);
+			USE_MACRO_ACTIONS = "1".equals(Stats.ARGUMENTS[6]);
+			USE_PARTIAL_EXPANSION = "1".equals(Stats.ARGUMENTS[7]);
+			USE_ROULETTE_WHEEL_SELECTION = "1".equals(Stats.ARGUMENTS[8]);
+			USE_HOLE_DETECTION = "1".equals(Stats.ARGUMENTS[9]);
+			USE_LIMITED_ACTIONS = "1".equals(Stats.ARGUMENTS[10]);
 			System.out.println("Settings: " + ((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
 		}
-		
+		Q = (USE_SOFTMAX) ? Q : 0.0;
 		setName(((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
 		
 		
