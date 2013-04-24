@@ -220,8 +220,17 @@ Since we in our implementation expand nodes through multiple iterations, we have
 \subsubsection{Behaviour}
 %---------------------------------------------------------
 \subsection{Roulette Wheel Selection}
+In implementations of Monte Carlo Tree Search where nodes are expanded fully at once, this enhancement doesn't make any difference. In our case though, we expand nodes through multiple iterations. This means that actions leading from a node to its children must be considered in some order. In the basic implementation we just pick a random action to apply when expanding, but with this enhancement we explore the possibility of using a heuristically guided ordering of expansion through Roulette Wheel Selection.
+
 \subsubsection{Description}
+Roulette Wheel Selection or Fitness proportionate selection as its called in genetic algorithms, is a technique used to heuristically guide a random selection towards the most promising choice without removing the random possibility of choosing a less fit choice before a more fit one. Each choice is given a width on the roulette wheel corresponding to their expected fitness, such that actions from which we expect a high reward get a large width, and actions with a low expected reward is given less.
+When an action wins, it is removed from the roulette and the analogy crumbles a little bit, since the area where the action was, cease to exist on our roulette.
+
+Our estimation of actions' expected reward is based on the choices made in successful playthroughs performed previously and are static throughout an entire game of Super Mario from start to end.
+
 \subsubsection{Implementation}
+
+
 \subsubsection{Behaviour}
 %---------------------------------------------------------
 \subsection{Checkpoints}
@@ -321,7 +330,7 @@ Her er noget mere tekst, reference til figur \ref{fig:followed}
 \section{Conclusion}
 \clearpage
 
-\begin{thebibliography}{9}
+\begin{thebibliography}{9} %Uses IEEE citation style
 \bibitem{mctssurvey}
   C. B. Browne, E. Powley, D. Whitehouse, S. M. Lucas, P. I. Cowling, P. Rohlfshagen, S. Tavener, D. Perez, S. Samothrakis, and S. Colton, “A survey of monte carlo tree search methods,” Computational Intelligence and AI in Games, IEEE Transactions on, vol. 4, no. 1, pp. 1–43, 2012.
 
