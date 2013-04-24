@@ -91,7 +91,7 @@ public class EnhancementTesterNode extends UCTNode {
 	private void setScores(){
 		this.actionScores = !EnhancementTester.USE_LIMITED_ACTIONS ? new int[]{14,20,17,1,0,0,0,0,48,28,23,1,0,0,0,0,19,14,172,1,0,0,0,0,29,9,242,1,0,0,0,0} 
 		: new int[]{0,20,17,0,0,0,0,0,48,28,23,0,0,0,0,0,0,14,172,0,0,0,0,0,29,9,242,0,0,0,0,0};
-			this.scoreSum =  !EnhancementTester.USE_LIMITED_ACTIONS ? 684 : 602;
+			this.scoreSum =  !EnhancementTester.USE_LIMITED_ACTIONS ? 639 : 602;
 
 		if (!EnhancementTester.USE_ROULETTE_WHEEL_SELECTION)
 		{
