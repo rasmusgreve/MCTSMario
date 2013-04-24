@@ -8,10 +8,10 @@ import competition.cig.robinbaumgarten.astar.LevelScene;
 
 public class EnhancementTester extends SimpleMCTS {
 
-	public static boolean USE_SOFTMAX 					= true;
-	public static boolean USE_MACRO_ACTIONS 			= true;
-	public static boolean USE_PARTIAL_EXPANSION 		= true;
-	public static boolean USE_ROULETTE_WHEEL_SELECTION  = true;
+	public static boolean USE_SOFTMAX 					= false;
+	public static boolean USE_MACRO_ACTIONS 			= false;
+	public static boolean USE_PARTIAL_EXPANSION 		= false;
+	public static boolean USE_ROULETTE_WHEEL_SELECTION  = false;
 	
 	public static boolean USE_HOLE_DETECTION  			= false;
 	public static boolean USE_LIMITED_ACTIONS 			= false;
