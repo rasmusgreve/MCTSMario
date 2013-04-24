@@ -89,7 +89,7 @@ public class EnhancementTesterNode extends UCTNode {
 	}
 	
 	private void setScores(){
-		this.actionScores = !EnhancementTester.USE_LIMITED_ACTIONS ? new int[]{14,20,17,1,17,1,1,1,48,28,23,1,0,0,0,0,19,14,172,1,22,1,1,1,29,9,242,1,0,0,0,0} 
+		this.actionScores = !EnhancementTester.USE_LIMITED_ACTIONS ? new int[]{14,20,17,1,0,0,0,0,48,28,23,1,0,0,0,0,19,14,172,1,0,0,0,0,29,9,242,1,0,0,0,0} 
 		: new int[]{0,20,17,0,0,0,0,0,48,28,23,0,0,0,0,0,0,14,172,0,0,0,0,0,29,9,242,0,0,0,0,0};
 			this.scoreSum =  !EnhancementTester.USE_LIMITED_ACTIONS ? 684 : 602;
 
