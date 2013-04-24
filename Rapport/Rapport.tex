@@ -171,21 +171,25 @@ We use equation \ref{eq:softmax_equation} to calculate the exploration part for 
 Powley et al demonstrate the benefits of using macro actions in MCTS for the physical traveling salesman problem\cite{salesman}. As the physical travelling salesman problem share the physical properties with Super Mario, this approach might also show an improvement for us.
 
 \subsubsection{Description}
-Searching using macro actions means that when a search node is expanded, instead of performing the action just once, the same action is performed multiple times in a row before a child node is generated. 
-%TODO Hvorfor giver det mening (forstærker gode/dårlige spor)
-%TODO Forøger søgetiden på samme træ
+Searching using macro actions means that when a search node is expanded, instead of performing the action just once, the same action is performed multiple times in a row before a child node is generated.
+The benefit we get from this enhancement is that the value of the resulting state will be amplified such that actions going in a good direction will give a larger reward this way. Likewise actions leading in a less promising direction could potentially show a losing terminal state in fewer search steps.
+
+Another advantage of using macro actions is that after an actions has been decided it will be performed for the next $n$ game ticks. This means that for the next $n$ ticks, the actions is already chosen and the search tree for the next decision can be build over multiple game ticks, resulting in ideally $n$ times as many search nodes.
+
 \subsubsection{Implementation}
-%TODO Grundlæggende detaljer
-%TODO Vi skifter til micro hvis tæt på monster/hul
+The implementation of macro actions in its basic form is pretty straight forward. We maintain a counter keeping track of the current repetition of the action. If the counter has hit the limit, the next action to perform is extracted from the tree. If not, the current tree is expanded.
+
+During tests of this we quickly saw that while the intention was good enough, the behaviour turned very defensive. Mario would stop quite a distance before a hole and not do much and when approached by a monster he would run away from it and only rarely engage in combat.
+
+This of course was a result of a great limitation that comes along with macro actions; only a coarse path through the level can be planned with macro actions. Overcoming holes and monsters require "micro" planning as fine movement is needed to go to the edge of hole and to avoid or kill the monsters.
+
+To get around this drawback we added a simple rule to this enhancement; if Mario is within a certain distance of a monster or a hole the planning strategy will switch to an action size of 1 effectively disabling macro actions as long as micro actions are needed.
 
 \subsubsection{Behaviour}
+
+
 %---------------------------------------------------------
-\subsection{Partial Expansion}
-\subsubsection{Description}
-\subsubsection{Implementation}
-\subsubsection{Behaviour}
-%---------------------------------------------------------
-\subsection{Roulette Wheel Selection}
+\subsection{Heuristic Partial Tree Expansion Policy}
 \subsubsection{Description}
 \subsubsection{Implementation}
 \subsubsection{Behaviour}
