@@ -115,8 +115,6 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	/**
 	 * Performs MCTS for the most optimal move for 39 ms and
 	 * returns the action that seems to lead to the best outcome.
-	 * It will reuse the tree for MAX_REUSES times and then
-	 * create a brand new tree with the given Environment.
 	 * 
 	 * @param obs The Environment just recieved from the game.
 	 * @return The action that seems to be best.

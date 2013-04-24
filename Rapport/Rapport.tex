@@ -115,6 +115,7 @@ Source \cite{mctssurvey}
 
 \subsubsection{Behaviour}
 
+%---------------------------------------------------------
 \subsection{Domain knowledge}
 While MCTS on it's own does show some intelligent behaviour, we felt like we had to introduce some domain knowledge to the algorithm to make it perform better. Otherwise most of the enhancements to make wouldn't really show much difference, as it in any case would lead to quite a large amount of random behaviour.
 
@@ -154,14 +155,26 @@ Blablabla om specifikke actions
 Blablabla om hole detection
 
 %---------------------------------------------------------
-\subsection{Softmax Backup}
+\subsection{Softmax Backup} %TODO Meanmax måske?
+Changing how the backpropagation phase of the algorithm calculates a new value of parent nodes, will alter the order in which nodes are selected for expansion by the tree policy. By experimenting with different techniques we try to find the method which gives the best results in Super Mario. %TODO Sidste sætning er ret skidt
+
 \subsubsection{Description}
+The first technique for backpropagation we tried, was using the average of children's rewards as the reward of parents. This is described in %TODO reference
+and seems like a reasonable way of re-evaluating a node.
+Another technique we discussed was to propagate the value of the child with the highest reward, up through the tree. %TODO reference? Someone must have done this
+%TODO Lead to miximax/meanmax/something
+
+
+\subsubsection{Implementation}
+Changing how backpropagation works requires change in both the backup method as well as the method for calculating the confidence of a node used for the tree policy.
+For each node we store a list of descendants' rewards as well as the currently highest reward of all descendants. The list and maximum is updated through the backup method which inserts the new value in the list, and replaces the maximum value if appropriate.
+
+The change in the confidence calculation is a change only to the exploitation part of UCT, since this enhancement changes our interpretation of an expected reward from expanded nodes, and does not change how we weight exploring unexpanded nodes.
+
 \begin{equation}\label{eq:softmax_equation}
 exploitation = Q * maxReward + (1 - Q ) * averageReward
 \end{equation}
-We use equation \ref{eq:softmax_equation} to calculate the exploration part for the confidence of nodes
-
-\subsubsection{Implementation}
+We use equation \ref{eq:softmax_equation} to calculate the exploitation part for the confidence of nodes
 
 \subsubsection{Behaviour}
 
@@ -176,7 +189,7 @@ The benefit we get from this enhancement is that the value of the resulting stat
 
 Another advantage of using macro actions is that after an actions has been decided it will be performed for the next $n$ game ticks. This means that for the next $n$ ticks, the actions is already chosen and the search tree for the next decision can be build over multiple game ticks, resulting in ideally $n$ times as many search nodes.
 
-\subsubsection{Implementation}
+\subsubsection{Implementation} %TODO Action size 3?
 The implementation of macro actions in its basic form is pretty straight forward. We maintain a counter keeping track of the current repetition of the action. If the counter has hit the limit, the next action to perform is extracted from the tree. If not, the current tree is expanded.
 
 During tests of this we quickly saw that while the intention was good enough, the behaviour turned very defensive. Mario would stop quite a distance before a hole and not do much and when approached by a monster he would run away from it and only rarely engage in combat.
@@ -186,10 +199,27 @@ This of course was a result of a great limitation that comes along with macro ac
 To get around this drawback we added a simple rule to this enhancement; if Mario is within a certain distance of a monster or a hole the planning strategy will switch to an action size of 1 effectively disabling macro actions as long as micro actions are needed.
 
 \subsubsection{Behaviour}
+The use of macro actions without a way to switch to using a normal action size performs very poorly. It often either gets stuck in front of holes or flee away from monsters which the unmodified algorithm could easily overcome. 
+When the additional ability to switch to the normal planning size is added, the macro actions enhancement performs roughly the same as the unmodified algorithm. 
+A nice difference can be seen in some rare cases though. When Mario is presented with an option to either go below a row of blocks to face many monsters or above the row and run straight past the danger, using macro actions seems to tend to choose the route above the row of blocks. 
+This may very well be connected to the relatively deeper search in terms of map distances, made possible by both the extended period a search tree is expanded but mostly the greater distance Mario travels when committing to performing each action multiple times in a row.
 
+%TODO Fixes the tower stalling thing
 
 %---------------------------------------------------------
-\subsection{Heuristic Partial Tree Expansion Policy}
+\subsection{Partial Expansion}
+In standard Monte Carlo Tree search as described in %TODO reference
+a node is fully expanded in either one or multiple iterations, before any children of this node is expanded.
+Since we in our implementation expand nodes through multiple iterations, we have experimented with considering the child node of half-expanded nodes as targets for expansion.
+%TODO Progressive unpruning?
+
+\subsubsection{Description}
+%TODO Probably doesn't make sense w/o guidance in which action to expand first (e.g. roulette wheel selection)
+
+\subsubsection{Implementation}
+\subsubsection{Behaviour}
+%---------------------------------------------------------
+\subsection{Roulette Wheel Selection}
 \subsubsection{Description}
 \subsubsection{Implementation}
 \subsubsection{Behaviour}
