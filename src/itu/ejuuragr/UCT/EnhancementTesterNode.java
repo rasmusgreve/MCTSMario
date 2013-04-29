@@ -146,7 +146,7 @@ public class EnhancementTesterNode extends UCTNode {
 	}
 	
 	private double calculateConfidenceNew(double cp){		
-		double exploitation = 0.55;
+		double exploitation = 0.25;
 		double exploration = cp*Math.sqrt(2*Math.log(this.visited)); // this is same has dividing by 1 because the new node has obviously never been visited
 		//System.out.printf("Exploit: %f Explore: %f\n", exploitation, exploration);
 		return exploitation + exploration;
