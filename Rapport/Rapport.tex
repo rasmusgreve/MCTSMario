@@ -44,7 +44,7 @@ In this experiment we explore different implementations and enhancements of the 
 %TODO Fill this space
 \subsection{Monte Carlo Tree Search}
 
-Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by random sampling in the decision space until an outcome can be determined. A very nice property of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires no or very little domain knowledge as a basic implementation only require knowledge of the action space and a means of simulating the outcome of an action.
+Monte Carlo Tree Search has shown surprisingly good results in solving problems with large branching factors. MCTS is a tree search algorithm, where evaluation of a node is done by performing random actions in the decision space until an outcome can be determined. A very nice property of MCTS is that it is an \emph{anytime} algorithm, meaning that it can be halted when a time budget is reached and give the result that looks the most promising at the given time. Furthermore it often requires no or very little domain knowledge as a basic implementation only require knowledge of the action space and a means of simulating the outcome of an action.
 
 
 Searching in MCTS is done by iteratively by building a search tree where the nodes are game states, and the edges are actions. A node is added to the tree in each iteration and recursively, based on the reward of the new node, the reward of parent nodes are updated.
@@ -57,6 +57,7 @@ A single iteration of the MCTS building process consists of these four steps:
 \end{enumerate}
 Modifications to this core algorithm will change one or more of these steps. We will note for each modification what steps they modify.
 \subsubsection{Tree Policy}
+\label{treepolicy}
 In the beginning of each iteration the algorithm must search through the tree and determine which existing node to expand. This is done by traversing the tree until we find a node that is not fully expanded. Modifications to this part of the algorithm generally differs in the choice between existing child nodes when looking at a fully expanded node.
 \subsubsection{Expansion}
 From the node that is not fully expanded a new child node is created corresponding to performing a specific action to the state of the current node. Differences in policies here are due to selecting the new child and how the action is performed (e.g. section \ref{macro}).
@@ -113,11 +114,13 @@ Source \cite{mctssurvey}
 
 \subsubsection{Implementation}
 
+%TODO limiting default policy with rollout length
+
 \subsubsection{Behaviour}
 
 %---------------------------------------------------------
 \subsection{Domain knowledge}
-While MCTS on it's own does show some intelligent behaviour, we felt like we had to introduce some domain knowledge to the algorithm to make it perform better. Otherwise most of the enhancements to make wouldn't really show much difference, as it in any case would lead to quite a large amount of random behaviour.
+While MCTS on it's own does show some intelligent behaviour, we felt like we had to introduce some domain knowledge to the algorithm to make it perform better. Otherwise most of the enhancements we made wouldn't really show much difference, as it in any case would lead to quite a large amount of random behaviour.
 
 \subsubsection{Description}
 We have experimented with including two different types of domain knowledge; reducing the action space by eliminating some less sensible actions from the possibilities, and informing the search of danger conditions before the danger is really threatening.
@@ -155,7 +158,7 @@ Blablabla om specifikke actions
 Blablabla om hole detection
 
 %---------------------------------------------------------
-\subsection{Softmax Backup} %TODO Meanmax måske?
+\subsection{Mixmax Backup} %TODO Meanmax måske?
 Changing how the backpropagation phase of the algorithm calculates a new value of parent nodes, will alter the order in which nodes are selected for expansion by the tree policy. By experimenting with different techniques we try to find the method which gives the best results in Super Mario. %TODO Sidste sætning er ret skidt
 
 \subsubsection{Description}
@@ -171,10 +174,10 @@ For each node we store a list of descendants' rewards as well as the currently h
 
 The change in the confidence calculation is a change only to the exploitation part of UCT, since this enhancement changes our interpretation of an expected reward from expanded nodes, and does not change how we weight exploring unexpanded nodes.
 
-\begin{equation}\label{eq:softmax_equation}
+\begin{equation}\label{eq:mixmax_equation}
 exploitation = Q * maxReward + (1 - Q ) * averageReward
 \end{equation}
-We use equation \ref{eq:softmax_equation} to calculate the exploitation part for the confidence of nodes
+We use Equation \ref{eq:mixmax_equation} to calculate the exploitation part for the confidence of nodes
 
 \subsubsection{Behaviour}
 
@@ -208,22 +211,29 @@ This may very well be connected to the relatively deeper search in terms of map 
 
 %---------------------------------------------------------
 \subsection{Partial Expansion}
-In standard Monte Carlo Tree search as described by Browne et al. \cite{mctssurvey} %TODO reference
-a node is fully expanded in either one or multiple iterations, before any children of this node is expanded. We experiment with a different strategy.
+In standard Monte Carlo Tree search (as described in \ref{treepolicy}) %TODO reference
+a node is fully expanded before any of its children is visited. Since we in our implementation expand nodes through multiple iterations, we have experimented with considering the child node of half-expanded nodes as targets for expansion and creating deeper (unbalanced) trees skewed further towards promising actions. 
 %TODO Progressive unpruning?
 
 \subsubsection{Description}
-In our basic implementation of Monte Carlo Tree Search we have chosen to expand nodes in multiple iterations. This allows us to make a modification to the tree policy allowing a node to be only partially expanded before a child of the node is considered for expansion.
+The choice between choosing an existing child or expand the current node further is done by calculating an estimated confidence for a new child node. This is done by adding an estimated fixed pessimistic reward for children with a factor for how neglected the missing children are.
 
+\begin{equation}
+\label{eq:partial_equation}
+\displaystyle UCB_c = k + \sqrt{2 * \log(n_c)}
+\end{equation}
+The equation is very similar to Equation \ref{eq:ucb1}, but with some differences since some 
+%TODO
 
-Since we in our implementation expand nodes through multiple iterations, we have experimented with considering the child nodes of half-expanded nodes as targets for expansion.
-
-%TODO Probably doesn't make sense w/o guidance in which action to expand first (e.g. roulette wheel selection)
+It is important to note that this modification doesn't distinguish between the different unexpanded children and can therefore benefit from combination with a selective policy for child expansion (like Roulette Wheel Selection in section \ref{roulette}).
 
 \subsubsection{Implementation}
+When performing the ...
+%TODO MAKE
 \subsubsection{Behaviour}
 %---------------------------------------------------------
 \subsection{Roulette Wheel Selection}
+\label{roulette}
 In implementations of Monte Carlo Tree Search where nodes are expanded fully at once, this enhancement doesn't make any difference. In our case though, we expand nodes through multiple iterations. This means that actions leading from a node to its children must be considered in some order. In the basic implementation we just pick a random action to apply when expanding, but with this enhancement we explore the possibility of using a heuristically guided ordering of expansion through Roulette Wheel Selection.
 
 \subsubsection{Description}
@@ -256,14 +266,14 @@ Our estimation of actions' expected reward is based on the choices made in games
 	\begin{tabular}{| l | l |}
 		\hline
 		\textbf{Method} & \textbf{Score} 		\\ \hline
-		Softmax backup q = 0 (UCT) 			& - \\ \hline
-		Softmax backup q = $\frac{1}{8}$	& - \\ \hline
-		Softmax backup q = $\frac{1}{4}$	& - \\ \hline
-		Softmax backup q = $\frac{1}{2}$	& - \\ \hline
-		Softmax backup q = 1 (Max)			& - \\ \hline
+		Mixmax backup q = 0 (UCT) 			& - \\ \hline
+		Mixmax backup q = $\frac{1}{8}$	& - \\ \hline
+		Mixmax backup q = $\frac{1}{4}$	& - \\ \hline
+		Mixmax backup q = $\frac{1}{2}$	& - \\ \hline
+		Mixmax backup q = 1 (Max)			& - \\ \hline
 	\end{tabular}
-	\caption{Results of using Softmax backup with different q values}
-	\label{tab:softmax_results}
+	\caption{Results of using Mixmax backup with different q values}
+	\label{tab:mixmax_results}
 \end{table}
 
 \begin{table}[h]
@@ -279,7 +289,7 @@ Our estimation of actions' expected reward is based on the choices made in games
 		MCTS w/ UCT, limit = 16			& - & - \\ \hline
 		MCTS w/ UCT, limit = $\infty$	& - & - \\ \hline
 	\end{tabular}
-	\caption{Results of using UCT with a different limit for random moves}
+	\caption{Results of using UCT with a different rollout length}
 	\label{tab:uct_results}
 \end{table}
 
@@ -307,9 +317,9 @@ Our estimation of actions' expected reward is based on the choices made in games
 	\begin{tabular}{| l | l |}
 		\hline
 		\textbf{Method} & \textbf{Score} \\ \hline
-		UCT (Softmax q = 0)				& - \\ \hline
-		Max (Softmax q = 1)				& - \\ \hline
-		Softmax							& - \\ \hline
+		UCT (Mixmax q = 0)				& - \\ \hline
+		Max (Mixmax q = 1)				& - \\ \hline
+		Mixmax							& - \\ \hline
 		Limited Actions		 			& - \\ \hline
 		Hole Detection		 			& - \\ \hline
 		Macro Actions		 			& - \\ \hline
