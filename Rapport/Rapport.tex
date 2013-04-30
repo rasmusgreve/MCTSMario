@@ -216,7 +216,14 @@ a node is fully expanded before any of its children is visited. Since we in our 
 %TODO Progressive unpruning?
 
 \subsubsection{Description}
-The choice between choosing an existing child or expand the current node further is done by calculating an estimated value for a new child node. This is done by adding an estimated fixed pessimistic reward for children with a factor for how neglected the missing children are (not unlike Equation \ref{eq:ucb1}).
+The choice between choosing an existing child or expand the current node further is done by calculating an estimated confidence for a new child node. This is done by adding an estimated fixed pessimistic reward for children with a factor for how neglected the missing children are.
+
+\begin{equation}
+\label{eq:partial_equation}
+\displaystyle UCB_c = k + \sqrt{2 * \log(n_c)}
+\end{equation}
+The equation is very similar to Equation \ref{eq:ucb1}, but with some differences since some 
+%TODO
 
 It is important to note that this modification doesn't distinguish between the different unexpanded children and can therefore benefit from combination with a selective policy for child expansion (like Roulette Wheel Selection in section \ref{roulette}).
 
