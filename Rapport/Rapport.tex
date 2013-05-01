@@ -70,7 +70,7 @@ The final reward calculated after performing the default policy is saved in the 
 Choosing which node to expand can be done in multiple ways. Upper Confidence Bound (UCB) is a bandit based approach to choosing the most urgent node to expand. The quality with UCB is that it allows for prioritizing between exploration of less tried nodes, and exploitation of seemingly promising nodes.
 \begin{equation}
 \label{eq:ucb1}
-\displaystyle UCB_j = \overline{X}_j + \sqrt{\frac{2 * \log(n)}{n_j}}
+\displaystyle UCB_j = \overline{X}_j + C_p * \sqrt{\frac{2 * \log(n)}{n_j}}
 \end{equation}
 Here $X_j$ is the average (i.e. expected) reward. $n$ is the total number of plays and $n_j$ is the number of times action $j$ was tried. Since the exploration term of the equation depends on how explored the node is compared to the parent, the confidence in a node will increase steadily until the node is eventually explored. The exploitation term will, however, make sure that good nodes will be explored more frequently than less promising ones.
 
@@ -216,20 +216,22 @@ a node is fully expanded before any of its children is visited. Since we in our 
 %TODO Progressive unpruning?
 
 \subsubsection{Description}
-The choice between choosing an existing child or expand the current node further is done by calculating an estimated confidence for a new child node. This is done by adding an estimated fixed pessimistic reward for children with a factor for how neglected the missing children are.
+The choice between choosing an existing child or expand the current node further is done by calculating an estimated confidence for a new child node. This is done by adding an estimated fixed reward for children with a factor for how neglected the missing children are.
 
 \begin{equation}
 \label{eq:partial_equation}
-\displaystyle UCB_c = k + \sqrt{2 * \log(n_c)}
+\displaystyle UCB_c = k + C_p * \sqrt{\frac{2 * \log(n)}{c_n}}
 \end{equation}
-The equation is very similar to Equation \ref{eq:ucb1}, but with some differences since some 
-%TODO
+This equation is very similar to Equation \ref{eq:ucb1}, but with some differences since the non-existent nodes don't have a calculated reward and have never been visited. The $k$-value is the standard reward for non-existent children, we set this constant to 0,50. $c_n$ is the number of expanded children on the current node. This way nodes will be gradually expanded with nodes higher in the tree being expanded more than lower ones.
 
-It is important to note that this modification doesn't distinguish between the different unexpanded children and can therefore benefit from combination with a selective policy for child expansion (like Roulette Wheel Selection in section \ref{roulette}).
+It is important to note that this modification in itself doesn't distinguish between the different unexpanded children and can therefore benefit from combination with a selective policy for child expansion (like Roulette Wheel Selection in section \ref{roulette}).
 
 \subsubsection{Implementation}
-When performing the ...
-%TODO MAKE
+We have implemented Partial Expansion to modify the Tree Policy and the following expansion.
+
+The Tree Policy differs in that it propagates down the tree until the \emph{getBestChildTuple} method returns a new node (instead of and existing child node). Since a new child can be created at any level of the tree, this method returns a tuple containing the node and a boolean value denoting if the result is newly created.
+
+In the method it will (like the standard \emph{getbestChild} method) see what child has the highest confidence. If the highest confidence is less than the need to expand a new child (according to Equation \ref{eq:partial_equation} it will create a new child (randomly chosen).
 \subsubsection{Behaviour}
 %---------------------------------------------------------
 \subsection{Roulette Wheel Selection}
