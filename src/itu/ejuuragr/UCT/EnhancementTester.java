@@ -19,7 +19,7 @@ public class EnhancementTester extends SimpleMCTS {
 	
 	
 	//Softmax
-	public static double Q = (USE_SOFTMAX) ? 0.25 : 0.0; // 0 = avg, 1 = max
+	public static double Q = (USE_SOFTMAX) ? 0.375 : 0.0; // 0 = avg, 1 = max
 	//Macro actions
 	public static int MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? 3 : 1; //How many times to repeat each action
 	
