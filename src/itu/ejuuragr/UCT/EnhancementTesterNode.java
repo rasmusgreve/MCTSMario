@@ -115,7 +115,7 @@ public class EnhancementTesterNode extends UCTNode {
 			double curScore;
 			if(children[i] != null){
 				curScore = children[i].calculateConfidence(cp);
-			}else if(actionScores[i] != 0){ // the difference
+			}else if(actionScores[i] != 0){ 
 				curScore = newScore;
 			}else{
 				continue;

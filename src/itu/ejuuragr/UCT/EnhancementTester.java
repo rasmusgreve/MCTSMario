@@ -21,7 +21,7 @@ public class EnhancementTester extends SimpleMCTS {
 	//Softmax
 	public static double Q = (USE_SOFTMAX) ? 0.25 : 0.0; // 0 = avg, 1 = max
 	//Macro actions
-	public static final int MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? 3 : 1; //How many times to repeat each action
+	public static int MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? 3 : 1; //How many times to repeat each action
 	
 	public static final int MONSTER_DANGER_DISTANCE_BACKWARD = 2; //Threshold distance backwards of monsters for switching to micro actions
 	public static final int MONSTER_DANGER_DISTANCE_FORWARD = 4; //Threshold distance forwards of monsters for switching to micro actions
@@ -32,7 +32,6 @@ public class EnhancementTester extends SimpleMCTS {
 	public static int CURRENT_ACTION_SIZE = MACRO_ACTION_SIZE; //The current action size (1 when in danger)
 	int moveCount = Integer.MAX_VALUE-1;
 	boolean[] curAction;
-	
 	
 	public EnhancementTester()
 	{
@@ -50,6 +49,7 @@ public class EnhancementTester extends SimpleMCTS {
 			System.out.println("Settings: " + ((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
 		}
 		Q = (USE_SOFTMAX) ? Q : 0.0;
+		MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? MACRO_ACTION_SIZE : 1;
 		setName("uct " + ((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
 		
 		
@@ -140,10 +140,18 @@ public class EnhancementTester extends SimpleMCTS {
 	}
 
 	@Override
-	public UCTNode treePolicy(UCTNode v) {
+	public UCTNode treePolicy(UCTNode vi) {
+		EnhancementTesterNode v = (EnhancementTesterNode) vi;
 		if (!USE_PARTIAL_EXPANSION)
-			return super.treePolicy(v);
-		
+		{
+			while(true){
+				if(!v.isExpanded()){
+					return v.expand();
+				}else{
+					v = (EnhancementTesterNode) v.getBestChild(cp);
+				}
+			}
+		}
 		EnhancementTesterNode w = (EnhancementTesterNode) v;
 		MCTSTools.Tuple<EnhancementTesterNode,Boolean> p;
 		do{

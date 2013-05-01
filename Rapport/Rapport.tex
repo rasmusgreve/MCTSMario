@@ -164,7 +164,7 @@ Changing how the backpropagation phase of the algorithm calculates a new value o
 \subsubsection{Description}
 The first technique for backpropagation we tried, was using the average of children's rewards as the reward of parents. This is described in %TODO reference
 and seems like a reasonable way of re-evaluating a node.
-Another technique we discussed was to propagate the value of the child with the highest reward, up through the tree. %TODO reference? Someone must have done this
+Another technique we discussed was to propagate the value of the child with the highest reward, up through the tree. %TODO reference? Someone might have done this
 %TODO Lead to miximax/meanmax/something
 
 
@@ -184,7 +184,7 @@ We use Equation \ref{eq:mixmax_equation} to calculate the exploitation part for 
 %---------------------------------------------------------
 \subsection{Macro actions}
 \label{macro}
-Powley et al demonstrate the benefits of using macro actions in MCTS for the physical traveling salesman problem\cite{salesman}. As the physical travelling salesman problem share the physical properties with Super Mario, this approach might also show an improvement for us.
+Powley et al. demonstrate the benefits of using macro actions in MCTS for the physical traveling salesman problem\cite{salesman}. As the physical travelling salesman problem share the physical properties with Super Mario, this approach could possibly show an improvement for us as well.
 
 \subsubsection{Description}
 Searching using macro actions means that when a search node is expanded, instead of performing the action just once, the same action is performed multiple times in a row before a child node is generated.
@@ -216,7 +216,14 @@ a node is fully expanded before any of its children is visited. Since we in our 
 %TODO Progressive unpruning?
 
 \subsubsection{Description}
-The choice between choosing an existing child or expand the current node further is done by calculating an estimated value for a new child node. This is done by adding an estimated fixed pessimistic reward for children with a factor for how neglected the missing children are (not unlike Equation \ref{eq:ucb1}).
+The choice between choosing an existing child or expand the current node further is done by calculating an estimated confidence for a new child node. This is done by adding an estimated fixed pessimistic reward for children with a factor for how neglected the missing children are.
+
+\begin{equation}
+\label{eq:partial_equation}
+\displaystyle UCB_c = k + \sqrt{2 * \log(n_c)}
+\end{equation}
+The equation is very similar to Equation \ref{eq:ucb1}, but with some differences since some 
+%TODO
 
 It is important to note that this modification doesn't distinguish between the different unexpanded children and can therefore benefit from combination with a selective policy for child expansion (like Roulette Wheel Selection in section \ref{roulette}).
 
@@ -230,10 +237,10 @@ When performing the ...
 In implementations of Monte Carlo Tree Search where nodes are expanded fully at once, this enhancement doesn't make any difference. In our case though, we expand nodes through multiple iterations. This means that actions leading from a node to its children must be considered in some order. In the basic implementation we just pick a random action to apply when expanding, but with this enhancement we explore the possibility of using a heuristically guided ordering of expansion through Roulette Wheel Selection.
 
 \subsubsection{Description}
-Roulette Wheel Selection or Fitness proportionate selection as its called in genetic algorithms, is a technique used to heuristically guide a random selection towards the most promising choice without removing the random possibility of choosing a less fit choice before a more fit one. Each choice is given a width on the roulette wheel corresponding to their expected fitness, such that actions from which we expect a high reward get a large width, and actions with a low expected reward is given less.
+Roulette Wheel Selection or Fitness proportionate selection as it's called in genetic algorithms, is a technique used to heuristically guide a random selection towards the most promising choice without removing the random possibility of choosing a less fit choice before a more fit one. Each choice is given a width on the roulette wheel corresponding to their expected fitness, such that actions from which we expect a high reward get a large width, and actions with a low expected reward is given less.
 When an action wins, it is removed from the roulette and the analogy crumbles a little bit, since the area where the action was, cease to exist on our roulette.
 
-Our estimation of actions' expected reward is based on the choices made in successful playthroughs performed previously and are static throughout an entire game of Super Mario from start to end.
+Our estimation of actions' expected reward is based on the choices made in games played previously and are static throughout an entire game of Super Mario from start to end.
 
 \subsubsection{Implementation}
 
