@@ -3,6 +3,7 @@ package itu.ejuuragr;
 import ch.idsia.ai.agents.Agent;
 import ch.idsia.ai.agents.AgentsPool;
 import ch.idsia.ai.agents.ai.TimingAgent;
+import ch.idsia.mario.engine.sprites.Mario;
 import ch.idsia.scenarios.Stats;
 import ch.idsia.tools.EvaluationOptions;
 import ch.idsia.tools.CmdLineOptions;
@@ -32,14 +33,15 @@ public class MiniStats2 {
         options.setMaxFPS(true);
         System.out.println("Testing controller " + agent.getName() + " with starting seed " + startingSeed);
         
-        StatisticalSummary ss = new StatisticalSummary ();
+        StatisticalSummary ssScore = new StatisticalSummary ();
+        StatisticalSummary ssTimeLeft = new StatisticalSummary ();
         for (int i = 0; i < numberOfTrials; i++)
-        	testConfig (controller, options, 131626201 + i, 20, false, ss);
+        	testConfig (controller, options, 131626201 + i, 20, false, ssScore, ssTimeLeft);
         
-        System.out.printf("Results: Mean: %.4f SD: (%.4f), (min %.4f max %.4f)\n", ss.mean(), ss.sd(), ss.min(), ss.max());
+        System.out.printf("Results: Score mean: %.2f SD: (%.2f), Time left on wins, mean: %.2f SD: (%.2f)\n", ssScore.mean(), ssScore.sd(), ssTimeLeft.mean(), ssTimeLeft.sd());
     }
 
-    public static void testConfig (TimingAgent controller, EvaluationOptions options, int seed, int level, boolean paused, StatisticalSummary ss) {
+    public static void testConfig (TimingAgent controller, EvaluationOptions options, int seed, int level, boolean paused, StatisticalSummary ssScore, StatisticalSummary ssTimeLeft) {
         options.setLevelDifficulty(level);
         options.setPauseWorld(paused);
         options.setLevelRandSeed(seed);
@@ -49,9 +51,13 @@ public class MiniStats2 {
         
         Evaluator evaluator = new Evaluator (options);
         EvaluationInfo result = evaluator.evaluate().get(0);
-        ss.add (result.computeDistancePassed());
+
+        ssScore.add (result.computeDistancePassed());
         
-        System.out.printf("Score from seed %9d : %.1f\n", seed, result.computeDistancePassed());
+        if(result.marioStatus == Mario.STATUS_WIN)
+        	ssTimeLeft.add(result.timeLeft);
+        	
+        	System.out.printf("Score from seed %9d : %.1f - time left %3d %s\n", seed, result.computeDistancePassed(),result.timeLeft, (result.marioStatus == Mario.STATUS_WIN) ? "WIN (time recorded)" : "");
         
     }
 
