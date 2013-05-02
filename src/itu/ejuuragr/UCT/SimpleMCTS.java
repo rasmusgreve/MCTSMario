@@ -25,8 +25,8 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	
 	protected static int TIME_PER_TICK = 39; // milliseconds
 
-	public static int RANDOM_SAMPLES_LIMIT = 8;
-	public static double cp = 0.5;
+	public static int RANDOM_SAMPLES_LIMIT = 6;
+	public static double cp = 0.25;
 	private boolean SAVE_NEXT_TREE = false;
 	protected int maxDepth = 0;
 	
