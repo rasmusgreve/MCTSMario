@@ -50,10 +50,49 @@ public class EnhancementTester extends SimpleMCTS {
 		}
 		Q = (USE_SOFTMAX) ? Q : 0.0;
 		MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? MACRO_ACTION_SIZE : 1;
-		setName("uct " + ((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
+		updateName();
 		
 		
 	}
+	
+	public void setSoftmax(boolean v)
+	{
+		USE_SOFTMAX = v;
+		Q = (USE_SOFTMAX) ? 0.125 : 0.0;
+		updateName();
+	}
+	public void setMacro(boolean v)
+	{
+		USE_MACRO_ACTIONS = v;
+		MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? 3 : 1; //How many times to repeat each action
+		updateName();
+	}
+	public void setPartial(boolean v)
+	{
+		USE_PARTIAL_EXPANSION = v;
+		updateName();
+	}
+	public void setRoulette(boolean v)
+	{
+		USE_ROULETTE_WHEEL_SELECTION = v;
+		updateName();
+	}
+	public void setHole(boolean v)
+	{
+		USE_HOLE_DETECTION = v;
+		updateName();
+	}
+	public void setLimited(boolean v)
+	{
+		USE_LIMITED_ACTIONS = v;
+		updateName();
+	}
+	
+	private void updateName()
+	{
+		setName("uct " + ((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
+	}
+	
 	
 	private boolean isInDanger(Environment obs)
 	{
