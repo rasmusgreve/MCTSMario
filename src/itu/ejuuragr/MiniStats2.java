@@ -13,7 +13,7 @@ import ch.idsia.utils.StatisticalSummary;
 
 public class MiniStats2 {
 
-    final static int numberOfTrials = 50;
+    final static int numberOfTrials = 100;
 
     public static void main(String[] args) {
     	Stats.ARGUMENTS = args;
