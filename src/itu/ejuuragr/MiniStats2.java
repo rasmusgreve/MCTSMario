@@ -1,5 +1,7 @@
 package itu.ejuuragr;
 
+import competition.cig.robinbaumgarten.AStarAgent;
+
 import ch.idsia.ai.agents.Agent;
 import ch.idsia.ai.agents.AgentsPool;
 import ch.idsia.ai.agents.ai.TimingAgent;
