@@ -2,10 +2,8 @@ package itu.ejuuragr;
 
 import itu.ejuuragr.UCT.EnhancementTester;
 import java.io.FileWriter;
-import competition.cig.robinbaumgarten.AStarAgent;
 
 import ch.idsia.ai.agents.Agent;
-import ch.idsia.ai.agents.AgentsPool;
 import ch.idsia.ai.agents.ai.TimingAgent;
 import ch.idsia.mario.engine.sprites.Mario;
 import ch.idsia.scenarios.Stats;
@@ -21,7 +19,7 @@ public class MiniStats2 {
     final static int numberOfTrials = 50;
     
     private static BufferedWriter out;
-    
+
     public static void main(String[] args) {
     	Stats.ARGUMENTS = args;
         //Agent controller = AgentsPool.load (args[0]);
