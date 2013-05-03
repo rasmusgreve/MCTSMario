@@ -26,13 +26,14 @@ public class MiniStats2 {
     	Stats.ARGUMENTS = args;
         //Agent controller = AgentsPool.load (args[0]);
     	
-    	EnhancementTester controller = new EnhancementTester();
+    	EnhancementTester controller;
     	try{
     	out = new BufferedWriter(new FileWriter("Big Stats Results.txt"));
     	}
     	catch(Exception e){}
         for (int i = 0; i < 64; i++)
         {
+        	controller = new EnhancementTester();
         	controller.setSoftmax(	(i & (1<<0)) != 0);
         	controller.setMacro(	(i & (1<<1)) != 0);
         	controller.setPartial(	(i & (1<<2)) != 0);
