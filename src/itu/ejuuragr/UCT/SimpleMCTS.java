@@ -78,7 +78,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		this.name = name;
 	}
 	
-	private void fixSimulationErrors(Environment obs)
+	protected void fixSimulationErrors(Environment obs)
 	{
 		if (root != null && root.state != null)
 		{
@@ -217,7 +217,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	 * 
 	 * @param obs The current state of the game to simulate from.
 	 */
-	private void initRoot(){
+	protected void initRoot(){
 		LevelScene	l = new LevelScene();
 		l.init();
 		l.level = new Level(1500,15);
