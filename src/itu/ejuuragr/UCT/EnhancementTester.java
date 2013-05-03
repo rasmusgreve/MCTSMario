@@ -55,6 +55,13 @@ public class EnhancementTester extends SimpleMCTS {
 		
 	}
 	
+	@Override
+	public void reset()
+	{
+		super.reset();
+		moveCount = Integer.MAX_VALUE-1;
+	}
+	
 	public void setSoftmax(boolean v)
 	{
 		USE_SOFTMAX = v;
