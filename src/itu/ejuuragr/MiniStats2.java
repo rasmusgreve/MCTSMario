@@ -1,8 +1,8 @@
 package itu.ejuuragr;
 
 import itu.ejuuragr.UCT.EnhancementTester;
-
 import java.io.FileWriter;
+import competition.cig.robinbaumgarten.AStarAgent;
 
 import ch.idsia.ai.agents.Agent;
 import ch.idsia.ai.agents.AgentsPool;
