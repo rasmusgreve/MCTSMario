@@ -8,18 +8,18 @@ import competition.cig.robinbaumgarten.astar.LevelScene;
 
 public class EnhancementTester extends SimpleMCTS {
 
-	public static boolean USE_SOFTMAX 					= false;
+	public static boolean USE_SOFTMAX 					= true;
 	public static boolean USE_MACRO_ACTIONS 			= false;
-	public static boolean USE_PARTIAL_EXPANSION 		= false;
-	public static boolean USE_ROULETTE_WHEEL_SELECTION  = false;
+	public static boolean USE_PARTIAL_EXPANSION 		= true;
+	public static boolean USE_ROULETTE_WHEEL_SELECTION  = true;
 	
-	public static boolean USE_HOLE_DETECTION  			= false;
-	public static boolean USE_LIMITED_ACTIONS 			= false;
+	public static boolean USE_HOLE_DETECTION  			= true;
+	public static boolean USE_LIMITED_ACTIONS 			= true;
 	
 	
 	
 	//Softmax
-	public static double Q = (USE_SOFTMAX) ? 0.375 : 0.0; // 0 = avg, 1 = max
+	public static double Q = (USE_SOFTMAX) ? 0.125 : 0.0; // 0 = avg, 1 = max
 	//Macro actions
 	public static int MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? 3 : 1; //How many times to repeat each action
 	
@@ -50,10 +50,49 @@ public class EnhancementTester extends SimpleMCTS {
 		}
 		Q = (USE_SOFTMAX) ? Q : 0.0;
 		MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? MACRO_ACTION_SIZE : 1;
-		setName("uct " + ((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
+		updateName();
 		
 		
 	}
+	
+	public void setSoftmax(boolean v)
+	{
+		USE_SOFTMAX = v;
+		Q = (USE_SOFTMAX) ? 0.125 : 0.0;
+		updateName();
+	}
+	public void setMacro(boolean v)
+	{
+		USE_MACRO_ACTIONS = v;
+		MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? 3 : 1; //How many times to repeat each action
+		updateName();
+	}
+	public void setPartial(boolean v)
+	{
+		USE_PARTIAL_EXPANSION = v;
+		updateName();
+	}
+	public void setRoulette(boolean v)
+	{
+		USE_ROULETTE_WHEEL_SELECTION = v;
+		updateName();
+	}
+	public void setHole(boolean v)
+	{
+		USE_HOLE_DETECTION = v;
+		updateName();
+	}
+	public void setLimited(boolean v)
+	{
+		USE_LIMITED_ACTIONS = v;
+		updateName();
+	}
+	
+	private void updateName()
+	{
+		setName("uct " + ((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
+	}
+	
 	
 	private boolean isInDanger(Environment obs)
 	{
