@@ -9,7 +9,7 @@ import competition.cig.robinbaumgarten.astar.LevelScene;
 public class EnhancementTester extends SimpleMCTS {
 
 	public static boolean USE_SOFTMAX 					= false;
-	public static boolean USE_MACRO_ACTIONS 			= false;
+	public static boolean USE_MACRO_ACTIONS 			= true;
 	public static boolean USE_PARTIAL_EXPANSION 		= false;
 	public static boolean USE_ROULETTE_WHEEL_SELECTION  = false;
 	
@@ -148,11 +148,6 @@ public class EnhancementTester extends SimpleMCTS {
 		}
 		else
 		{
-			if(root == null){
-				initRoot();
-				//Before searching
-				clearRoot(obs);  //reset root, add observation information
-			}
 			
 			//Continue work on current tree
 			long startTime = System.currentTimeMillis();
