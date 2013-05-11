@@ -355,6 +355,7 @@ public class Mario extends Sprite
         if (y > world.level.height * 16 + 16)
         {
             die();
+            System.out.print("Death by gap "); //ejuuragr addition for debugging
         }
 
         if (x < 0)
@@ -639,6 +640,7 @@ public class Mario extends Sprite
         else
         {
             die();
+            System.out.print("Death by monster "); //ejuuragr addition for debugging
         }
     }
 
