@@ -40,13 +40,12 @@ public class CheckpointNode extends UCTNode {
 		
 		double checkpointValue = 1.0 / (checkpoints.size()-1); // value for each checkpoint
 		
-		double baseValue = 0.0; // default value
 		double clearedValue = (cleared) * checkpointValue; // value for cleared checkpoints
 		double progress = Math.max(0.0, 1.0 - (distToPoint(checkpoints.get(cleared+1)) / 
 				distBetweenPoints(checkpoints.get(cleared), checkpoints.get(cleared+1))));
 		double progressValue = checkpointValue * progress; // progress towards next
 		
-		double result = baseValue + clearedValue + progressValue;
+		double result = clearedValue + progressValue;
 				 
 		//MCTSTools.print("Reward: "+(baseValue + clearedValue + progressValue)+" cleared: "+clearedValue + " progress: "+progressValue + " ("+checkpoints.size() + " cps)");
 		return result;
