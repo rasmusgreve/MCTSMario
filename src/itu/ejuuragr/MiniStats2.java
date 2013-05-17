@@ -16,7 +16,7 @@ import java.io.*;
 
 public class MiniStats2 {
 
-    final static int numberOfTrials = 50;
+    final static int numberOfTrials = 100;
     
     private static BufferedWriter out;
 
@@ -26,18 +26,18 @@ public class MiniStats2 {
     	
     	EnhancementTester controller;
     	try{
-    	out = new BufferedWriter(new FileWriter("Big Stats Results.txt"));
+    	out = new BufferedWriter(new FileWriter("Big Stats Mixmax Results.txt"));
     	}
     	catch(Exception e){}
-        for (int i = 0; i < 64; i++)
+        for (int i = 10; i < 32; i++)
         {
         	controller = new EnhancementTester();
-        	controller.setSoftmax(	(i & (1<<0)) != 0);
-        	controller.setMacro(	(i & (1<<1)) != 0);
-        	controller.setPartial(	(i & (1<<2)) != 0);
-        	controller.setRoulette(	(i & (1<<3)) != 0);
-        	controller.setHole(		(i & (1<<4)) != 0);
-        	controller.setLimited(	(i & (1<<5)) != 0);
+        	controller.setSoftmax(	true			 );
+        	controller.setMacro(	(i & (1<<0)) != 0);
+        	controller.setPartial(	(i & (1<<1)) != 0);
+        	controller.setRoulette(	(i & (1<<2)) != 0);
+        	controller.setHole(		(i & (1<<3)) != 0);
+        	controller.setLimited(	(i & (1<<4)) != 0);
         	doStats (controller);
         }
         try{
