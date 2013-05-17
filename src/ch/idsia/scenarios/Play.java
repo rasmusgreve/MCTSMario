@@ -30,6 +30,7 @@ public class Play {
         options.setNumberOfTrials(1);
         options.setMatlabFileName("");
         options.setLevelRandSeed((int) (Math.random () * Integer.MAX_VALUE));
+
         //options.setLevelRandSeed(849982662);
         options.setLevelLength(10000);
         options.setTimeLimit(1337);

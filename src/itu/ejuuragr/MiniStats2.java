@@ -25,8 +25,28 @@ public class MiniStats2 {
         //Agent controller = AgentsPool.load (args[0]);
     	
     	EnhancementTester controller;
-    	controller = new EnhancementTester();
-    	doStats (controller);
+
+    	try{
+    	out = new BufferedWriter(new FileWriter("Big Stats Mixmax Results.txt"));
+    	}
+    	catch(Exception e){}
+        for (int i = 10; i < 64; i++)
+        {
+        	controller = new EnhancementTester();
+        	controller.setSoftmax(	(i & (1<<0)) != 0);
+        	controller.setMacro(	(i & (1<<1)) != 0);
+        	controller.setPartial(	(i & (1<<2)) != 0);
+        	controller.setRoulette(	(i & (1<<3)) != 0);
+        	controller.setHole(		(i & (1<<4)) != 0);
+        	controller.setLimited(	(i & (1<<5)) != 0);
+        	doStats (controller);
+        }
+        try{
+		out.flush();
+		out.close();
+    	}
+    	catch(Exception e){}
+        
         System.exit(0);
 
     }

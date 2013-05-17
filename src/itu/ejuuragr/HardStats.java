@@ -13,7 +13,7 @@ import ch.idsia.utils.StatisticalSummary;
 
 public class HardStats {
 
-    final static int numberOfTrials = 50;
+    final static int numberOfTrials = 100;
 
     public static void main(String[] args) {
     	Stats.ARGUMENTS = args;
@@ -36,7 +36,7 @@ public class HardStats {
         StatisticalSummary ssScore = new StatisticalSummary ();
         StatisticalSummary ssTimeLeft = new StatisticalSummary ();
         for (int i = 0; i < numberOfTrials; i++)
-        	testConfig (controller, options, 131626201 + i, 20, false, ssScore, ssTimeLeft);
+        	testConfig (controller, options, 131626201 + i + startingSeed, 20, false, ssScore, ssTimeLeft);
         
         System.out.printf("Results: Score mean: %.2f SD: (%.2f), Time left on wins, mean: %.2f SD: (%.2f)\n", ssScore.mean(), ssScore.sd(), ssTimeLeft.mean(), ssTimeLeft.sd());
     }
