@@ -30,7 +30,7 @@ public class MiniStats2 {
     	out = new BufferedWriter(new FileWriter("Big Stats Mixmax Results.txt"));
     	}
     	catch(Exception e){}
-        for (int i = 10; i < 32; i++)
+        for (int i = 10; i < 64; i++)
         {
         	controller = new EnhancementTester();
         	controller.setSoftmax(	(i & (1<<0)) != 0);
