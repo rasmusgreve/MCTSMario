@@ -38,9 +38,9 @@ public class CheckpointNode extends UCTNode {
 		if (parent != null && MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) return 0.0;
 
 		
-		double checkpointValue = 0.75 / (checkpoints.size()-1); // value for each checkpoint
+		double checkpointValue = 1.0 / (checkpoints.size()-1); // value for each checkpoint
 		
-		double baseValue = 0.25; // default value
+		double baseValue = 0.0; // default value
 		double clearedValue = (cleared) * checkpointValue; // value for cleared checkpoints
 		double progress = Math.max(0.0, 1.0 - (distToPoint(checkpoints.get(cleared+1)) / 
 				distBetweenPoints(checkpoints.get(cleared), checkpoints.get(cleared+1))));
