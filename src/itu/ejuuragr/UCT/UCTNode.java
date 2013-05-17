@@ -213,16 +213,17 @@ public class UCTNode implements MCTSNode{
 		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) {
 			return 0.0;
 		}
-		
 		double reward;
 		// 0.5 for standing still, 1 for sprinting right, 0 for sprinting left
 		reward = 0.5 + ((state.mario.x - parent.state.mario.x)/MAX_XDIF)/2.0;
-		
+		//reward = state.mario.x / 4400;
 		//if(MCTSTools.isInGap(state)) reward /= 10; //TODO: Remove me!
 		
 		if (reward < 0 || reward > 1){
 			MCTSTools.print("Warning! Reward out of bounds: " + reward);
 		}
+		
+		
 		return reward;
 	}
 	

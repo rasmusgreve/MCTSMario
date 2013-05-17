@@ -31,6 +31,10 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
 	    public static boolean SAVE_NEXT_FRAME = false;
 	    public static int[] BESTLINE_XS;
 	    public static int[] BESTLINE_YS;
+	    public static int[] POSITIONS_XS;
+	    public static int[] POSITIONS_YS;
+	    public static double[] POSITIONS_VALUES;
+	    
 	    
 	    public static ArrayList<float[]> checkpoints;
     /*
@@ -258,6 +262,28 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
                     	}
                     }
                     
+                    //Find min and max value
+                    double min = 1;
+                    double max = 0;
+                    for (double d : POSITIONS_VALUES)
+                    {
+                    	if (d == 0.0) continue;
+                    	if (d < min) min = d;
+                    	if (d > max) max = d;
+                    }
+                    
+                    if (POSITIONS_XS != null)
+                    {
+                    	og.setColor(Color.BLUE);
+                    	for (int i = 0; i < POSITIONS_XS.length; i++)
+                    	{
+                    		og.setColor(new Color(100,100,Math.max(0,Math.min((int)(((POSITIONS_VALUES[i] - min)/(max-min))*255),255))));
+                    		
+                    		int x = POSITIONS_XS[i] - xCam;
+                    		int y = POSITIONS_YS[i];
+                    		og.drawOval(x-2, y-2, 4, 4);
+                    	}
+                    }
                     og.setColor(Color.RED);
                     if (BESTLINE_XS != null)
                     {

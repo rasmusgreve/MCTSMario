@@ -14,6 +14,7 @@ public class WilcoxonAnalysis {
 	public WilcoxonAnalysis(String filename, int samples, int tests) throws Exception
 	{
 		File f = new File(filename);
+		@SuppressWarnings("resource")
 		BufferedReader reader = new BufferedReader(new FileReader(f));
 
 		statsResults = new StatsResult[tests];
@@ -72,11 +73,13 @@ public class WilcoxonAnalysis {
 		StatsResult second = statsResults[resultIndex];
 		int samples = first.values.length;
 		AbsDifAndSign[] primaryDifs = new AbsDifAndSign[samples];
+		
 		//Step 1 - calc absdif and sign
 		for (int sample = 0; sample < samples; sample++)
 		{
 			primaryDifs[sample] = new AbsDifAndSign(first.values[sample], second.values[sample]);
-		}		
+		}
+		
 		//Step 2 - remove 0 absdifs
 		ArrayList<AbsDifAndSign> reducedDifsList = new ArrayList<AbsDifAndSign>();
 		for (AbsDifAndSign abs : primaryDifs)
@@ -85,6 +88,7 @@ public class WilcoxonAnalysis {
 			reducedDifsList.add(abs);
 		}
 		AbsDifAndSign[] reducedDifs = reducedDifsList.toArray(new AbsDifAndSign[reducedDifsList.size()]);
+		
 		//Step 3 - order
 		Arrays.sort(reducedDifs);
 
@@ -125,7 +129,7 @@ public class WilcoxonAnalysis {
 		double z = (W - .5) / sigma;
 		
 		
-		//Extra step - display p interval
+		//Extra step - display p interval (based on table from http://vassarstats.net/textbook/ch12a.html )
 		System.out.print(second.title + " same as " + first.title + " : ");
 		if (z < 1.645)
 		{
