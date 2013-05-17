@@ -25,6 +25,7 @@ public class MiniStats2 {
         //Agent controller = AgentsPool.load (args[0]);
     	
     	EnhancementTester controller;
+
     	try{
     	out = new BufferedWriter(new FileWriter("Big Stats Mixmax Results.txt"));
     	}
@@ -32,12 +33,12 @@ public class MiniStats2 {
         for (int i = 10; i < 32; i++)
         {
         	controller = new EnhancementTester();
-        	controller.setSoftmax(	true			 );
-        	controller.setMacro(	(i & (1<<0)) != 0);
-        	controller.setPartial(	(i & (1<<1)) != 0);
-        	controller.setRoulette(	(i & (1<<2)) != 0);
-        	controller.setHole(		(i & (1<<3)) != 0);
-        	controller.setLimited(	(i & (1<<4)) != 0);
+        	controller.setSoftmax(	(i & (1<<0)) != 0);
+        	controller.setMacro(	(i & (1<<1)) != 0);
+        	controller.setPartial(	(i & (1<<2)) != 0);
+        	controller.setRoulette(	(i & (1<<3)) != 0);
+        	controller.setHole(		(i & (1<<4)) != 0);
+        	controller.setLimited(	(i & (1<<5)) != 0);
         	doStats (controller);
         }
         try{
@@ -45,6 +46,7 @@ public class MiniStats2 {
 		out.close();
     	}
     	catch(Exception e){}
+        
         System.exit(0);
 
     }
@@ -52,7 +54,7 @@ public class MiniStats2 {
     public static void print(String msg)
     {
     	System.out.println(msg);
-    	try{out.write(msg + "\n");out.flush();} catch(Exception e){}
+    	//try{out.write(msg + "\n");out.flush();} catch(Exception e){}
     }
     
     public static void doStats (Agent agent) {
@@ -85,6 +87,7 @@ public class MiniStats2 {
         EvaluationInfo result = evaluator.evaluate().get(0);
 
         ssScore.add (result.computeDistancePassed());
+        
         
         if(result.marioStatus == Mario.STATUS_WIN)
         	ssTimeLeft.add(result.timeLeft);

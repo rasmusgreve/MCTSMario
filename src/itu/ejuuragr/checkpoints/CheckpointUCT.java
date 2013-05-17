@@ -24,12 +24,15 @@ public class CheckpointUCT extends SimpleMCTS {
 
 	@Override
 	public UCTNode createRoot(LevelScene state) {
-		return new CheckpointNode(state,null,null,calculateCheckpoints(),1);
+		return new CheckpointNode(state,null,null,calculateCheckpoints(),0);
 	}
 
 	@Override
 	public boolean[] getAction(Environment obs) {
 		observations = obs;
+		
+		//System.out.println(obs.getMarioFloatPos()[1]);
+		
 		return super.getAction(obs);
 	}
 

@@ -153,7 +153,7 @@ public class UCTNode implements MCTSNode{
 	public double advanceXandReward(int ticks){
 		// check for immediate death
 		double curReward = this.calculateReward(state);
-		if(curReward <= TERMINAL_MARGIN) return curReward; // no need to check further
+		if(curReward <= TERMINAL_MARGIN || curReward >= 1.0) return curReward; // no need to check further
 		
 		LevelScene copy = null;
 		try {
@@ -207,16 +207,24 @@ public class UCTNode implements MCTSNode{
 	 * 0 is worst and 1 is best.
 	 */
 	public double calculateReward(LevelScene state){
+		double change = MCTSTools.marioShrunk(parent.state.mario, state.mario);
 		if(state.mario.deathTime > 0){
 			return 0.0;
 		}
-		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) {
+		else if (change > 1.0) {
 			return 0.0;
 		}
+		
+		/*if(reachedEnd(state)){
+			//System.out.println("REACHED END");
+			return 1.0;
+		}*/
 		
 		double reward;
 		// 0.5 for standing still, 1 for sprinting right, 0 for sprinting left
 		reward = 0.5 + ((state.mario.x - parent.state.mario.x)/MAX_XDIF)/2.0;
+		
+		//if(change < 1.0) /* grew */ reward = Math.min(1.0, reward*2);
 		
 		//if(MCTSTools.isInGap(state)) reward /= 10; //TODO: Remove me!
 		
@@ -224,6 +232,18 @@ public class UCTNode implements MCTSNode{
 			MCTSTools.print("Warning! Reward out of bounds: " + reward);
 		}
 		return reward;
+	}
+	
+	private boolean reachedEnd(LevelScene state){
+		return state.mario.winTime > 0 || state.mario.x - 176 >= rootX();
+	}
+	
+	private float rootX(){
+		UCTNode cur = this;
+		while(cur.parent != null){
+			cur = cur.parent;
+		}
+		return cur.state.mario.x;
 	}
 	
 	/**

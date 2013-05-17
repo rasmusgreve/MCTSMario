@@ -15,6 +15,7 @@
 %\graphicspath{ {C:\Users\Rasmus\workspace\MCTSMario\Rapport} }
 \renewcommand{\si}[1]{\SI{#1}}
 
+
 \begin{document}
 \title{Enhancements for Monte Carlo Tree Search in The Mario AI Framework}
 \date{May 22, 2013}
@@ -34,6 +35,9 @@ framework. We have identified a set of refinements and alterations of the algori
 and through implementation and evaluation of these individually we came up
 with compositions that greatly increase the performance of the AI.
 \end{abstract}
+\clearpage
+
+\tableofcontents
 \clearpage
 
 \section{Introduction}
@@ -94,7 +98,7 @@ Apart from simply running and visualizing the game, the framework also includes 
 
 Using this tool on different implementations of the agent will provide a fair comparison between them, enabling us to evaluate our different implementations against each other, and finished external agents.
 
-\subsection{Foundation}
+\subsection{Code Foundation}
 The MCTS algorithm requires a correct simulation of future actions in order to determine what action lead to the best outcome. Therefore we are using the simulation classes by Robin Baumgarten extracted from the benchmark tool itself. This simulations lets us keep a game state for each tree node of our simulation and when needed we can copy the state, set the next action for Mario and progress the simulation one tick further.
 
 We also noticed that Baumgarten had problems with the gaps in his A* solution, and because of that the simulation includes information of whether or not Mario is currently inside a gap. We have chosen to use this small piece of code instead of calculating it again ourselves (In section \ref{hole}).
@@ -104,25 +108,25 @@ We also noticed that Baumgarten had problems with the gaps in his A* solution, a
 \section{Approach and Enhancements}
 In this section we will go over the different implementations and enhancements that we have experimented with. For enhancements including a value that can be tweaked we have tried finding the optimal setting, and in the end we have combined enhancements which complement each other well.
 
-\subsection{Monte Carlo Tree Search with UCB}
+\subsection{Monte Carlo Tree Search}
 To have a baseline for comparison and an implementation to build on, we started by implementing the basic Monte Carlo Tree Search algorithm with Upper Confidence Bounds for selection of nodes. It is evident that many basic implementations of MCTS includes UCT\cite{mspacman}, which also makes good sense in our context, due to the positive effect of a tree unbalanced towards the best nodes.
 
-\subsubsection{Description}
+\subsubsection*{Description}
 The characteristics of basic MCTS with UCB are that 
 
 Source \cite{mctssurvey}
 
-\subsubsection{Implementation}
+\subsubsection*{Implementation}
 
 %TODO limiting default policy with rollout length
 
-\subsubsection{Behaviour}
+\subsubsection*{Behaviour}
 
 %---------------------------------------------------------
 \subsection{Domain knowledge}
 While MCTS on it's own does show some intelligent behaviour, we felt like we had to introduce some domain knowledge to the algorithm to make it perform better. Otherwise most of the enhancements we made wouldn't really show much difference, as it in any case would lead to quite a large amount of random behaviour.
 
-\subsubsection{Description}
+\subsubsection*{Description}
 We have experimented with including two different types of domain knowledge; reducing the action space by eliminating some less sensible actions from the possibilities, and informing the search of danger conditions before the danger is really threatening.
 
 \paragraph{Down button} %TODO Skrives færdig når vi har endeligt besluttet om vi bruger -down hele tiden
@@ -140,7 +144,7 @@ The final two actions we have removed in this enhancement is the action where no
 While testing our different enhancements we quickly discovered that the distance we were able to simulate ahead was very limited. A frequently occurring obstacle in Super Mario is holes which Mario has to jump over in order to survive. This proved to be a challenge when the distance we could search was limited to only one or two blocks ahead, since Mario wouldn't discover the risk of dying at the bottom of a hole before he was well down in it.
 
 
-\subsubsection{Implementation}
+\subsubsection*{Implementation}
 
 \paragraph{Down button and specific actions}
 In our test suite we made ourself a utility class with several reusable functions across different enhancements. Some of these methods had to do with determining which actions are available. Implementation of and testing these two enhancements was simply a matter of removing the down button altogether in the first case, and setting the exact available action in the latter.
@@ -149,7 +153,7 @@ In our test suite we made ourself a utility class with several reusable function
 \paragraph{Hole detection}
 In order to reduce the risk of falling into the holes we added a enhancement to the reward function. Heavily inspired by Robin Baumgartens' implementation we made the reward function return a tenth of the computed value if the position was found to be in a hole.
 
-\subsubsection{Behaviour}
+\subsubsection*{Behaviour}
 
 \paragraph{Down button and specific actions}
 Blablabla om specifikke actions
@@ -161,14 +165,14 @@ Blablabla om hole detection
 \subsection{Mixmax Backup} %TODO Meanmax måske?
 Changing how the backpropagation phase of the algorithm calculates a new value of parent nodes, will alter the order in which nodes are selected for expansion by the tree policy. By experimenting with different techniques we try to find the method which gives the best results in Super Mario. %TODO Sidste sætning er ret skidt
 
-\subsubsection{Description}
+\subsubsection*{Description}
 The first technique for backpropagation we tried, was using the average of children's rewards as the reward of parents. This is described in %TODO reference
 and seems like a reasonable way of re-evaluating a node.
 Another technique we discussed was to propagate the value of the child with the highest reward, up through the tree. %TODO reference? Someone must have done this
 %TODO Lead to miximax/meanmax/something
 
 
-\subsubsection{Implementation}
+\subsubsection*{Implementation}
 Changing how backpropagation works requires change in both the backup method as well as the method for calculating the confidence of a node used for the tree policy.
 For each node we store a list of descendants' rewards as well as the currently highest reward of all descendants. The list and maximum is updated through the backup method which inserts the new value in the list, and replaces the maximum value if appropriate.
 
@@ -179,20 +183,20 @@ exploitation = Q * maxReward + (1 - Q ) * averageReward
 \end{equation}
 We use Equation \ref{eq:mixmax_equation} to calculate the exploitation part for the confidence of nodes
 
-\subsubsection{Behaviour}
+\subsubsection*{Behaviour}
 
 %---------------------------------------------------------
 \subsection{Macro actions}
 \label{macro}
 Powley et al demonstrate the benefits of using macro actions in MCTS for the physical traveling salesman problem\cite{salesman}. As the physical travelling salesman problem share the physical properties with Super Mario, this approach might also show an improvement for us.
 
-\subsubsection{Description}
+\subsubsection*{Description}
 Searching using macro actions means that when a search node is expanded, instead of performing the action just once, the same action is performed multiple times in a row before a child node is generated.
 The benefit we get from this enhancement is that the value of the resulting state will be amplified such that actions going in a good direction will give a larger reward this way. Likewise actions leading in a less promising direction could potentially show a losing terminal state in fewer search steps.
 
 Another advantage of using macro actions is that after an actions has been decided it will be performed for the next $n$ game ticks. This means that for the next $n$ ticks, the actions is already chosen and the search tree for the next decision can be build over multiple game ticks, resulting in ideally $n$ times as many search nodes.
 
-\subsubsection{Implementation} %TODO Action size 3?
+\subsubsection*{Implementation} %TODO Action size 3?
 The implementation of macro actions in its basic form is pretty straight forward. We maintain a counter keeping track of the current repetition of the action. If the counter has hit the limit, the next action to perform is extracted from the tree. If not, the current tree is expanded.
 
 During tests of this we quickly saw that while the intention was good enough, the behaviour turned very defensive. Mario would stop quite a distance before a hole and not do much and when approached by a monster he would run away from it and only rarely engage in combat.
@@ -201,7 +205,7 @@ This of course was a result of a great limitation that comes along with macro ac
 
 To get around this drawback we added a simple rule to this enhancement; if Mario is within a certain distance of a monster or a hole the planning strategy will switch to an action size of 1 effectively disabling macro actions as long as micro actions are needed.
 
-\subsubsection{Behaviour}
+\subsubsection*{Behaviour}
 The use of macro actions without a way to switch to using a normal action size performs very poorly. It often either gets stuck in front of holes or flee away from monsters which the unmodified algorithm could easily overcome. 
 When the additional ability to switch to the normal planning size is added, the macro actions enhancement performs roughly the same as the unmodified algorithm. 
 A nice difference can be seen in some rare cases though. When Mario is presented with an option to either go below a row of blocks to face many monsters or above the row and run straight past the danger, using macro actions seems to tend to choose the route above the row of blocks. 
@@ -215,7 +219,7 @@ In standard Monte Carlo Tree search (as described in \ref{treepolicy}) %TODO ref
 a node is fully expanded before any of its children is visited. Since we in our implementation expand nodes through multiple iterations, we have experimented with considering the child node of half-expanded nodes as targets for expansion and creating deeper (unbalanced) trees skewed further towards promising actions. 
 %TODO Progressive unpruning?
 
-\subsubsection{Description}
+\subsubsection*{Description}
 The choice between choosing an existing child or expand the current node further is done by calculating an estimated confidence for a new child node. This is done by adding an estimated fixed reward for children with a factor for how neglected the missing children are.
 
 \begin{equation}
@@ -226,38 +230,38 @@ This equation is very similar to Equation \ref{eq:ucb1}, but with some differenc
 
 It is important to note that this modification in itself doesn't distinguish between the different unexpanded children and can therefore benefit from combination with a selective policy for child expansion (like Roulette Wheel Selection in section \ref{roulette}).
 
-\subsubsection{Implementation}
+\subsubsection*{Implementation}
 We have implemented Partial Expansion to modify the Tree Policy and the following expansion.
 
 The Tree Policy differs in that it propagates down the tree until the \emph{getBestChildTuple} method returns a new node (instead of and existing child node). Since a new child can be created at any level of the tree, this method returns a tuple containing the node and a boolean value denoting if the result is newly created.
 
 In the method it will (like the standard \emph{getbestChild} method) see what child has the highest confidence. If the highest confidence is less than the need to expand a new child (according to Equation \ref{eq:partial_equation} it will create a new child (randomly chosen).
-\subsubsection{Behaviour}
+\subsubsection*{Behaviour}
 %---------------------------------------------------------
 \subsection{Roulette Wheel Selection}
 \label{roulette}
 In implementations of Monte Carlo Tree Search where nodes are expanded fully at once, this enhancement doesn't make any difference. In our case though, we expand nodes through multiple iterations. This means that actions leading from a node to its children must be considered in some order. In the basic implementation we just pick a random action to apply when expanding, but with this enhancement we explore the possibility of using a heuristically guided ordering of expansion through Roulette Wheel Selection.
 
-\subsubsection{Description}
+\subsubsection*{Description}
 Roulette Wheel Selection or Fitness proportionate selection as its called in genetic algorithms, is a technique used to heuristically guide a random selection towards the most promising choice without removing the random possibility of choosing a less fit choice before a more fit one. Each choice is given a width on the roulette wheel corresponding to their expected fitness, such that actions from which we expect a high reward get a large width, and actions with a low expected reward is given less.
 When an action wins, it is removed from the roulette and the analogy crumbles a little bit, since the area where the action was, cease to exist on our roulette.
 
 Our estimation of actions' expected reward is based on the choices made in successful playthroughs performed previously and are static throughout an entire game of Super Mario from start to end.
 
-\subsubsection{Implementation}
+\subsubsection*{Implementation}
 
 
-\subsubsection{Behaviour}
+\subsubsection*{Behaviour}
 %---------------------------------------------------------
 \subsection{Checkpoints}
-\subsubsection{Description}
-\subsubsection{Implementation}
-\subsubsection{Behaviour}
+\subsubsection*{Description}
+\subsubsection*{Implementation}
+\subsubsection*{Behaviour}
 %---------------------------------------------------------
 \subsection{(Combination)}
-\subsubsection{Description}
-\subsubsection{Implementation}
-\subsubsection{Behaviour}
+\subsubsection*{Description}
+\subsubsection*{Implementation}
+\subsubsection*{Behaviour}
 
 \clearpage
 
@@ -343,6 +347,7 @@ Our estimation of actions' expected reward is based on the choices made in succe
 
 Her er noget mere tekst, reference til figur \ref{fig:followed}
 \clearpage
+\section{Discussion}
 \section{Conclusion}
 \clearpage
 
