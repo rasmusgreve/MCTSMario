@@ -220,7 +220,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	protected void initRoot(){
 		LevelScene	l = new LevelScene();
 		l.init();
-		l.level = new Level(10000,15);
+		l.level = new Level(1500,15);
 		
 		root = createRoot(l);
 		root.state.tick();

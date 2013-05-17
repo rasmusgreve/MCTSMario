@@ -33,8 +33,8 @@ public class Play {
         //options.setLevelRandSeed(1144498231);
         //options.setLevelRandSeed(1337);
         
-        options.setLevelLength(10000);
-        options.setTimeLimit(1337);
+        //options.setLevelLength(10000);
+        //options.setTimeLimit(1337);
        
         options.setLevelDifficulty(20);
         task.setOptions(options);
