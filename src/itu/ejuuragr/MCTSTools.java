@@ -10,7 +10,7 @@ import itu.ejuuragr.UCT.UCTNode;
 public class MCTSTools {
 
 	//                                {LEFT, RIGHT, DOWN, JUMP, SPEED}
-	public static boolean[] buttons = {true, true, false, true, true};
+	public static boolean[] buttons = {true, true, true, true, true};
 	public static boolean[] defaultButtonState = {false, false, false, false, false};
 	public static int CHILDREN;
 	public static List<boolean[]> actions = new ArrayList<boolean[]>();
@@ -18,7 +18,7 @@ public class MCTSTools {
 		buildActionsFromButtons();
 	}
 	
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	
 	public static void printObservation(byte[][] observation)
 	{
