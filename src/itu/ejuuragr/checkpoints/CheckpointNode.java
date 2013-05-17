@@ -20,7 +20,7 @@ public class CheckpointNode extends UCTNode {
 		this.cleared = cleared;
 		
 		// check for completed checkpoint
-		double dist = distToPoint(checkpoints.get(cleared));
+		double dist = distToPoint(checkpoints.get(cleared+1));
 		if(dist <= CLEAR_DISTANCE){
 			cleared++; // progress
 		}
@@ -29,7 +29,7 @@ public class CheckpointNode extends UCTNode {
 
 	public void setCheckpoints(ArrayList<float[]> arrayList) {
 		this.checkpoints = arrayList;
-		this.cleared = 1;
+		this.cleared = 0;
 	}
 
 	@Override
@@ -41,9 +41,9 @@ public class CheckpointNode extends UCTNode {
 		double checkpointValue = 0.75 / (checkpoints.size()-1); // value for each checkpoint
 		
 		double baseValue = 0.25; // default value
-		double clearedValue = (cleared-1) * checkpointValue; // value for cleared checkpoints
-		double progress = Math.max(0.0, 1.0 - (distToPoint(checkpoints.get(cleared)) / 
-				distBetweenPoints(checkpoints.get(cleared - 1), checkpoints.get(cleared))));
+		double clearedValue = (cleared) * checkpointValue; // value for cleared checkpoints
+		double progress = Math.max(0.0, 1.0 - (distToPoint(checkpoints.get(cleared+1)) / 
+				distBetweenPoints(checkpoints.get(cleared), checkpoints.get(cleared+1))));
 		double progressValue = checkpointValue * progress; // progress towards next
 		
 		double result = baseValue + clearedValue + progressValue;
