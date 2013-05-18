@@ -33,7 +33,7 @@ public class MarioComponent extends JComponent implements Runnable, /*KeyListene
 	    public static int[] BESTLINE_YS;
 	    public static int[] POSITIONS_XS;
 	    public static int[] POSITIONS_YS;
-	    public static double[] POSITIONS_VALUES;
+	    public static double[] POSITIONS_VALUES = new double[0];
 	    
 	    
 	    public static ArrayList<float[]> checkpoints;
