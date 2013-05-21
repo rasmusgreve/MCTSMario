@@ -59,6 +59,63 @@ public class MCTSEnhancementAgent extends SimpleMCTS {
 	}
 	
 	/**
+	 * Enable or disable softmax
+	 */
+	public void setSoftmax(boolean v)
+	{
+		USE_SOFTMAX = v;
+		Q = (USE_SOFTMAX) ? 0.125 : 0.0;
+		updateName();
+	}
+	
+	/**
+	 * Enable or disable macro actions
+	 */
+	public void setMacro(boolean v)
+	{
+		USE_MACRO_ACTIONS = v;
+		MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? 3 : 1; //How many times to repeat each action
+		updateName();
+	}
+	
+	/**
+	 * Enable or disable partial expansion
+	 */
+	public void setPartial(boolean v)
+	{
+		USE_PARTIAL_EXPANSION = v;
+		updateName();
+	}
+	
+	/**
+	 * Enable or disable roulette wheel selection
+	 */
+	public void setRoulette(boolean v)
+	{
+		USE_ROULETTE_WHEEL_SELECTION = v;
+		updateName();
+	}
+	
+	/**
+	 * Enable or disable hole detection
+	 */
+	public void setHole(boolean v)
+	{
+		USE_HOLE_DETECTION = v;
+		updateName();
+	}
+	
+	/**
+	 * Enable or disable limited actions
+	 */
+	public void setLimited(boolean v)
+	{
+		USE_LIMITED_ACTIONS = v;
+		updateName();
+	}
+
+	
+	/**
 	 * Returns true if mario is in danger in the observation.
 	 * A dangerous position is close to a monster or near a hole
 	 */
