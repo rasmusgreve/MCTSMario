@@ -31,11 +31,13 @@ public class Play {
         options.setMatlabFileName("");
         options.setLevelRandSeed((int) (Math.random () * Integer.MAX_VALUE));
 
-        //options.setLevelRandSeed(131626226);
         //options.setLevelLength(10000);
         //options.setTimeLimit(1337);
         
-        options.setLevelDifficulty(20);//268435452);
+        //options.setLevelType(2);
+       
+        options.setLevelDifficulty(20);
+
         task.setOptions(options);
         System.out.println("Seed: " + options.getLevelRandSeed());
         System.out.println("Difficulty: " + options.getLevelDifficulty());
