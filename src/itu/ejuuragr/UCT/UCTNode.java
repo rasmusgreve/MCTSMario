@@ -133,7 +133,7 @@ public class UCTNode implements MCTSNode{
 		ArrayList<Integer> best = new ArrayList<Integer>();
 		double score = -1;
 		for(int i = 0; i < MCTSTools.CHILDREN; i++){
-			if(children[i] != null){
+			if(children[i] != null /*&& !((EnhancementTesterNode)children[i]).closed*/){
 				double curScore = children[i].calculateConfidence(cp);
 				if (curScore > score)
 				{

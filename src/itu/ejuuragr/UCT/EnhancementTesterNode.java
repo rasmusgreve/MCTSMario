@@ -14,6 +14,8 @@ public class EnhancementTesterNode extends UCTNode {
 	
 	private int[] actionScores;
 	private int scoreSum;
+	
+	//public boolean closed = false;
 
 	public EnhancementTesterNode(LevelScene state, boolean[] action, EnhancementTesterNode parent) {
 		super(state, action, parent);
@@ -21,6 +23,9 @@ public class EnhancementTesterNode extends UCTNode {
 		this.maxReward = this.reward;
 		MAX_XDIF = ((EnhancementTester.CURRENT_ACTION_SIZE+SimpleMCTS.RANDOM_SAMPLES_LIMIT*EnhancementTester.CURRENT_ACTION_SIZE)*11.0);
 		setScores();
+		
+		// if end, close
+		//if(this.reachedEnd(state)) closed = true;
 	}
 
 	@Override
@@ -48,9 +53,28 @@ public class EnhancementTesterNode extends UCTNode {
 		children[MCTSTools.actionToIndex(action)] = child;
 		numChildren++;
 		child.REPETITIONS = REPETITIONS;
+		
+		// check if should be closed
+		//checkClosed();
+		
 		return child;
 	}
 	
+	/*protected void checkClosed() {
+		if(!this.isExpanded()) return;
+		
+		for(UCTNode child : children){
+			if(child == null) continue;
+			if(!((EnhancementTesterNode)child).closed) return;
+		}
+		
+		// should be closed
+		this.closed = true;
+		MCTSTools.print("ParentNode closed");
+		((EnhancementTesterNode) this.parent).checkClosed();
+		return;
+	}*/
+
 	@Override
 	public double calculateReward(LevelScene state) {
 		if (EnhancementTester.USE_HOLE_DETECTION && MCTSTools.isInGap(state))
@@ -81,7 +105,7 @@ public class EnhancementTesterNode extends UCTNode {
 	@Override
 	public boolean isExpanded()
 	{
-		for (int i = 0; i < MCTSTools.CHILDREN; i++)
+		for (int i = 0; i < actionScores.length; i++)
 		{
 			if (actionScores[i] > 0) return false;
 		}
@@ -91,7 +115,8 @@ public class EnhancementTesterNode extends UCTNode {
 	private void setScores(){
 		this.actionScores = !EnhancementTester.USE_LIMITED_ACTIONS ? new int[]{14,20,17,1,0,0,0,0,48,28,23,1,0,0,0,0,19,14,172,1,0,0,0,0,29,9,242,1,0,0,0,0} 
 		: new int[]{0,20,17,0,0,0,0,0,48,28,23,0,0,0,0,0,0,14,172,0,0,0,0,0,29,9,242,0,0,0,0,0};
-			this.scoreSum =  !EnhancementTester.USE_LIMITED_ACTIONS ? 639 : 602;
+		
+		this.scoreSum =  !EnhancementTester.USE_LIMITED_ACTIONS ? 639 : 602;
 
 		if (!EnhancementTester.USE_ROULETTE_WHEEL_SELECTION)
 		{
@@ -111,26 +136,19 @@ public class EnhancementTesterNode extends UCTNode {
 		double newScore = calculateConfidenceNew(cp);
 		int best = -1;
 		double score = -1;
-		for(int i = 0; i < MCTSTools.CHILDREN; i++){
-			double curScore;
-			if(children[i] != null){
-				curScore = children[i].calculateConfidence(cp);
-			}else if(actionScores[i] != 0){ 
-				curScore = newScore;
-			}else{
-				continue;
-			}
-			
-			if(curScore > score || (curScore == score && rand.nextBoolean())){
-				score = curScore;
-				best = i;
+		for(int i = 0; i < children.length; i++){
+			if(children[i] != null /*&& !((EnhancementTesterNode)children[i]).closed*/){
+				double curScore = children[i].calculateConfidence(cp);
+				
+				if(curScore > score || (curScore == score && rand.nextBoolean())){
+					score = curScore;
+					best = i;
+				}
 			}
 		}
 		
-		if(best > -1){
-			if(children[best] != null) return new MCTSTools.Tuple<EnhancementTesterNode,Boolean>((EnhancementTesterNode)children[best],false); // existing node
-
-			// find best child left (heuristically weighted random)
+		if(scoreSum > 0 && newScore > score){
+			// find best child left (heuristically weighted random)			
 			int randomToken = rand.nextInt(scoreSum) + 1;
 			int index = -1;
 			while(randomToken > 0){
@@ -142,7 +160,12 @@ public class EnhancementTesterNode extends UCTNode {
 			
 			return new MCTSTools.Tuple<EnhancementTesterNode,Boolean>((EnhancementTesterNode)createChild(MCTSTools.indexToAction(index)),true);
 		}
-		return null;
+		
+		/*if(best == -1 && !closed){
+			System.out.println("should be closed");
+		}*/
+		
+		return new MCTSTools.Tuple<EnhancementTesterNode,Boolean>((EnhancementTesterNode)children[best],false); // existing node
 	}
 
 	private double calculateConfidenceNew(double cp){		
@@ -152,5 +175,16 @@ public class EnhancementTesterNode extends UCTNode {
 		return exploitation + exploration;
 	}
 	
-
+	private boolean reachedEnd(LevelScene state){
+		return state.mario.winTime > 0 || state.mario.x - 176 >= rootX();
+	}
+	
+	private float rootX(){
+		UCTNode cur = this;
+		while(cur.parent != null){
+			cur = cur.parent;
+		}
+		return cur.state.mario.x;
+	}
+	
 }
