@@ -130,6 +130,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		//Before searching
 		clearRoot(obs);  //reset root, add observation information
 		
+		
 		//Search
 		maxDepth = 0;
 		while(System.currentTimeMillis() < endTime){
@@ -140,6 +141,8 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		
 		MCTSTools.print(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
 		
+		
+
 		if (SAVE_NEXT_TREE)
 			root.outputTree("Tree.xml");
 		
@@ -163,8 +166,40 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		return new boolean[5];
 	}
 	
+	private void addNodePositions(UCTNode v, ArrayList<Integer> xs, ArrayList<Integer> ys, ArrayList<Double> values)
+	{
+		if (v == null) return;
+		xs.add((int)v.state.mario.x);
+		ys.add((int)v.state.mario.y);
+		values.add(v.reward);
+		if (v.children != null)
+		for (UCTNode c : v.children)
+			addNodePositions(c, xs, ys, values);
+	}
+	
 	protected void drawFuture(UCTNode v)
 	{
+		//Positions
+		ArrayList<Integer> pxs = new ArrayList<Integer>();
+		ArrayList<Integer> pys = new ArrayList<Integer>();
+		ArrayList<Double> pvalues = new ArrayList<Double>();
+		addNodePositions(v, pxs, pys, pvalues);
+		
+		int[] prx = new int[pxs.size()];
+		int[] pry = new int[pxs.size()];
+		double[] pvals = new double[pvalues.size()];
+		for (int i = 0; i < pxs.size(); i++)
+		{
+			prx[i] = pxs.get(i);
+			pry[i] = pys.get(i);
+			pvals[i] = pvalues.get(i);
+		}
+		MarioComponent.POSITIONS_XS = prx;
+		MarioComponent.POSITIONS_YS = pry;
+		MarioComponent.POSITIONS_VALUES = pvals;
+		
+		
+		//Bestline
 		ArrayList<Integer> xs = new ArrayList<Integer>();
 		ArrayList<Integer> ys = new ArrayList<Integer>();
 		

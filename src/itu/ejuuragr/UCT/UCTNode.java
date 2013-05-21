@@ -214,7 +214,7 @@ public class UCTNode implements MCTSNode{
 		else if (change > 1.0) {
 			return 0.0;
 		}
-		
+
 		/*if(reachedEnd(state)){
 			//System.out.println("REACHED END");
 			return 1.0;
@@ -231,6 +231,8 @@ public class UCTNode implements MCTSNode{
 		if (reward < 0 || reward > 1){
 			MCTSTools.print("Warning! Reward out of bounds: " + reward);
 		}
+		
+		
 		return reward;
 	}
 	

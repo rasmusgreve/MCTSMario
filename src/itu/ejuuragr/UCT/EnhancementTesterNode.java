@@ -11,7 +11,7 @@ public class EnhancementTesterNode extends UCTNode {
 	
 	public ArrayList<Double> rewards = new ArrayList<Double>(64);
 	public double maxReward = -1;
-	
+	public double expl;
 	private int[] actionScores;
 	private int scoreSum;
 	
@@ -35,7 +35,7 @@ public class EnhancementTesterNode extends UCTNode {
 		double max = EnhancementTester.Q * maxReward;
 		double avg = (1.0 - EnhancementTester.Q) * average(rewards);
 		double exploitation = max + avg; 
-		
+		expl = exploitation;
 		double exploration = cp*Math.sqrt((2*Math.log(parent.visited))/this.visited);
 		
 		return exploitation + exploration;

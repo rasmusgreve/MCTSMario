@@ -17,7 +17,6 @@ public class EnhancementTester extends SimpleMCTS {
 	public static boolean USE_LIMITED_ACTIONS 			= true;
 	
 	
-	
 	//Softmax
 	public static double Q = (USE_SOFTMAX) ? 0.125 : 0.0; // 0 = avg, 1 = max
 	//Macro actions

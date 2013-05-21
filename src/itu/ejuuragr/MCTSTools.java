@@ -5,6 +5,8 @@ import java.util.*;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.sprites.Mario;
 
+import itu.ejuuragr.UCT.EnhancementTester;
+import itu.ejuuragr.UCT.EnhancementTesterNode;
 import itu.ejuuragr.UCT.UCTNode;
 
 public class MCTSTools {
@@ -18,7 +20,7 @@ public class MCTSTools {
 		buildActionsFromButtons();
 	}
 	
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	
 	public static void printObservation(byte[][] observation)
 	{
@@ -204,7 +206,12 @@ public class MCTSTools {
 	
 	private static void getXMLRepresentation(UCTNode n, StringBuilder b)
 	{
-		b.append("<Node " + actionToXML(n.action) + " " + String.format("Reward=\"%s\"",n.reward/n.visited) + ">");
+		if (n.getClass().equals(EnhancementTesterNode.class))
+		{
+			b.append("<Node " + actionToXML(n.action) + " " + String.format("Reward=\"%s\"",((EnhancementTesterNode)n).expl) + ">");
+		}
+		else
+			b.append("<Node " + actionToXML(n.action) + " " + String.format("Reward=\"%s\"",n.reward/n.visited) + ">");
 		if (n.children != null)
 			for (UCTNode c : n.children)
 				if (c != null)

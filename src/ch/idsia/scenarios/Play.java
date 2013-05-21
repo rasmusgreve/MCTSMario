@@ -39,6 +39,7 @@ public class Play {
         //options.setLevelType(2);
        
         options.setLevelDifficulty(20);
+
         task.setOptions(options);
         System.out.println("Seed: " + options.getLevelRandSeed());
         System.out.println("Difficulty: " + options.getLevelDifficulty());
