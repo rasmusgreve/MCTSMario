@@ -26,7 +26,7 @@ public class HoleDetectionNode extends UCTNode {
 		if(state.mario.deathTime > 0){
 			return 0.0;
 		}
-		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario) > 1.0) {
+		else if (MCTSTools.marioShrunk(parent.state.mario, state.mario)) {
 			return 0.0;
 		}
 		

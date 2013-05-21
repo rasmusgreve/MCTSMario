@@ -3,7 +3,6 @@ package itu.ejuuragr.UCT;
 
 import itu.ejuuragr.MCTSTools;
 import ch.idsia.mario.environments.Environment;
-import ch.idsia.scenarios.Stats;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
 public class MCTSEnhancementAgent extends SimpleMCTS {
@@ -18,9 +17,9 @@ public class MCTSEnhancementAgent extends SimpleMCTS {
 	
 	
 	//Softmax
-	public static double Q = (USE_SOFTMAX) ? 0.125 : 0.0; // 0 = avg, 1 = max
+	public static double Q = 0.125; // 0 = avg, 1 = max
 	//Macro actions
-	public static int MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? 3 : 1; //How many times to repeat each action
+	public static int MACRO_ACTION_SIZE = 3; //How many times to repeat each action
 	
 	public static final int MONSTER_DANGER_DISTANCE_BACKWARD = 2; //Threshold distance backwards of monsters for switching to micro actions
 	public static final int MONSTER_DANGER_DISTANCE_FORWARD = 4; //Threshold distance forwards of monsters for switching to micro actions
@@ -32,75 +31,37 @@ public class MCTSEnhancementAgent extends SimpleMCTS {
 	int moveCount = Integer.MAX_VALUE-1;
 	boolean[] curAction;
 	
+	/**
+	 * Create a new MCTS Enhancement Agent
+	 */
 	public MCTSEnhancementAgent()
 	{
 		MCTSTools.buttons = new boolean[]{true,true,true,true,true};
 		MCTSTools.buildActionsFromButtons();
-		if (Stats.ARGUMENTS != null && Stats.ARGUMENTS.length >= 11)
-		{
-			Q = Double.parseDouble(Stats.ARGUMENTS[4]);
-			System.out.println("Setting Q = " + Q);
-			USE_SOFTMAX = "1".equals(Stats.ARGUMENTS[5]);
-			USE_MACRO_ACTIONS = "1".equals(Stats.ARGUMENTS[6]);
-			USE_PARTIAL_EXPANSION = "1".equals(Stats.ARGUMENTS[7]);
-			USE_ROULETTE_WHEEL_SELECTION = "1".equals(Stats.ARGUMENTS[8]);
-			USE_HOLE_DETECTION = "1".equals(Stats.ARGUMENTS[9]);
-			USE_LIMITED_ACTIONS = "1".equals(Stats.ARGUMENTS[10]);
-			System.out.println("Settings: " + ((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
-		}
 		Q = (USE_SOFTMAX) ? Q : 0.0;
 		MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? MACRO_ACTION_SIZE : 1;
 		updateName();
-		
-		
 	}
 	
 	@Override
 	public void reset()
 	{
 		super.reset();
-		moveCount = Integer.MAX_VALUE-1;
+		moveCount = Integer.MAX_VALUE-1; //Reset macro actions counter
 	}
 	
-	public void setSoftmax(boolean v)
-	{
-		USE_SOFTMAX = v;
-		Q = (USE_SOFTMAX) ? 0.125 : 0.0;
-		updateName();
-	}
-	public void setMacro(boolean v)
-	{
-		USE_MACRO_ACTIONS = v;
-		MACRO_ACTION_SIZE = (USE_MACRO_ACTIONS) ? 3 : 1; //How many times to repeat each action
-		updateName();
-	}
-	public void setPartial(boolean v)
-	{
-		USE_PARTIAL_EXPANSION = v;
-		updateName();
-	}
-	public void setRoulette(boolean v)
-	{
-		USE_ROULETTE_WHEEL_SELECTION = v;
-		updateName();
-	}
-	public void setHole(boolean v)
-	{
-		USE_HOLE_DETECTION = v;
-		updateName();
-	}
-	public void setLimited(boolean v)
-	{
-		USE_LIMITED_ACTIONS = v;
-		updateName();
-	}
-	
+	/**
+	 * Update the name of the agent to tell which enhancements are in use
+	 */
 	private void updateName()
 	{
 		setName("uct " + ((USE_SOFTMAX) ? "sof " : "") + ((USE_MACRO_ACTIONS) ? "mac " : "" ) + ((USE_PARTIAL_EXPANSION) ? "par " : "" ) + ((USE_ROULETTE_WHEEL_SELECTION) ? "rou " : "" ) + ((USE_HOLE_DETECTION) ? "hol " : "" ) + ((USE_LIMITED_ACTIONS) ? "lim " : "" ));
 	}
 	
-	
+	/**
+	 * Returns true if mario is in danger in the observation.
+	 * A dangerous position is close to a monster or near a hole
+	 */
 	private boolean isInDanger(Environment obs)
 	{
 		//If a monster is close
@@ -146,13 +107,12 @@ public class MCTSEnhancementAgent extends SimpleMCTS {
 			curAction = super.getAction(obs);
 			moveCount = 1;
 		}
-		else
+		else //Macro actions
 		{
-			
 			//Continue work on current tree
 			long startTime = System.currentTimeMillis();
 			long endTime = startTime + TIME_PER_TICK;
-			while(System.currentTimeMillis() < endTime /*&& !((EnhancementTesterNode)root).closed*/){
+			while(System.currentTimeMillis() < endTime){
 				UCTNode v1 = treePolicy(root);
 				double reward = defaultPolicy(v1);
 				backup(v1,reward);
@@ -166,11 +126,17 @@ public class MCTSEnhancementAgent extends SimpleMCTS {
 	}
 	
 
+	/**
+	 * Override the base method to create nodes of the MCTSEnhancementNode type.
+	 */
 	@Override
 	public UCTNode createRoot(LevelScene state) {
 		return new MCTSEnhancementNode(state,null,null);
 	}
 
+	/**
+	 * Backup the calculated reward through the tree
+	 */
 	@Override
 	public void backup(UCTNode v, double reward) {
 		MCTSEnhancementNode w = (MCTSEnhancementNode)v;
@@ -186,6 +152,10 @@ public class MCTSEnhancementAgent extends SimpleMCTS {
 		maxDepth = Math.max(maxDepth, depth);
 	}
 
+	/**
+	 * Perform the MCTS tree policy from a given node
+	 * Expands the tree by creating one new node: the most urgent one.
+	 */
 	@Override
 	public UCTNode treePolicy(UCTNode vi) {
 		MCTSEnhancementNode v = (MCTSEnhancementNode) vi;
@@ -199,6 +169,7 @@ public class MCTSEnhancementAgent extends SimpleMCTS {
 				}
 			}
 		}
+		//Partial expansion:
 		MCTSEnhancementNode w = (MCTSEnhancementNode) v;
 		MCTSTools.Tuple<MCTSEnhancementNode,Boolean> p;
 		do{
