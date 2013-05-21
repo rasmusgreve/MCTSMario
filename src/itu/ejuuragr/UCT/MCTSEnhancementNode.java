@@ -8,9 +8,13 @@ import java.util.List;
 import competition.cig.robinbaumgarten.astar.LevelScene;
 
 /**
- * 
- * @author Emil
- *
+ * A single Node of the Monte Carlo search tree with enhancements where 
+ * you can traverse both up (parent) and down (children) from. Each 
+ * node contains the state that it covers, the action used to get to 
+ * the state, the total reward of itself and its children and finally 
+ * a number of how many times it has been visited (the number of nodes 
+ * beneath it). It will read the enabled enhancements from MCTSEnhancementAgent
+ * and behave accordingly.
  */
 public class MCTSEnhancementNode extends UCTNode {
 	
@@ -20,6 +24,12 @@ public class MCTSEnhancementNode extends UCTNode {
 	private int[] actionScores;
 	private int scoreSum;
 
+	/**
+	 * Creates a new MCTSEnhancementNode starting from the given arguments.
+	 * @param state The game state of this node.
+	 * @param action The action that led to this node.
+	 * @param parent The parent node where this should be hanged under in the tree.
+	 */
 	public MCTSEnhancementNode(LevelScene state, boolean[] action, MCTSEnhancementNode parent) {
 		super(state, action, parent);
 		this.rewards.add(this.reward); // reward is own-reward from super(...)
@@ -41,6 +51,11 @@ public class MCTSEnhancementNode extends UCTNode {
 		return exploitation + exploration;
 	}
 
+	/**
+	 * Find the average value of a list of numbers.
+	 * @param list The list of numbers.
+	 * @return The average value of the numbers.
+	 */
 	private double average(List<Double> list){
 		double result = 0;
 		for(Double d : list) result += d;
@@ -59,21 +74,6 @@ public class MCTSEnhancementNode extends UCTNode {
 		
 		return child;
 	}
-	
-	/*protected void checkClosed() {
-		if(!this.isExpanded()) return;
-		
-		for(UCTNode child : children){
-			if(child == null) continue;
-			if(!((EnhancementTesterNode)child).closed) return;
-		}
-		
-		// should be closed
-		this.closed = true;
-		MCTSTools.print("ParentNode closed");
-		((EnhancementTesterNode) this.parent).checkClosed();
-		return;
-	}*/
 
 	@Override
 	public double calculateReward(LevelScene state) {
@@ -112,6 +112,9 @@ public class MCTSEnhancementNode extends UCTNode {
 		return true;
 	}
 	
+	/**
+	 * Sets the scores for actions in the Roulette Wheel, and sets all of them to 1 if Roulette Wheel Selection is disabled.
+	 */
 	private void setScores(){
 		this.actionScores = !MCTSEnhancementAgent.USE_LIMITED_ACTIONS ? new int[]{14,20,17,1,0,0,0,0,48,28,23,1,0,0,0,0,19,14,172,1,0,0,0,0,29,9,242,1,0,0,0,0} 
 		: new int[]{0,20,17,0,0,0,0,0,48,28,23,0,0,0,0,0,0,14,172,0,0,0,0,0,29,9,242,0,0,0,0,0};
@@ -132,12 +135,21 @@ public class MCTSEnhancementNode extends UCTNode {
 		}
 	}
 	
+	/**
+	 * Finds the child with the best confidence or expands a new 
+	 * child if the value for a new node is higher than that of
+	 * any existing child.
+	 * @param cp The Cp constant to calculate the confidence for the 
+	 * individual nodes.
+	 * @return A Tuple containing the chosen node and a boolean telling
+	 * if the given node was new or an existing one.
+	 */
 	public MCTSTools.Tuple<MCTSEnhancementNode,Boolean> getBestChildTuple(double cp) {
 		double newScore = calculateConfidenceNew(cp);
 		int best = -1;
 		double score = -1;
 		for(int i = 0; i < children.length; i++){
-			if(children[i] != null /*&& !((EnhancementTesterNode)children[i]).closed*/){
+			if(children[i] != null){
 				double curScore = children[i].calculateConfidence(cp);
 				
 				if(curScore > score || (curScore == score && rand.nextBoolean())){
@@ -161,30 +173,19 @@ public class MCTSEnhancementNode extends UCTNode {
 			return new MCTSTools.Tuple<MCTSEnhancementNode,Boolean>((MCTSEnhancementNode)createChild(MCTSTools.indexToAction(index)),true);
 		}
 		
-		/*if(best == -1 && !closed){
-			System.out.println("should be closed");
-		}*/
-		
 		return new MCTSTools.Tuple<MCTSEnhancementNode,Boolean>((MCTSEnhancementNode)children[best],false); // existing node
 	}
 
+	/**
+	 * Calculates the confidence in expanding a new node, used to 
+	 * choose between a new instead of using an existing one.
+	 * @param cp The Cp constant to calculate the confidence for the 
+	 * individual nodes.
+	 * @return The confidence for expanding a new child node.
+	 */
 	private double calculateConfidenceNew(double cp){		
 		double exploitation = 0.50;
 		double exploration = cp*Math.sqrt(2*Math.log(this.visited)/(this.numChildren+1)); // this is same has dividing by 1 because the new node has obviously never been visited
-		//System.out.printf("Exploit: %f Explore: %f\n", exploitation, exploration);
 		return exploitation + exploration;
-	}
-	
-	private boolean reachedEnd(LevelScene state){
-		return state.mario.winTime > 0 || state.mario.x - 176 >= rootX();
-	}
-	
-	private float rootX(){
-		UCTNode cur = this;
-		while(cur.parent != null){
-			cur = cur.parent;
-		}
-		return cur.state.mario.x;
-	}
-	
+	}	
 }
