@@ -133,27 +133,27 @@ public class WilcoxonAnalysis {
 		System.out.print(second.title + " same as " + first.title + " : ");
 		if (z < 1.645)
 		{
-			System.out.print("p > 0.05");
+			System.out.print("     p > 0.05");
 		}
 		else if (z < 1.96)
 		{
-			System.out.print("0.05 > p > 0.025");
+			System.out.print("*    0.05 > p > 0.025");
 		}
 		else if (z < 2.326)
 		{
-			System.out.print("0.025 > p > 0.01");
+			System.out.print("*    0.025 > p > 0.01");
 		}
 		else if (z < 2.576)
 		{
-			System.out.print("0.01 > p > 0.005");
+			System.out.print("**   0.01 > p > 0.005");
 		}
 		else if (z < 3.291)
 		{
-			System.out.print("0.005 > p > 0.0005");
+			System.out.print("**   0.005 > p > 0.0005");
 		}
 		else
 		{
-			System.out.print("p < 0.0005");
+			System.out.print("***  p < 0.0005");
 		}
 		System.out.println();
 	}
