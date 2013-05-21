@@ -2,9 +2,6 @@ package itu.ejuuragr.UCT;
 
 import itu.ejuuragr.MCTSNode;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,36 +11,35 @@ import itu.ejuuragr.MCTSTools;
 
 
 /**
- * A single Node of the Monte Carlo Tree where you can traverse both
+ * A single Node of the Monte Carlo search tree where you can traverse both
  * up (parent) and down (children) from. Each node contains the state
  * that it covers, the action used to get to the state, the total 
  * reward of itself and its children and finally a number of how many
  * times it has been visited (the number of nodes beneath it).
- * 
- * @author Emil
- *
  */
 public class UCTNode implements MCTSNode{	
-	public static Random rand = new Random(1337);
-	protected static double TERMINAL_MARGIN = 0.0;
+	//Instantiate a new pseudo random number generator. If determinism is wanted, this should be seeded, and
+	//the while loop performing the search in SimpleMCTS should be changed to a constant amount instead of time
+	public static Random rand = new Random();
 	
-	public LevelScene state = null;
-	public boolean[] action = new boolean[MCTSTools.CHILDREN];
+	protected static double TERMINAL_MARGIN = 0.0; //Margin under which a reward is considered a loss
+	public LevelScene state = null; //The current game state (simulation)
+	public boolean[] action = new boolean[MCTSTools.NUM_CHILDREN]; //The action leading to this node
 	public UCTNode parent = null;
-	public UCTNode[] children = new UCTNode[MCTSTools.CHILDREN];
+	public UCTNode[] children = new UCTNode[MCTSTools.NUM_CHILDREN];
 	
-	public double reward = 0;
-	public int visited = 1;
-	public int REPETITIONS = 1;
+	public double reward = 0; //Sum of rewards of nodes below this (this inclusive)
+	public int visited = 1; //Count of how many times this node has been visited (equal to subtree size)
+	public int REPETITIONS = 1; //How many times an action should be repeated when moving to a child node
 	
-	public double MAX_XDIF = ((1+SimpleMCTS.RANDOM_SAMPLES_LIMIT)*11.0);
+	//The max x-distance it is possible to move in a single step
+	public double MAX_XDIF = ((1+SimpleMCTS.ROLLOUT_CAP)*11.0);
 	
-	// for stats
+	// For statistics
 	public int numChildren = 0;
 
 	/**
-	 * Constructor for the MCTreeNode.
-	 * 
+	 * Construct a new UCT node containing a simulation in a given state
 	 * @param state The state that the node should have.
 	 * @param action The action leading to the node's state.
 	 * @param parent The parent of the new node or null if it is root.
@@ -55,6 +51,9 @@ public class UCTNode implements MCTSNode{
 		if(parent != null) this.reward = this.calculateReward(state);
 	}
 	
+	/**
+	 * Expand this node by creating a random child that hasn't yet been added
+	 */
 	@Override
 	public UCTNode expand() {
 		ArrayList<Integer> spaces = getUnexpanded();
@@ -63,11 +62,10 @@ public class UCTNode implements MCTSNode{
 	
 	/**
 	 * Tells if the node has all its possible children created.
-	 * 
 	 * @return True if no more children can be created, else false.
 	 */
 	public boolean isExpanded(){
-		for(int i = 0; i < MCTSTools.CHILDREN; i++){
+		for(int i = 0; i < MCTSTools.NUM_CHILDREN; i++){
 			if(children[i] == null) return false;
 		}
 		return true;
@@ -98,7 +96,7 @@ public class UCTNode implements MCTSNode{
 			if (n != null)
 				n.parent = null;
 		
-		children = new UCTNode[MCTSTools.CHILDREN];
+		children = new UCTNode[MCTSTools.NUM_CHILDREN];
 		action = null;
 		parent = null;
 		reward = 0;
@@ -132,8 +130,8 @@ public class UCTNode implements MCTSNode{
 	public UCTNode getBestChild(double cp){
 		ArrayList<Integer> best = new ArrayList<Integer>();
 		double score = -1;
-		for(int i = 0; i < MCTSTools.CHILDREN; i++){
-			if(children[i] != null /*&& !((EnhancementTesterNode)children[i]).closed*/){
+		for(int i = 0; i < MCTSTools.NUM_CHILDREN; i++){
+			if(children[i] != null){
 				double curScore = children[i].calculateConfidence(cp);
 				if (curScore > score)
 				{
@@ -150,7 +148,12 @@ public class UCTNode implements MCTSNode{
 		return best.isEmpty() ? null : children[best.get(rand.nextInt(best.size()))];
 	}
 	
-	public double advanceXandReward(int ticks){
+	/**
+	 * Perform Monte Carlo rollout and calculate the final reward of this node
+	 * @param ticks How many random actions to simulate before calculating the reward
+	 * @return The calculated reward of the node
+	 */
+	public double advance(int ticks){
 		// check for immediate death
 		double curReward = this.calculateReward(state);
 		if(curReward <= TERMINAL_MARGIN || curReward >= 1.0) return curReward; // no need to check further
@@ -179,12 +182,17 @@ public class UCTNode implements MCTSNode{
 	 */
 	protected ArrayList<Integer> getUnexpanded(){
 		ArrayList<Integer> result = new ArrayList<Integer>();
-		for(int i = 0; i < MCTSTools.CHILDREN; i++){
+		for(int i = 0; i < MCTSTools.NUM_CHILDREN; i++){
 			if(children[i] == null) result.add(i);
 		}
 		return result;
 	}
 	
+	/**
+	 * Advance a step on a simulation
+	 * @param state The simulation state to advance on
+	 * @param action The action to simulate
+	 */
 	private void advanceStep(LevelScene state, boolean[] action){
 		state.mario.setKeys(action);
 		for(int i = 0; i < REPETITIONS; i++){
@@ -192,8 +200,11 @@ public class UCTNode implements MCTSNode{
 		}
 	}
 	
+	/**
+	 * Get a random action
+	 */
 	protected boolean[] getRandomAction(){
-		return MCTSTools.indexToAction(rand.nextInt(MCTSTools.CHILDREN));
+		return MCTSTools.indexToAction(rand.nextInt(MCTSTools.NUM_CHILDREN));
 	}
 	
 	/**
@@ -207,63 +218,15 @@ public class UCTNode implements MCTSNode{
 	 * 0 is worst and 1 is best.
 	 */
 	public double calculateReward(LevelScene state){
-		double change = MCTSTools.marioShrunk(parent.state.mario, state.mario);
-		if(state.mario.deathTime > 0){
+		if(state.mario.deathTime > 0 || MCTSTools.marioShrunk(parent.state.mario, state.mario)){
 			return 0.0;
 		}
-		else if (change > 1.0) {
-			return 0.0;
-		}
-
-		/*if(reachedEnd(state)){
-			//System.out.println("REACHED END");
-			return 1.0;
-		}*/
-		
-		double reward;
 		// 0.5 for standing still, 1 for sprinting right, 0 for sprinting left
-		reward = 0.5 + ((state.mario.x - parent.state.mario.x)/MAX_XDIF)/2.0;
-		
-		//if(change < 1.0) /* grew */ reward = Math.min(1.0, reward*2);
-		
-		//if(MCTSTools.isInGap(state)) reward /= 10; //TODO: Remove me!
-		
+		double reward = 0.5 + ((state.mario.x - parent.state.mario.x)/MAX_XDIF)/2.0;
 		if (reward < 0 || reward > 1){
 			MCTSTools.print("Warning! Reward out of bounds: " + reward);
 		}
 		
-		
 		return reward;
 	}
-	
-	private boolean reachedEnd(LevelScene state){
-		return state.mario.winTime > 0 || state.mario.x - 176 >= rootX();
-	}
-	
-	private float rootX(){
-		UCTNode cur = this;
-		while(cur.parent != null){
-			cur = cur.parent;
-		}
-		return cur.state.mario.x;
-	}
-	
-	/**
-	 * Output the tree under this node as XML
-	 * @param filename Where to store the generated XML
-	 */
-	public void outputTree(String filename)
-	{
-		try {
-			String xml = MCTSTools.getXMLRepresentation(this);
-			File f = new File(filename);
-			FileWriter fw = new FileWriter(f);
-			fw.write(xml);
-			fw.flush();
-			fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 }

@@ -21,7 +21,7 @@ public class EnhancementTesterNode extends UCTNode {
 		super(state, action, parent);
 		this.rewards.add(this.reward); // reward is own-reward from super(...)
 		this.maxReward = this.reward;
-		MAX_XDIF = ((EnhancementTester.CURRENT_ACTION_SIZE+SimpleMCTS.RANDOM_SAMPLES_LIMIT*EnhancementTester.CURRENT_ACTION_SIZE)*11.0);
+		MAX_XDIF = ((EnhancementTester.CURRENT_ACTION_SIZE+SimpleMCTS.ROLLOUT_CAP*EnhancementTester.CURRENT_ACTION_SIZE)*11.0);
 		setScores();
 		
 		// if end, close

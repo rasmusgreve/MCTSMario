@@ -13,40 +13,26 @@ import competition.cig.robinbaumgarten.astar.level.Level;
 import ch.idsia.ai.agents.Agent;
 import ch.idsia.mario.engine.MarioComponent;
 import ch.idsia.mario.environments.Environment;
-import ch.idsia.scenarios.Stats;
+
 /**
- * This Agent for the Mario AI Benchmark is based on the UTC MCTS algorithm
- * (Upper Confidence Bound for Trees Monte Carlo Tree Search).
+ * This Agent for the Mario AI Benchmark is based on Monte Carlo Tree Search.
  * 
- * @author Emil & Rasmus
- *
+ * @author Emil Juul Jacbosen & Rasmus Greve
  */
 public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	
-	protected static int TIME_PER_TICK = 39; // milliseconds
-
-	public static int RANDOM_SAMPLES_LIMIT = 6;
+	protected static int TIME_PER_TICK = 39; //Milliseconds
+	public static int ROLLOUT_CAP = 6;
 	public static double cp = 0.1875;
-	private boolean SAVE_NEXT_TREE = false;
-	protected int maxDepth = 0;
+	private boolean SAVE_NEXT_TREE = false; //Save next search tree as XML when it is complete
 	
-	private float lastX, lastY; //For simulation error correction
+	//For simulation error correction
+	private float lastX, lastY; 
 	private int lastMode = 2;
 	
 	private String name = "BasicMCTS";
+	protected int maxDepth = 0;
 	protected UCTNode root = null;
-	
-	public SimpleMCTS()
-	{
-		if (Stats.ARGUMENTS != null && Stats.ARGUMENTS.length >= 4)
-		{
-			System.out.println("Testing " + getClass().getName());
-			RANDOM_SAMPLES_LIMIT = Integer.parseInt(Stats.ARGUMENTS[2]);
-			cp = Double.parseDouble(Stats.ARGUMENTS[3]);
-			System.out.println("Setting RANDOM_SAMPLES_LIMIT = " + RANDOM_SAMPLES_LIMIT);
-			System.out.println("Setting CP = " + cp);
-		}
-	}
 	
 	@Override
 	public void reset() {
@@ -56,10 +42,12 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	
 	@Override
 	public boolean[] getAction(Environment obs) {
+		//Simulation error correction
 		int m = obs.getMarioMode();
 		if (m != lastMode)
 			MCTSTools.print("Mode changed: " + m);
 		lastMode = m;
+		
 		return search(obs);
 	}
 
@@ -78,6 +66,10 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		this.name = name;
 	}
 	
+	/**
+	 * Identify and correct simulation errors if any
+	 * @param obs The current observation to match the simulation to
+	 */
 	protected void fixSimulationErrors(Environment obs)
 	{
 		if (root != null && root.state != null)
@@ -105,7 +97,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 				root.state.mario.fire = (obs.getMarioMode() == 2);
 				root.state.mario.large = (obs.getMarioMode() >= 1);
 
-				root.state.mario.deathTime = 0;
+				root.state.mario.deathTime = 0; //If he really was dead, getAction() wouldn't get called.
 				MCTSTools.print(String.format("CORRECTED MARIO STATE! Fire: %s Large: %s", root.state.mario.fire, root.state.mario.large));
 			}
 		}
@@ -117,7 +109,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	 * Performs MCTS for the most optimal move for 39 ms and
 	 * returns the action that seems to lead to the best outcome.
 	 * 
-	 * @param obs The Environment just recieved from the game.
+	 * @param obs The Environment just received from the game.
 	 * @return The action that seems to be best.
 	 */
 	public boolean[] search(Environment obs){
@@ -125,41 +117,29 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		long endTime = startTime + TIME_PER_TICK;
 		
 		if(root == null) initRoot();
-		
 		fixSimulationErrors(obs);
-		//Before searching
 		clearRoot(obs);  //reset root, add observation information
 		
-		
-		//Search
 		maxDepth = 0;
+		//Perform as many MCTS iterations as the time allows
 		while(System.currentTimeMillis() < endTime){
 			UCTNode v1 = treePolicy(root);
 			double reward = defaultPolicy(v1);
 			backup(v1,reward);
 		}
-		
 		MCTSTools.print(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
 		
-		if (obs.getMarioFloatPos()[0] > 16*8 && obs.getMarioFloatPos()[0] < 16*10)
-		{
-			MarioComponent.SAVE_NEXT_FRAME = true;
-		}
-
 		if (SAVE_NEXT_TREE)
-			root.outputTree("Tree.xml");
+			MCTSTools.outputTree("Tree.xml", root);
 		
 		//Selecting action
-		if(root.visited != 1){
+		if(root.visited > 1){
 			UCTNode choice = root.getBestChild(0);
 			if (root.state.mario.fire != choice.state.mario.fire || root.state.mario.large != choice.state.mario.large || choice.state.mario.deathTime > root.state.mario.deathTime)
-
 				MCTSTools.print("I'm gonna die and i know it! ("+choice.state.mario.fire+" , " + choice.state.mario.large + " , " + choice.state.mario.deathTime + ") Reward:" + choice.reward);
 			
 			if (MCTSTools.DEBUG)
-			{
 				drawFuture(root);
-			}
 			
 			root = choice;
 			return choice.action;
@@ -169,6 +149,14 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		return new boolean[5];
 	}
 	
+	/**
+	 * Private helper method for drawing all search nodes to the screen
+	 * Collects positions and rewards of the given node and all descendants and store in xs, ys and values 
+	 * @param v The node for which to recursively add its and its childrens values
+	 * @param xs The list where X values are to be stored
+	 * @param ys The list where Y values are to be stored
+	 * @param values The list where rewards are to be stored
+	 */
 	private void addNodePositions(UCTNode v, ArrayList<Integer> xs, ArrayList<Integer> ys, ArrayList<Double> values)
 	{
 		if (v == null) return;
@@ -180,6 +168,12 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 			addNodePositions(c, xs, ys, values);
 	}
 	
+	/**
+	 * Draw the information stored in a MCTS search tree to the screen when next frame is drawn
+	 * All nodes in the tree are drawn as circles, and the best path down the tree is drawn as a line
+	 * The drawing engine of the game has been modified to allow drawing of this information 
+	 * @param v The search tree to draw 
+	 */
 	protected void drawFuture(UCTNode v)
 	{
 		//Positions
@@ -200,7 +194,6 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		MarioComponent.POSITIONS_XS = prx;
 		MarioComponent.POSITIONS_YS = pry;
 		MarioComponent.POSITIONS_VALUES = pvals;
-		
 		
 		//Bestline
 		ArrayList<Integer> xs = new ArrayList<Integer>();
@@ -224,7 +217,11 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		MarioComponent.BESTLINE_YS = ry;
 	}
 	
-	public void keyPressed (KeyEvent e)
+	/**
+	 * Capture when the space key is pressed and store the current search tree as well as
+	 * the frame being drawn to the screen for debugging purposes.
+	 */
+	public void keyPressed(KeyEvent e)
     {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE)
         {
@@ -232,42 +229,31 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 			MarioComponent.SAVE_NEXT_FRAME = true;
 			SAVE_NEXT_TREE = true;
         }
-		else if (e.getKeyCode() == KeyEvent.VK_UP)
-		{
-			TIME_PER_TICK += 10;
-			System.out.println("Time pr tick: " + TIME_PER_TICK);
-		}
-		else if (e.getKeyCode() == KeyEvent.VK_DOWN) 
-		{
-			TIME_PER_TICK -= 10;
-			while (TIME_PER_TICK < 0) TIME_PER_TICK += 10;
-			System.out.println("Time pr tick: " + TIME_PER_TICK);
-		}
     }
 	
+	/**
+	 * Create a new root node
+	 * This method is used instead of just using the new keyword in order to make
+	 * subtypes able to overwrite the decision of which type of node to create. 
+	 */
 	public UCTNode createRoot(LevelScene state){
 		return new UCTNode(state, null, null);
 	}
 	
 	/**
-	 * Creates a new root node (MCTreeNode) with the data in
-	 * the given state (Environment).
-	 * 
-	 * @param obs The current state of the game to simulate from.
+	 * Initializes the root node with the data in the given state (Environment).
 	 */
 	protected void initRoot(){
-		LevelScene	l = new LevelScene();
+		LevelScene l = new LevelScene();
 		l.init();
 		l.level = new Level(1500,15);
-		
 		root = createRoot(l);
 		root.state.tick();
 	}
 	
 	/**
-	 * Clear the (newly selected) root node of all children 
-	 * and get it ready for searching 
-	 * @param obs
+	 * Clear the root node, removing all children and updating it with the observation 
+	 * @param obs The observation received from the game engine
 	 */
 	protected void clearRoot(Environment obs)
 	{
@@ -280,7 +266,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	 * From the given MCTreeNode it will go up the tree and add
 	 * the reward value to all parents.
 	 * 
-	 * @param v The MCTreeNode that has recieved the reward.
+	 * @param v The MCTreeNode that has received the reward.
 	 * @param reward The reward for the given node (how good it is).
 	 */
 	public void backup(UCTNode v, double reward) {
@@ -303,7 +289,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 	 * @return The final reward for the node after the simulations.
 	 */
 	public double defaultPolicy(UCTNode node) {
-		return node.advanceXandReward(RANDOM_SAMPLES_LIMIT);
+		return node.advance(ROLLOUT_CAP);
 	}
 
 	/**

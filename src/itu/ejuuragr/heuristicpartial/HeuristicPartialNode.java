@@ -44,9 +44,9 @@ public class HeuristicPartialNode extends UCTNode {
 	}
 	
 	private void setScores(){                       //                                         X                                        X
-		this.actionScores = MCTSTools.CHILDREN == 32 ? new int[]{14,20,17,0,17,0,0,0,48,28,23,0,0,0,0,0,19,14,172,0,22,0,0,0,29,9,242,0,0,0,0,0} 
+		this.actionScores = MCTSTools.NUM_CHILDREN == 32 ? new int[]{14,20,17,0,17,0,0,0,48,28,23,0,0,0,0,0,19,14,172,0,22,0,0,0,29,9,242,0,0,0,0,0} 
 		: new int[]{14,20,17,0,48,28,23,0,19,14,172,0,29,9,242,0};
-		this.scoreSum = MCTSTools.CHILDREN == 32 ? 674 : 635;
+		this.scoreSum = MCTSTools.NUM_CHILDREN == 32 ? 674 : 635;
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class HeuristicPartialNode extends UCTNode {
 		double newScore = calculateConfidenceNew(cp);
 		int best = -1;
 		double score = -1;
-		for(int i = 0; i < MCTSTools.CHILDREN; i++){
+		for(int i = 0; i < MCTSTools.NUM_CHILDREN; i++){
 			double curScore;
 			if(children[i] != null){
 				curScore = children[i].calculateConfidence(cp);

@@ -1,27 +1,35 @@
 package itu.ejuuragr;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 import competition.cig.robinbaumgarten.astar.LevelScene;
 import competition.cig.robinbaumgarten.astar.sprites.Mario;
 
-import itu.ejuuragr.UCT.EnhancementTester;
-import itu.ejuuragr.UCT.EnhancementTesterNode;
 import itu.ejuuragr.UCT.UCTNode;
 
 public class MCTSTools {
-
+	//Specify which buttons are available for the algorithm to use
 	//                                {LEFT, RIGHT, DOWN, JUMP, SPEED}
 	public static boolean[] buttons = {true, true, false, true, true};
+	//Specify the default state of a button if it isn't available for the algorithm.
 	public static boolean[] defaultButtonState = {false, false, false, false, false};
-	public static int CHILDREN;
+	//Number of children each node is going to have 
+	public static int NUM_CHILDREN;
+	//A list of possible actions
 	public static List<boolean[]> actions = new ArrayList<boolean[]>();
 	static{
 		buildActionsFromButtons();
 	}
 	
+	//Turn debug messages and drawing of the search tree on or off
 	public static final boolean DEBUG = true;
 	
+	/**
+	 * Prints an observation (received from the game engine) to the console
+	 */
 	public static void printObservation(byte[][] observation)
 	{
 		System.out.println("-------------------------------------");
@@ -40,13 +48,16 @@ public class MCTSTools {
 		}
 	}
 	
+	/**
+	 * Print a message to the console if debug is on
+	 */
 	public static void print(String message)
 	{
 		if (DEBUG) System.out.println(message);
 	}
 	
 	/**
-	 * Set the possible actions
+	 * Specify the exact possible actions
 	 */
 	public static void setActions(boolean[][] actionsToAdd)
 	{
@@ -55,13 +66,11 @@ public class MCTSTools {
 		{
 			actions.add(a);
 		}
-		CHILDREN = actions.size();
+		NUM_CHILDREN = actions.size();
 	}
 	
 	/**
-	 * Build a set of actions from a setting of pushable buttons and their default state
-	 * @param buttons Array of buttons, true if it is pushable
-	 * @param defaultButtonState Array of buttons giving the default state (used if not pushable)
+	 * Build a set of actions from the settings of pushable buttons and their default state
 	 */
 	public static void buildActionsFromButtons()
 	{
@@ -85,7 +94,7 @@ public class MCTSTools {
 			}
 			actions.add(action);
 		}
-		CHILDREN = actions.size();
+		NUM_CHILDREN = actions.size();
 	}
 	
 	/**
@@ -95,7 +104,7 @@ public class MCTSTools {
 	 */
 	public static int actionToIndex(boolean[] action)
 	{
-		for (int i = 0; i < CHILDREN; i++)
+		for (int i = 0; i < NUM_CHILDREN; i++)
 		{
 			if (Arrays.equals(actions.get(i),action))
 				return i;
@@ -114,15 +123,19 @@ public class MCTSTools {
 	}
 	
 	/**
-	 * Clone a LevelScene, advance a step on the clone and return it
-	 * @param state
-	 * @param action
-	 * @return
+	 * Clone a simulation, advance a step on the clone and return it
 	 */
 	public static LevelScene advanceStepClone(LevelScene state, boolean[] action){
 		return advanceStepClone(state, action, 1);
 	}	
 	
+	/**
+	 * Clone a simulation and advance a step on the clone a specific amount of repetitions
+	 * @param state The simulation to clone
+	 * @param action The action to simulate
+	 * @param repetitions The number of repetitions to perform
+	 * @return The resulting simulation state
+	 */
 	public static LevelScene advanceStepClone(LevelScene state, boolean[] action, int repetitions){
 		try {
 			
@@ -137,14 +150,22 @@ public class MCTSTools {
 		return null;
 	}	
 	
-	public static double marioShrunk(Mario old, Mario cur){
+	/**
+	 * Return true if mario has shrunk from "old" to "cur"
+	 */
+	public static boolean marioShrunk(Mario old, Mario cur){
 		int before = marioSize(old);
 		int after = marioSize(cur);
-		if(after < before) return 2.0;
-		if(after > before) return 1/2.0;
-		return 1.0;
+		if(after < before) return true;
+		return false;
 	}
 	
+	/**
+	 * Get the size of mario expressed as an int
+	 * 2: Fire
+	 * 1: Large, no fire
+	 * 0: small
+	 */
 	public static int marioSize(Mario mario){
 		if(mario.fire) return 2;
 		if(mario.large) return 1;
@@ -162,16 +183,21 @@ public class MCTSTools {
     			levelScene.mario.y > levelScene.level.gapHeight[(int) (levelScene.mario.x/16)]*16);
 	}
 	
+	/**
+	 * Generic tuple class for containing two objects
+	 */
 	public static class Tuple<T,V>{
 		public T first;
 		public V second;
-
 		public Tuple(T first, V second){
 			this.first = first;
 			this.second = second;
 		}
 	}
 	
+	/**
+	 * Get the direct distance of two 2D points
+	 */
 	public static double dist(float x1, float y1, float x2, float y2){
 		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 	}
@@ -180,6 +206,27 @@ public class MCTSTools {
 	 * XML Stuff
 	 ********************/
 	
+	/**
+	 * Output the tree under a node as XML
+	 * @param filename Where to store the generated XML
+	 */
+	public static void outputTree(String filename, UCTNode node)
+	{
+		try {
+			String xml = getXMLRepresentation(node);
+			File f = new File(filename);
+			FileWriter fw = new FileWriter(f);
+			fw.write(xml);
+			fw.flush();
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Convert an action boolean array to a string suitable for XML
+	 */
 	public static String actionToXML(boolean[] act)
 	{
 		StringBuilder b = new StringBuilder("Move=\"");
@@ -197,6 +244,11 @@ public class MCTSTools {
 		return b.append("\"").toString();
 	}
 	
+	/**
+	 * Get a XML representation of a node
+	 * @param n The node to get the representation of
+	 * @return A String containing the generated XML
+	 */
 	public static String getXMLRepresentation(UCTNode n)
 	{
 		StringBuilder b = new StringBuilder();
@@ -204,14 +256,14 @@ public class MCTSTools {
 		return b.toString();
 	}
 	
+	/**
+	 * Get a XML representation of a node recursively
+	 * @param n The node to get a representation of
+	 * @param b The string builder where the XML representation is put
+	 */
 	private static void getXMLRepresentation(UCTNode n, StringBuilder b)
 	{
-		if (n.getClass().equals(EnhancementTesterNode.class))
-		{
-			b.append("<Node " + actionToXML(n.action) + " " + String.format("Reward=\"%s\"",((EnhancementTesterNode)n).expl) + ">");
-		}
-		else
-			b.append("<Node " + actionToXML(n.action) + " " + String.format("Reward=\"%s\"",n.reward/n.visited) + ">");
+		b.append("<Node " + actionToXML(n.action) + " " + String.format("Reward=\"%s\"",n.reward/n.visited) + ">");
 		if (n.children != null)
 			for (UCTNode c : n.children)
 				if (c != null)
