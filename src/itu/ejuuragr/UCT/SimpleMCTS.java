@@ -100,7 +100,7 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 					root.state.mario.ya = (marioPos[1] - lastY) * 0.85f;
 				root.state.mario.y = marioPos[1];
 			}
-			if (root.state.mario.fire && obs.getMarioMode() < 2 || root.state.mario.large && obs.getMarioMode() < 1 || root.state.mario.deathTime > 0)
+			if ((root.state.mario.fire && obs.getMarioMode() < 2) || (root.state.mario.large && obs.getMarioMode() < 1) || root.state.mario.deathTime > 0)
 			{
 				root.state.mario.fire = (obs.getMarioMode() == 2);
 				root.state.mario.large = (obs.getMarioMode() >= 1);
@@ -141,7 +141,10 @@ public class SimpleMCTS extends KeyAdapter implements MCTSAgent<UCTNode> {
 		
 		MCTSTools.print(String.format("Depth: %2d, at %4d nodes %3dms used",maxDepth,root.visited,System.currentTimeMillis() - startTime));
 		
-		
+		if (obs.getMarioFloatPos()[0] > 16*8 && obs.getMarioFloatPos()[0] < 16*10)
+		{
+			MarioComponent.SAVE_NEXT_FRAME = true;
+		}
 
 		if (SAVE_NEXT_TREE)
 			root.outputTree("Tree.xml");
