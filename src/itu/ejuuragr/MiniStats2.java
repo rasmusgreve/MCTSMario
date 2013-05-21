@@ -1,6 +1,6 @@
 package itu.ejuuragr;
 
-import itu.ejuuragr.UCT.EnhancementTester;
+import itu.ejuuragr.UCT.MCTSEnhancementAgent;
 import java.io.FileWriter;
 
 import ch.idsia.ai.agents.Agent;
@@ -24,7 +24,7 @@ public class MiniStats2 {
     	Stats.ARGUMENTS = args;
         //Agent controller = AgentsPool.load (args[0]);
     	
-    	EnhancementTester controller;
+    	MCTSEnhancementAgent controller;
 
     	try{
     	out = new BufferedWriter(new FileWriter("Big Stats Mixmax Results.txt"));
@@ -32,7 +32,7 @@ public class MiniStats2 {
     	catch(Exception e){}
         for (int i = 10; i < 64; i++)
         {
-        	controller = new EnhancementTester();
+        	controller = new MCTSEnhancementAgent();
         	controller.setSoftmax(	(i & (1<<0)) != 0);
         	controller.setMacro(	(i & (1<<1)) != 0);
         	controller.setPartial(	(i & (1<<2)) != 0);
