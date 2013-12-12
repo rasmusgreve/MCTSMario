@@ -32,7 +32,7 @@ public class Art
     public static Image logo;
     public static Image titleScreen;
     final static String curDir = System.getProperty("user.dir");
-    final static String img = curDir + "/../img/";
+    final static String img = curDir + "/img/";
 
     public static void init(GraphicsConfiguration gc)
     {
