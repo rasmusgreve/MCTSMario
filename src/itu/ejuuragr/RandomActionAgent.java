@@ -2,7 +2,6 @@ package itu.ejuuragr;
 
 import java.util.Random;
 
-import itu.ejuuragr.UCT.EnhancementTester;
 import ch.idsia.ai.agents.Agent;
 import ch.idsia.mario.environments.Environment;
 
@@ -13,9 +12,8 @@ public class RandomActionAgent implements Agent {
 	//Chance of random action: numerator/divisor	
 	private int rn_numerator = 2, rn_divisor = 10;
 	
-	public RandomActionAgent(){
-		actualAgent = new EnhancementTester();
-		actualAgent = new competition.cig.robinbaumgarten.AStarAgent();
+	public RandomActionAgent(Agent actualAgent){
+		this.actualAgent = actualAgent;
 		
 		random = new Random(System.currentTimeMillis());
 	}
