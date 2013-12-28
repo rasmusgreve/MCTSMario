@@ -32,14 +32,12 @@ public class Art
     public static Image logo;
     public static Image titleScreen;
     final static String curDir = System.getProperty("user.dir");
-    final static String img = curDir + "/img/";
+    final static String img = curDir + "/../img/";
 
     public static void init(GraphicsConfiguration gc)
     {
         try
         {
-//            System.out.println("Image Directory: " + img);
-//            System.out.println(curDir);
             mario = cutImage(gc, "mariosheet.png", 32, 32);
             smallMario = cutImage(gc, "smallmariosheet.png", 16, 16);
             fireMario = cutImage(gc, "firemariosheet.png", 32, 32);

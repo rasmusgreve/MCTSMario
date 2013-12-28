@@ -25,7 +25,7 @@ public class MCTSTools {
 	}
 	
 	//Turn debug messages and drawing of the search tree on or off
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	
 	/**
 	 * Prints an observation (received from the game engine) to the console
